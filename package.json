@@ -1,7 +1,7 @@
 {
   "name": "garta-student-grading-system",
   "version": "1.0.0",
-  "description": "GARTA FIRST PROJECT AKA COURSE SEARCH ENGINE/COURSE MANAGEMENT SYSYEM",
+  "description": "GARTA Student Grading System",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "cd server && nodemon server.js",
