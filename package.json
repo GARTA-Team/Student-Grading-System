@@ -8,10 +8,6 @@
     "client": "cd client && npm start",
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://robert-minzat@bitbucket.org/parteniealex/garta-student-grading-system.git"
-  },
   "author": "",
   "license": "ISC",
   "homepage": "https://bitbucket.org/parteniealex/garta-student-grading-system#readme",
