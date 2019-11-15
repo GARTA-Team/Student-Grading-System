@@ -1,4 +1,9 @@
-GARTA FIRST PROJECT AKA COURSE SEARCH ENGINE/COURSE MANAGEMENT SYSYEM
+# GARTA Student Grading System
 
-npm install on root directory
-npm start to start both server and client
+## Requirements to run the app
+* Nodemon: npm install -g nodemon
+* Install dependencies
+	* npm install on root directory
+	* "cd client" and "npm install"
+	* "cd ../server" and "npm install"
+* Go back to root directory and run "npm start"
