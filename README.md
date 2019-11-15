@@ -1,4 +1,5 @@
-GARTA FIRST PROJECT AKA COURSE SEARCH ENGINE/COURSE MANAGEMENT SYSYEM
+# GARTA Student Grading System
 
-npm install on root directory
-npm start to start both server and client
+## How to run the app
+* npm install on root directory
+* npm start to start both server and client
