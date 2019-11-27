@@ -2,30 +2,23 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import Home from "./Home";
 import Auth from "./Auth";
-import AppBar from "../layout/AppBar"
+import Drawer from "../layout/Drawer";
+import List from '@material-ui/core/List';
 
 
 class App extends Component {
   render() {
     return (
       <Router>
-      <AppBar />
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-            </ul>
-          </nav>
+      <Drawer >
+        <p>reactul e smecher</p>
+      </Drawer>
+      
+        
 
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -37,7 +30,6 @@ class App extends Component {
               <Auth />
             </Route>
           </Switch>
-        </div>
       </Router>
     );
   }
