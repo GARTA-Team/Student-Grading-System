@@ -4,7 +4,7 @@ export default class index extends Component {
   render() {
     return (
       <div>
-        <p>Home</p>
+        <p>Team</p>
       </div>
     );
   }
