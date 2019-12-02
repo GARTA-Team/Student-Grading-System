@@ -28,5 +28,6 @@ sequelize.sync({ force: false }).then(() => {
 
 module.exports = {
   User,
-  Project
+  Project,
+  sequelize
 };
