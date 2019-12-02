@@ -4,7 +4,7 @@
   "description": "GARTA Student Grading System",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "cd server && nodemon server.js",
+    "server": "cd server && npm start",
     "client": "cd client && npm start",
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
