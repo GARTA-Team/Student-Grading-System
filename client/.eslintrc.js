@@ -23,5 +23,7 @@ module.exports = {
   ],
   rules: {
     quotes: ["error", "double"],
+    "react/prop-types": [1, { ignore: ["children"] }],
+    "react/require-default-props": [0],
   },
 };
