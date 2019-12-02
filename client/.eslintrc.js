@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true,
   },
   extends: [
     'plugin:react/recommended',
@@ -17,6 +16,7 @@ module.exports = {
       jsx: true,
     },
     ecmaVersion: 2018,
+    sourceType: 'module',
   },
   plugins: [
     'react',
