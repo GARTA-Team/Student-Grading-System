@@ -30,21 +30,18 @@ router.get("/users", async (req, res) => {
 
 router.post("/users", async (req, res) => {
   try {
-    // let unhashed = req.body.pass;
-
     if (req.query.bulk && req.query.bulk == "on") {
-      //   bcrypt.hash(unhashed, saltRounds, async function(err, hash) {
-      //     await User.create({
-      //       id: req.body.id,
-      //       username: req.body.username,
-      //       pass: hash,
-      //       session_id: req.body.session_id,
-      //       email: req.body.email
-      //     });
-      //   });
+      req.body.forEach(user => {
+        var salt = bcrypt.genSaltSync(saltRounds);
+        var hash = bcrypt.hashSync(user.pass, salt);
+        user.pass = hash;
+      });
       await User.bulkCreate(req.body);
       res.status(201).json({ message: "created" });
     } else {
+      var salt = bcrypt.genSaltSync(saltRounds);
+      var hash = bcrypt.hashSync(req.body.pass, salt);
+      req.body.pass = hash;
       await User.create(req.body);
       res.status(201).json({ message: "created" });
     }
