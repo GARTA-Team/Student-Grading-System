@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+require('dotenv').config()
 const port = process.env.PORT || 3001;
 
 // var corsOptions = {
@@ -11,6 +12,15 @@ const port = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+let userRouter= require("./routers/user-router");
+let projectRouter= require("./routers/project-router");
+
+
+app.use('/user-api',userRouter);
+app.use('/project-api',projectRouter);
+
+
 
 app.get('/api/hello', (req, res) => {
 	console.log("received request");
