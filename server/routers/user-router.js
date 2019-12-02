@@ -10,7 +10,7 @@ let router = express.Router();
 
 // router.get("/create", async (req, res) => {
 //   try {
-//     await sequelize.sync({ force: true });
+//     await Sequelize.sync({ force: true });
 //     res.status(201).json({ message: "created" });
 //   } catch (e) {
 //     console.warn(e);
