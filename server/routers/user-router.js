@@ -1,22 +1,9 @@
 const express = require("express");
 const { User } = require("../sequelize");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 let router = express.Router();
-
-// Momentan face sync la import cu force=false
-// ca sa nu se stearga ce punem acolo pt debug
-
-// router.get("/create", async (req, res) => {
-//   try {
-//     await Sequelize.sync({ force: true });
-//     res.status(201).json({ message: "created" });
-//   } catch (e) {
-//     console.warn(e);
-//     res.status(500).json({ message: "server error" });
-//   }
-// });
 
 router.get("/users", async (req, res) => {
   try {
