@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const UserModel = require("./models/user");
 const ProjectModel = require("./models/project");
-require("dotenv").config();
+
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
