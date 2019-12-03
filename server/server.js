@@ -54,6 +54,8 @@ app.get(
   }
 );
 
+// app.use(passport.authenticate("jwt", { session: false })); //enable this to have global auth
+
 app.post("/register", function(req, res, next) {
   try {
     let { username, email, pass } = req.body;
