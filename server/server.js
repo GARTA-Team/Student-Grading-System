@@ -5,7 +5,8 @@ const port = process.env.PORT || 3001;
 const { sequelize, User } = require("./sequelize");
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 // ExtractJwt to help extract the token
 let ExtractJwt = passportJWT.ExtractJwt; // JwtStrategy which is the strategy for the authentication
 let JwtStrategy = passportJWT.Strategy;
@@ -25,13 +26,14 @@ let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
 passport.use(strategy);
 const app = express();
 app.use(passport.initialize());
-// var corsOptions = {
-// 	origin: 'http://localhost:3000',
-// 	optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// }
-// app.use(cors(corsOptions));
+var corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 let userRouter = require("./routers/user-router");
 let projectRouter = require("./routers/project-router");
@@ -81,6 +83,7 @@ app.post("/login", async function(req, res, next) {
       if (bcrypt.compareSync(pass, user.pass)) {
         let payload = { id: user.email };
         let token = jwt.sign(payload, jwtOptions.secretOrKey);
+        res.cookie("loginToken", token, { maxAge: 900000, httpOnly: true });
         res.status(200).json({ msg: "ok", token: token });
       } else {
         res.status(401).json({ msg: "Password is incorrect" });
@@ -104,6 +107,11 @@ app.get("/create", async (req, res) => {
     console.warn(e);
     res.status(500).json({ message: "server error" });
   }
+});
+
+app.all("*", function(req, resp, next) {
+  console.log(req.path); // do anything you want here
+  next();
 });
 
 app.use("/user-api", userRouter);
