@@ -2,13 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 3001;
-const {sequelize} = require("./sequelize");
+const { sequelize } = require("./sequelize");
+const passport = require("passport");
+const session = require('express-session')
 // var corsOptions = {
 // 	origin: 'http://localhost:3000',
 // 	optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 // }
 // app.use(cors(corsOptions));
-
+// app.configure(function() {
+//   app.use(express.session({ secret: "your secret key" }));
+//   app.use(passport.initialize());
+//   app.use(passport.session());
+// });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
