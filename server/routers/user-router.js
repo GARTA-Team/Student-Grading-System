@@ -5,7 +5,7 @@ const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
 let router = express.Router();
 
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let users = await User.findAll();
     res.status(200).json(users);
@@ -15,11 +15,11 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.post("/users", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     if (req.query.bulk && req.query.bulk == "on") {
       req.body.forEach(user => {
-        const salt = bcrypt.genSaltSync(saltRounds);
+        const salt = bcrypt.genSaltSync();
         const hash = bcrypt.hashSync(user.pass, salt);
         user.pass = hash;
       });
@@ -38,7 +38,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     let user = await User.findByPk(req.params.id);
     if (user) {
@@ -52,7 +52,7 @@ router.get("/users/:id", async (req, res) => {
   }
 });
 
-router.put("/users/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     let user = await User.findByPk(req.params.id);
     if (user) {
@@ -67,7 +67,7 @@ router.put("/users/:id", async (req, res) => {
   }
 });
 
-router.delete("/users/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     let user = await User.findByPk(req.params.id);
     if (user) {
@@ -80,10 +80,6 @@ router.delete("/users/:id", async (req, res) => {
     console.warn(error);
     res.status(500).json({ message: "server error" });
   }
-});
-
-router.get("/test", (req, res) => {
-  res.status(200).json({ message: "test" });
 });
 
 module.exports = router;
