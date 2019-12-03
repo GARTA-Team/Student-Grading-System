@@ -12,9 +12,10 @@ let JwtStrategy = passportJWT.Strategy;
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = "wowwow";
+// JwtStrategy takes your token from the Auth header and uses the id stored in it to pass you to the next step
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log("payload received", jwt_payload);
-  let user = getUser({ id: jwt_payload.id });
+  let user = getUser({ email: jwt_payload.id });
   if (user) {
     next(null, user);
   } else {
@@ -54,7 +55,7 @@ app.get(
   }
 );
 
-// app.use(passport.authenticate("jwt", { session: false })); //enable this to have global auth
+// app.use(passport.authenticate("jwt", { session: false })); //enable this to have global token auth
 
 app.post("/register", function(req, res, next) {
   try {
@@ -68,7 +69,7 @@ app.post("/register", function(req, res, next) {
     res.status(500).json({ message: "server error" });
   }
 });
-
+// /login checks the email and password against the db and then sends back a unique token
 app.post("/login", async function(req, res, next) {
   try {
     const { email, pass } = req.body;
@@ -78,9 +79,9 @@ app.post("/login", async function(req, res, next) {
         res.status(401).json({ msg: "No such user found", user });
       }
       if (bcrypt.compareSync(pass, user.pass)) {
-        let payload = { id: user.id };
+        let payload = { id: user.email };
         let token = jwt.sign(payload, jwtOptions.secretOrKey);
-        res.json({ msg: "ok", token: token });
+        res.status(200).json({ msg: "ok", token: token });
       } else {
         res.status(401).json({ msg: "Password is incorrect" });
       }
