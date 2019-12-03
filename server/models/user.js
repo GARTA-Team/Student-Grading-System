@@ -5,9 +5,30 @@ module.exports = (sequelize, type) => {
       primaryKey: true,
       autoIncrement: true
     },
-    username: type.STRING,
-    pass: type.STRING,
-    session_id: type.STRING,
-    email: type.STRING
+    username: {
+      type: type.STRING,
+      allowNull: false,
+      validate: {
+        len: [5, 20]
+      }
+    },
+    pass: {
+      type: type.STRING,
+      allowNull: false
+    },
+    session_id: {
+      type: type.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true
+      }
+    },
+    email: {
+      type: type.STRING,
+      validate: {
+        isEmail: true,
+        notEmpty: true
+      }
+    }
   });
 };
