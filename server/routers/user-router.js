@@ -19,15 +19,15 @@ router.post("/users", async (req, res) => {
   try {
     if (req.query.bulk && req.query.bulk == "on") {
       req.body.forEach(user => {
-        var salt = bcrypt.genSaltSync(saltRounds);
-        var hash = bcrypt.hashSync(user.pass, salt);
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(user.pass, salt);
         user.pass = hash;
       });
       await User.bulkCreate(req.body);
       res.status(201).json({ message: "created" });
     } else {
-      var salt = bcrypt.genSaltSync(saltRounds);
-      var hash = bcrypt.hashSync(req.body.pass, salt);
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hash = bcrypt.hashSync(req.body.pass, salt);
       req.body.pass = hash;
       await User.create(req.body);
       res.status(201).json({ message: "created" });
