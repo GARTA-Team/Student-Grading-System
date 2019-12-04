@@ -10,14 +10,14 @@ const app = express();
 const port = process.env.PORT || 3001;
 const corsOptions = {
   origin: "http://localhost:3000",
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
-  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
+  session({ secret: "keyboard cat", resave: true, saveUninitialized: true }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -35,8 +35,12 @@ app.use(isAuthenticated);
 app.use("/user-api", userRouter);
 app.use("/project-api", projectRouter);
 
-app.get("/", isAuthenticated, (req, res) => {
-  res.status(200).json({ message: "this is a server, why are you here?" });
+app.get("/", (req, res) => {
+  res.status(200).redirect("/dashboard");
+});
+
+app.get("/dashboard", (req, res) => {
+  res.status(200).send("this is the dashboard");
 });
 
 app.get("/create", async (req, res) => {

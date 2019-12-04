@@ -1,11 +1,11 @@
 const express = require("express");
 const { User } = require("../config/sequelize");
 
-let router = express.Router();
+const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    let users = await User.findAll();
+    const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
     console.warn(error);
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    if (req.query.bulk && req.query.bulk == "on") {
+    if (req.query.bulk && req.query.bulk === "on") {
       await User.bulkCreate(req.body);
       res.status(201).json({ message: "created" });
     } else {
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    let user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -44,7 +44,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    let user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id);
     if (user) {
       await user.update(req.body);
       res.status(202).json({ message: "accepted" });
@@ -59,7 +59,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    let user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id);
     if (user) {
       await user.destroy();
       res.status(202).json({ message: "accepted" });

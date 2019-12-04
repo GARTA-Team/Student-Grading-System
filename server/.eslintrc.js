@@ -16,6 +16,7 @@ module.exports = {
   },
   rules: {
     quotes: ["error", "double"],
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "no-console": ["error", { allow: ["warn", "error"] }] //sa facem logger intr-un fisier
   },
 };
