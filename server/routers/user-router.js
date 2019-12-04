@@ -1,7 +1,5 @@
 const express = require("express");
-const { User } = require("../sequelize");
-const bcrypt = require("bcrypt");
-const saltRounds = parseInt(process.env.SALT_ROUNDS);
+const { User } = require("../config/sequelize");
 
 let router = express.Router();
 
@@ -18,17 +16,9 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     if (req.query.bulk && req.query.bulk == "on") {
-      req.body.forEach(user => {
-        const salt = bcrypt.genSaltSync();
-        const hash = bcrypt.hashSync(user.pass, salt);
-        user.pass = hash;
-      });
       await User.bulkCreate(req.body);
       res.status(201).json({ message: "created" });
     } else {
-      const salt = bcrypt.genSaltSync(saltRounds);
-      const hash = bcrypt.hashSync(req.body.pass, salt);
-      req.body.pass = hash;
       await User.create(req.body);
       res.status(201).json({ message: "created" });
     }

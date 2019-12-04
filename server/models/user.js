@@ -1,5 +1,7 @@
+const bcrypt = require("bcrypt");
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 module.exports = (sequelize, type) => {
-  return sequelize.define("user", {
+  let User = sequelize.define("user", {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -31,4 +33,13 @@ module.exports = (sequelize, type) => {
       }
     }
   });
+  User.addHook("beforeCreate", (user, options) => {
+    user.pass = bcrypt.hashSync(
+      user.pass,
+      bcrypt.genSaltSync(saltRounds),
+      null
+    );
+    console.log("hashed before");
+  });
+  return User;
 };
