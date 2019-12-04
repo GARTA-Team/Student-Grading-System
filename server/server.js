@@ -35,8 +35,12 @@ app.use(isAuthenticated);
 app.use("/user-api", userRouter);
 app.use("/project-api", projectRouter);
 
-app.get("/", isAuthenticated, (req, res) => {
-  res.status(200).json({ message: "this is a server, why are you here?" });
+app.get("/", (req, res) => {
+  res.status(200).redirect("/dashboard");
+});
+
+app.get("/dashboard", (req, res) => {
+  res.status(200).send("this is the dashboard");
 });
 
 app.get("/create", async (req, res) => {
