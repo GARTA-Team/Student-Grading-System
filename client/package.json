@@ -6,9 +6,11 @@
     "@material-ui/core": "^4.6.1",
     "@material-ui/icons": "^4.5.1",
     "clsx": "^1.0.4",
+    "material-table": "^1.54.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-i18nify": "^3.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0"
   },
@@ -27,15 +29,6 @@
       "react-app",
       "airbnb"
     ],
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "paths": [
-            "src"
-          ]
-        }
-      }
-    },
     "rules": {
       "quotes": [
         "error",
@@ -51,7 +44,9 @@
       ],
       "react/require-default-props": [
         0
-      ]
+      ],
+      "react/jsx-props-no-spreading": 0,
+      "import/no-unresolved": 0
     }
   },
   "browserslist": {
