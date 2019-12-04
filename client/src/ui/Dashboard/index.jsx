@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { t } from "react-i18nify";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -9,7 +10,7 @@ import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import DoneIcon from "@material-ui/icons/Done";
 
 import DataTable from "../../components/DataTable";
-import {columns, options} from "./utils/options";
+import { columns, options } from "./utils/options";
 
 
 const useStyles = makeStyles(() => ({
@@ -24,8 +25,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Home() {
+export default function Dashboard(props) {
   const classes = useStyles();
+
+  const { data } = props;
+  const { completedCount, toBeGradedCount, projects = [] } = data;
 
   return (
     <div>
@@ -35,11 +39,11 @@ export default function Home() {
           <Paper className={classes.card}>
             <div>
               <Typography color="textSecondary">
-                Proiecte deschise
+                {t("Dashboard.OpenProjects")}
               </Typography>
 
               <Typography variant="h4" color="textPrimary">
-                500
+                {projects.length}
               </Typography>
 
             </div>
@@ -51,11 +55,11 @@ export default function Home() {
           <Paper className={classes.card}>
             <div>
               <Typography color="textSecondary">
-                To be graded TODO
+                {t("Dashboard.ProjectsToBeGraded")}
               </Typography>
 
               <Typography variant="h4" color="textPrimary">
-                500
+                {toBeGradedCount}
               </Typography>
 
             </div>
@@ -67,11 +71,11 @@ export default function Home() {
           <Paper className={classes.card}>
             <div>
               <Typography color="textSecondary">
-                Completed
+                {t("Dashboard.CompletedProjects")}
               </Typography>
 
               <Typography variant="h4" color="textPrimary">
-                500
+                {completedCount}
               </Typography>
 
             </div>
@@ -81,13 +85,7 @@ export default function Home() {
 
         <Grid item xs={12}>
           <DataTable
-            data={[
-              { name: "Tehnologii", percentaje: "20", deadline: new Date() },
-              { name: "Tehnologii", percentaje: "20", deadline: new Date() },
-              { name: "Tehnologii", percentaje: "20", deadline: new Date() },
-              { name: "Tehnologii", percentaje: "20", deadline: new Date() },
-
-            ]}
+            data={projects}
             title={t("Home.Title")}
             columns={columns}
             options={options}
@@ -98,3 +96,11 @@ export default function Home() {
     </div>
   );
 }
+
+Dashboard.propTypes = {
+  data: PropTypes.shape({
+    completedCount: PropTypes.number,
+    toBeGradedCount: PropTypes.number,
+    projects: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+};

@@ -15,7 +15,7 @@ import NavItem from "./NavItem";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
   },
@@ -116,7 +116,7 @@ export default function Layout({ children }) {
       >
         <div className={classes.toolbar} />
         <List>
-          <NavItem path="/" exact title="Home" />
+          <NavItem path="/dashboard" exact title="Dashboard" />
           <NavItem path="/projects" title="Projects" />
           <NavItem path="/team" title="Team" />
           <Divider />

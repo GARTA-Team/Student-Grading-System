@@ -1,5 +1,8 @@
 {
-  "Home": {
+  "Dashboard": {
+    "OpenProjects": "Proiecte in desfasurare",
+    "ProjectsToBeGraded": "Proiecte de notat",
+    "CompletedProjects": "Proiecte incheiate",
     "Table": {
       "Title": "Proiecte",
       "Project": "Proiect",

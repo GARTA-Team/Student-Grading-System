@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Home from "./Home";
 import Dashboard from "./Dashboard";
@@ -8,6 +8,7 @@ import Auth from "./Auth";
 import Projects from "./Projects";
 import Team from "./Team";
 import Drawer from "../layout/Drawer";
+import Loader from "../components/Loader";
 
 const theme = createMuiTheme({
   palette: {
@@ -61,6 +62,7 @@ export default class App extends Component {
   }
 
   state = {
+    isLoading: true,
     isAuthenticated: false,
     dashboardData: [],
   }
@@ -71,44 +73,51 @@ export default class App extends Component {
 
   loadDashboardData = async () => {
     try {
-      const data = await axios.get("/dashboard");
+      const { data = {} } = await axios.get("/dashboard"); // TODO change when server is done
 
-      console.log(data);
+      this.setState({ isLoading: false, isAuthenticated: true, dashboardData: data });
     } catch (error) {
+      this.setState({ isLoading: false });
+
       console.error(error);
     }
   }
 
 
   render() {
-    const { isAuthenticated = false } = this.state;
+    const { isAuthenticated = false, isLoading = true, dashboardData = {} } = this.state;
 
     return (
       <ThemeProvider theme={theme}>
-        <Router>
-          {
-            isAuthenticated ? (
-              <Drawer>
-                <Switch>
-                  <Route isAuthenticated={isAuthenticated} path="/dashboard">
-                    <Dashboard />
-                  </Route>
-                  <Route isAuthenticated={isAuthenticated} path="/login">
-                    <Auth />
-                  </Route>
-                  <Route isAuthenticated={isAuthenticated} path="/projects">
-                    <Projects />
-                  </Route>
-                  <Route isAuthenticated={isAuthenticated} path="/team">
-                    <Team />
-                  </Route>
-                </Switch>
-              </Drawer>
-            ) : (
-              <Home />
-            )
-          }
-        </Router>
+        <Loader isLoading={isLoading}>
+          <Router>
+            {
+              isAuthenticated ? (
+                <Drawer>
+                  <Switch>
+                    <Route exact path="/">
+                      <Redirect to="/dashboard" />
+                    </Route>
+                    <Route path="/dashboard">
+                      <Dashboard data={dashboardData} />
+                    </Route>
+                    <Route path="/login">
+                      <Auth />
+                    </Route>
+                    <Route path="/projects">
+                      <Projects />
+                    </Route>
+                    <Route path="/team">
+                      <Team />
+                    </Route>
+                  </Switch>
+                </Drawer>
+              ) : (
+                <Home />
+              )
+            }
+          </Router>
+        </Loader>
       </ThemeProvider>
     );
   }
