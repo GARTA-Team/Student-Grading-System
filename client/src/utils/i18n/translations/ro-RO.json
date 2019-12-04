@@ -1,5 +1,10 @@
 {
   "Home": {
-    "Title": "test RO"
+    "Table": {
+      "Title": "Proiecte",
+      "Project": "Proiect",
+      "Percentaje": "Procentaj",
+      "Deadline": "Termen"
+    }
   }
 }
