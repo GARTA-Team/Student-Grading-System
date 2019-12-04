@@ -35,15 +35,10 @@ const theme = createMuiTheme({
 });
 
 export default class App extends Component {
-  state = {
-    isAuthenticated: false,
-    dashboardData: [],
-  }
-
   constructor(props) {
     super(props);
 
-    // if for any reason a user becomes loged out redirect him to Home route: "/"
+    // if for any reason a user becomes logged out redirect him to the Home route: "/"
     axios.interceptors.response.use(
       response => response,
       (error) => {
@@ -63,6 +58,11 @@ export default class App extends Component {
         return Promise.reject(error);
       },
     );
+  }
+
+  state = {
+    isAuthenticated: false,
+    dashboardData: [],
   }
 
   async componentDidMount() {
@@ -90,37 +90,26 @@ export default class App extends Component {
             isAuthenticated ? (
               <Drawer>
                 <Switch>
-                  <Route exact path="/">
-                    <Home />
-                  </Route>
-                  <PrivateRoute isAuthenticated={isAuthenticated} path="/dashboard">
+                  <Route isAuthenticated={isAuthenticated} path="/dashboard">
                     <Dashboard />
-                  </PrivateRoute>
-                  <PrivateRoute isAuthenticated={isAuthenticated} path="/login">
+                  </Route>
+                  <Route isAuthenticated={isAuthenticated} path="/login">
                     <Auth />
-                  </PrivateRoute>
-                  <PrivateRoute isAuthenticated={isAuthenticated} path="/projects">
+                  </Route>
+                  <Route isAuthenticated={isAuthenticated} path="/projects">
                     <Projects />
-                  </PrivateRoute>
-                  <PrivateRoute isAuthenticated={isAuthenticated} path="/team">
+                  </Route>
+                  <Route isAuthenticated={isAuthenticated} path="/team">
                     <Team />
-                  </PrivateRoute>
+                  </Route>
                 </Switch>
               </Drawer>
             ) : (
-                <Home />
-              )
+              <Home />
+            )
           }
         </Router>
       </ThemeProvider>
     );
   }
 }
-
-
-// eslint-disable-next-line react/prop-types
-const PrivateRoute = ({ isAuthenticated, ...props }) => {
-  return isAuthenticated
-    ? <Route {...props} />
-    : <Redirect to="/" />;
-};
