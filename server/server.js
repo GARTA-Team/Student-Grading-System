@@ -1,13 +1,14 @@
 const express = require("express");
 const cors = require("cors");
-const port = process.env.PORT || 3001;
-const { sequelize } = require("./config/sequelize");
-const passport = require("./config/passport");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const { sequelize } = require("./config/sequelize");
+const passport = require("./config/passport");
 const isAuthenticated = require("./config/auth");
+
 const app = express();
-var corsOptions = {
+const port = process.env.PORT || 3001;
+const corsOptions = {
   origin: "http://localhost:3000",
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
@@ -21,12 +22,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-let userRouter = require("./routers/user-router");
-let loginRouter = require("./routers/login-router");
-let projectRouter = require("./routers/project-router");
+const userRouter = require("./routers/user-router");
+const loginRouter = require("./routers/login-router");
+const projectRouter = require("./routers/project-router");
 
-app.all("*", function(req, resp, next) {
-  console.log(req.path); // do anything you want here
+app.all("*", (req, resp, next) => {
+  // console.log(req.path); // do anything you want here
   next();
 });
 app.use("/", loginRouter);
