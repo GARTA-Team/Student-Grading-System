@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.6.1",
     "@material-ui/icons": "^4.5.1",
+    "axios": "^0.19.0",
     "clsx": "^1.0.4",
     "material-table": "^1.54.1",
     "prop-types": "^15.7.2",
@@ -12,7 +13,8 @@
     "react-dom": "^16.12.0",
     "react-i18nify": "^3.0.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "react-select": "^3.0.8"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^14.0.0",
@@ -34,19 +36,12 @@
         "error",
         "double"
       ],
-      "react/prop-types": [
-        1,
-        {
-          "ignore": [
-            "children"
-          ]
-        }
-      ],
-      "react/require-default-props": [
-        0
-      ],
+      "react/require-default-props": 0,
       "react/jsx-props-no-spreading": 0,
-      "import/no-unresolved": 0
+      "import/no-unresolved": 0,
+      "react/state-in-constructor": 0,
+      "react/prop-types": 0,
+      "react/no-did-mount-set-state": 0
     }
   },
   "browserslist": {

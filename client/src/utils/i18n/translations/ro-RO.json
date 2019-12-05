@@ -1,5 +1,24 @@
 {
-  "Home": {
-    "Title": "test RO"
+  "Dashboard": {
+    "OpenProjects": "Proiecte in desfasurare",
+    "ProjectsToBeGraded": "Proiecte de notat",
+    "CompletedProjects": "Proiecte incheiate",
+    "Table": {
+      "Title": "Proiecte",
+      "Project": "Proiect",
+      "Percentaje": "Procentaj",
+      "Deadline": "Termen"
+    }
+  },
+  "Languages": {
+    "Romanian": "Romana",
+    "English": "Engleza"
+  },
+  "Navigation": {
+    "Dashboard": "Dashboard",
+    "Projects": "Proiecte",
+    "Team": "Echipa",
+    "Profile": "Profil",
+    "Logout": "Logout"
   }
 }

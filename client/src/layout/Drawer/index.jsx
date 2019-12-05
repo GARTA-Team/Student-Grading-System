@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { t } from "react-i18nify";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -11,11 +12,19 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Grid from "@material-ui/core/Grid";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import FolderIcon from "@material-ui/icons/Folder";
+import GroupIcon from "@material-ui/icons/Group";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import NavItem from "./NavItem";
+import LanguagePicker from "../../components/LanguagePicker";
+
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
   },
@@ -70,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
   chevronColor: {
     color: "white",
   },
+  languagePicker: {
+    justifyContent: "end",
+  },
 }));
 
 
@@ -80,26 +92,41 @@ export default function Layout({ children }) {
   return (
     <div className={classes.root}>
       <CssBaseline />
+
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setOpen(!open)}
-            edge="start"
-            className={classes.menuButton}
-          >
-            {open ? (
-              <ChevronLeftIcon className={classes.chevronColor} />
-            ) : (
-              <MenuIcon />
-            )}
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Garta SGS
-          </Typography>
-        </Toolbar>
+        <Grid container justify="space-between">
+
+          <Grid item xs={6}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => setOpen(!open)}
+                edge="start"
+                className={classes.menuButton}
+              >
+                {
+                  open
+                    ? <ChevronLeftIcon className={classes.chevronColor} />
+                    : <MenuIcon />
+                }
+              </IconButton>
+
+              <Typography variant="h6" noWrap>
+                Garta SGS
+              </Typography>
+            </Toolbar>
+          </Grid>
+
+          <Grid item xs={6} alignItems="center">
+            <Toolbar className={classes.languagePicker}>
+              <LanguagePicker />
+            </Toolbar>
+          </Grid>
+
+        </Grid>
       </AppBar>
+
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -116,12 +143,12 @@ export default function Layout({ children }) {
       >
         <div className={classes.toolbar} />
         <List>
-          <NavItem path="/" exact title="Home" />
-          <NavItem path="/projects" title="Projects" />
-          <NavItem path="/team" title="Team" />
+          <NavItem path="/dashboard" exact title={t("Navigation.Dashboard")} Icon={DashboardIcon} />
+          <NavItem path="/projects" title={t("Navigation.Projects")} Icon={FolderIcon} />
+          <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
           <Divider />
-          <NavItem path="/profile" title="Profile" />
-          <NavItem path="/logout" title="Logout" />
+          <NavItem path="/profile" title={t("Navigation.Profile")} Icon={AccountCircleIcon} />
+          <NavItem path="/logout" title={t("Navigation.Logout")} Icon={ExitToAppIcon} />
         </List>
       </Drawer>
       <main className={classes.content}>

@@ -1,5 +1,9 @@
 {
-  "Home": {
-    "Title": "Test EN"
-  }
+  "Dashboard": {
+    "OpenProjects": "Open Projects",
+    "ProjectsToBeGraded": "Projects to be completed",
+    "CompletedProjects": "Completed projects"
+  },
+  "Languages": {},
+  "Navigation": {}
 }

@@ -1,8 +1,18 @@
 import { setTranslations, setLocale, addLocale } from "react-i18nify";
-import en from "./translations/en-US";
-import ro from "./translations/ro-RO";
 
-import localeRo from 'date-fns/locale/ro';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import localeRo from "date-fns/locale/ro";
+
+import en from "./translations/en-US.json";
+import ro from "./translations/ro-RO.json";
+
+
+export function getLanguageOptions() {
+  return [
+    { label: "Languages.Romanian", avatar: "flags/ro.svg", locale: "ro" },
+    { label: "Languages.English", avatar: "flags/uk.svg", locale: "en" },
+  ];
+}
 
 
 export default function initializeI18n() {
