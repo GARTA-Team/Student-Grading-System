@@ -58,7 +58,6 @@ const options = getLanguageOptions();
 
 export default function LanguagePicker({ className }) {
   const classes = useStyles();
-
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   useEffect(() => {
@@ -88,20 +87,21 @@ export default function LanguagePicker({ className }) {
         DropdownIndicator: () => null,
       }}
       styles={{
-        singleValue: provided => ({
-          ...provided,
+        singleValue: providedStyles => ({
+          ...providedStyles,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
         }),
-        option: provided => ({
-          ...provided,
+        option: (providedStyles, { isFocused }) => ({
+          ...providedStyles,
+          backgroundColor: isFocused ? "#ebebeb" : undefined,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
         }),
-        input: provided => ({
-          ...provided,
+        input: providedStyles => ({
+          ...providedStyles,
           color: "transparent",
           textShadow: "0 0 0 #2196f3",
           "&:focus": {
