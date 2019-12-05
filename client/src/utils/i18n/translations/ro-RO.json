@@ -13,5 +13,12 @@
   "Languages": {
     "Romanian": "Romana",
     "English": "Engleza"
+  },
+  "Navigation": {
+    "Dashboard": "Dashboard",
+    "Projects": "Proiecte",
+    "Team": "Echipa",
+    "Profile": "Profil",
+    "Logout": "Logout"
   }
 }

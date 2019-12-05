@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { t } from "react-i18nify";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -142,12 +143,12 @@ export default function Layout({ children }) {
       >
         <div className={classes.toolbar} />
         <List>
-          <NavItem path="/dashboard" exact title="Dashboard" Icon={DashboardIcon} />
-          <NavItem path="/projects" title="Projects" Icon={FolderIcon} />
-          <NavItem path="/team" title="Team" Icon={GroupIcon} />
+          <NavItem path="/dashboard" exact title={t("Navigation.Dashboard")} Icon={DashboardIcon} />
+          <NavItem path="/projects" title={t("Navigation.Projects")} Icon={FolderIcon} />
+          <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
           <Divider />
-          <NavItem path="/profile" title="Profile" Icon={AccountCircleIcon} />
-          <NavItem path="/logout" title="Logout" Icon={ExitToAppIcon} />
+          <NavItem path="/profile" title={t("Navigation.Profile")} Icon={AccountCircleIcon} />
+          <NavItem path="/logout" title={t("Navigation.Logout")} Icon={ExitToAppIcon} />
         </List>
       </Drawer>
       <main className={classes.content}>
