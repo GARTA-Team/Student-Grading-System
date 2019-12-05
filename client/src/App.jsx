@@ -95,26 +95,26 @@ export default class App extends Component {
               isAuthenticated ? (
                 <Drawer>
                   <Switch>
-                    <Route exact path="/">
-                      <Redirect to="/dashboard" />
-                    </Route>
-                    <Route path="/dashboard">
-                      <Dashboard data={dashboardData} />
-                    </Route>
-                    <Route path="/login">
-                      <Auth />
-                    </Route>
-                    <Route path="/projects">
-                      <Projects />
-                    </Route>
-                    <Route path="/team">
-                      <Team />
-                    </Route>
+                    <Route exact path="/" render={routerProps => (<Redirect {...routerProps} to="/dashboard" />)} />
+                    <Route path="/dashboard" render={routerProps => (<Dashboard {...routerProps} data={dashboardData} />)} />
+                    <Route path="/projects" render={routerProps => (<Projects {...routerProps} />)} />
+                    <Route path="/team" render={routerProps => (<Team {...routerProps} />)} />
                   </Switch>
                 </Drawer>
               ) : (
-                <Home />
-              )
+                  <Switch>
+                    <Route path="/login" render={routerProps => (<Auth {...routerProps} onSucces={this.loadDashboardData} />)} />
+                    <Route
+                      path="/"
+                      render={routerProps => (
+                        <>
+                          <Redirect to="/" />
+                          <Home {...routerProps} />
+                        </>
+                      )}
+                    />
+                  </Switch>
+                )
             }
           </Router>
         </Loader>

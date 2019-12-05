@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavItem({ path, title, Icon, exact = false }) {
+function NavItem({ path, title, Icon, exact = false, ...rest }) {
   const classes = useStyles();
 
   return (
@@ -31,6 +31,7 @@ function NavItem({ path, title, Icon, exact = false }) {
       to={path}
       className={classes.link}
       activeClassName={classes.activeLink}
+      {...rest}
     >
       {
         Icon && (

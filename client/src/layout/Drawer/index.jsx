@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { t } from "react-i18nify";
+import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -89,6 +90,8 @@ export default function Layout({ children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
+  const handleLogOut = () => Axios.get("/logout");
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -148,7 +151,7 @@ export default function Layout({ children }) {
           <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
           <Divider />
           <NavItem path="/profile" title={t("Navigation.Profile")} Icon={AccountCircleIcon} />
-          <NavItem path="/logout" title={t("Navigation.Logout")} Icon={ExitToAppIcon} />
+          <NavItem path="/" title={t("Navigation.Logout")} Icon={ExitToAppIcon} onClick={handleLogOut} />
         </List>
       </Drawer>
       <main className={classes.content}>
