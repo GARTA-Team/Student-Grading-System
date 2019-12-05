@@ -4,11 +4,53 @@ module.exports = (sequelize, type) => sequelize.define("project", {
     primaryKey: true,
     autoIncrement: true,
   },
-  name: type.STRING,
-  summary: type.STRING,
-  date_created: type.DATE,
-  last_modified: type.DATE,
-  deadline: type.DATE,
-  status: type.STRING,
-  grading: type.INTEGER,
+  name: {
+    type: type.STRING,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  summary: {
+    type: type.STRING,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  date_created: {
+    type: type.DATE,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  last_modified: {
+    type: type.DATE,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  deadline: {
+    type: type.DATE,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  status: {
+    type: type.STRING,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  grading: {
+    type: type.INTEGER,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
+    },
+  },
 });
