@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Home from "./Home";
-import Dashboard from "./Dashboard";
-import Auth from "./Auth";
-import Projects from "./Projects";
-import Team from "./Team";
-import Drawer from "../layout/Drawer";
-import Loader from "../components/Loader";
+import Home from "./ui/Home";
+import Dashboard from "./ui/Dashboard";
+import Auth from "./ui/Auth";
+import Projects from "./ui/Projects";
+import Team from "./ui/Team";
+import Drawer from "./layout/Drawer";
+import Loader from "./components/Loader";
 
 const theme = createMuiTheme({
   palette: {

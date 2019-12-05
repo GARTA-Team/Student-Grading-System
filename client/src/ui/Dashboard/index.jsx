@@ -86,7 +86,7 @@ export default function Dashboard(props) {
         <Grid item xs={12}>
           <DataTable
             data={projects}
-            title={t("Home.Title")}
+            title={t("Dashboard.Table.Title")}
             columns={columns}
             options={options}
           />
