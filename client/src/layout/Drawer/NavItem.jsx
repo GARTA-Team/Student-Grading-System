@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/MailOutlined";
 import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavItem({ path, title, exact = false }) {
+function NavItem({ path, title, Icon, exact = false }) {
   const classes = useStyles();
 
   return (
@@ -33,9 +32,13 @@ function NavItem({ path, title, exact = false }) {
       className={classes.link}
       activeClassName={classes.activeLink}
     >
-      <ListItemIcon>
-        <MailIcon className={classes.icon} />
-      </ListItemIcon>
+      {
+        Icon && (
+          <ListItemIcon>
+            <Icon className={classes.icon} />
+          </ListItemIcon>
+        )
+      }
       <ListItemText primary={title} />
     </ListItem>
   );
@@ -45,6 +48,7 @@ NavItem.propTypes = {
   path: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   exact: PropTypes.bool,
+  Icon: PropTypes.node,
 };
 
 

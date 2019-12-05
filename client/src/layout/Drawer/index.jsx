@@ -11,11 +11,18 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import FolderIcon from "@material-ui/icons/Folder";
+import GroupIcon from "@material-ui/icons/Group";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
+
 import NavItem from "./NavItem";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
   },
@@ -116,12 +123,12 @@ export default function Layout({ children }) {
       >
         <div className={classes.toolbar} />
         <List>
-          <NavItem path="/" exact title="Home" />
-          <NavItem path="/projects" title="Projects" />
-          <NavItem path="/team" title="Team" />
+          <NavItem path="/" exact title="Home" Icon={DashboardIcon} />
+          <NavItem path="/projects" title="Projects" Icon={FolderIcon} />
+          <NavItem path="/team" title="Team" Icon={GroupIcon} />
           <Divider />
-          <NavItem path="/profile" title="Profile" />
-          <NavItem path="/logout" title="Logout" />
+          <NavItem path="/profile" title="Profile" Icon={AccountCircleIcon} />
+          <NavItem path="/logout" title="Logout" Icon={ExitToAppIcon} />
         </List>
       </Drawer>
       <main className={classes.content}>
