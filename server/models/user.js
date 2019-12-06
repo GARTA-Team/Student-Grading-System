@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 
 const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
 module.exports = (sequelize, type) => {
-  const User = sequelize.define("user", {
+  const User = sequelize.define("User", {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -19,7 +19,7 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       allowNull: false,
     },
-    session_id: {
+    sessionId: {
       type: type.STRING,
       allowNull: true,
       validate: {

@@ -1,4 +1,4 @@
-module.exports = (sequelize, type) => sequelize.define("project", {
+module.exports = (sequelize, type) => sequelize.define("Project", {
   id: {
     type: type.INTEGER,
     primaryKey: true,
@@ -18,14 +18,14 @@ module.exports = (sequelize, type) => sequelize.define("project", {
       notEmpty: true,
     },
   },
-  date_created: {
+  dateCreated: {
     type: type.DATE,
     allowNull: true,
     validate: {
       notEmpty: true,
     },
   },
-  last_modified: {
+  lastModified: {
     type: type.DATE,
     allowNull: true,
     validate: {

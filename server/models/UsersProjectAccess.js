@@ -1,19 +1,23 @@
 module.exports = (sequelize, type) => sequelize.define(
-  "users_project_access", {
+  "UsersProjectAccess", {
     id: {
       type: type.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
+    userId: {
+      // this will be the multipleForeignKey that will link the User table with UserProjectAcces table
       type: type.INTEGER,
+      required: true,
       allowNull: false,
     },
-    project_id: {
+    projectId: {
+      // this will be the multipleForeignKey that will link the Project table with UserProjectAcces table
       type: type.INTEGER,
+      required: true,
       allowNull: false,
     },
-    access_type: {
+    accessType: {
       type: type.INTEGER,
       allowNull: false,
     },

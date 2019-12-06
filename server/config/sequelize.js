@@ -1,8 +1,10 @@
 const Sequelize = require("sequelize");
-const UserModel = require("../models/user");
-const ProjectModel = require("../models/project");
-const UserProjectAccessModel = require("../models/users-project-access");
-const ProjectGradesModel = require("../models/project-grades");
+const UserModel = require("../models/User");
+const ProjectModel = require("../models/Project");
+const UserProjectAccessModel = require("../models/UsersProjectAccess");
+const ProjectGradesModel = require("../models/ProjectGrades");
+const ProjectDataModel = require("../models/ProjectData");
+const ProjectPhasesModel = require("../models/ProjectPhases")
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -24,6 +26,8 @@ const User = UserModel(sequelize, Sequelize);
 const Project = ProjectModel(sequelize, Sequelize);
 const ProjectGrades = ProjectGradesModel(sequelize, Sequelize);
 const UserProjectAccess = UserProjectAccessModel(sequelize, Sequelize);
+const ProjectData = ProjectDataModel(sequelize, Sequelize);
+const ProjectPhases = ProjectPhasesModel(sequelize, Sequelize);
 
 sequelize.sync({ force: false }).then(() => {
   console.warn("Database & tables created!");
@@ -34,5 +38,7 @@ module.exports = {
   Project,
   ProjectGrades,
   UserProjectAccess,
+  ProjectData,
+  ProjectPhases,
   sequelize,
 };
