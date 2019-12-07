@@ -26,7 +26,7 @@ const ProjectGrades = ProjectGradesModel(sequelize, Sequelize);
 const UserProjectAccess = UserProjectAccessModel(sequelize, Sequelize);
 
 sequelize.sync({ force: false }).then(() => {
-  console.warn("Database & tables created!");
+  console.log("Database sync completed!");
 });
 
 module.exports = {

@@ -36,7 +36,7 @@ export default class App extends Component {
         console.log(response)
         if (response.status === 202) {
           const { handleLoginSubmit } = this.props;
-  
+
           handleLoginSubmit();
         }
       });
@@ -68,7 +68,7 @@ export default class App extends Component {
         />
 
 
-        <Button type="submit"> lsfafs</Button>
+        <Button type="submit">Login</Button>
       </form>
     );
   }
