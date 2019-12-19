@@ -90,7 +90,12 @@ export default function Layout({ children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleLogOut = () => Axios.get("/logout");
+  const handleLogOut = () => {
+    Axios.get("/logout").then((res)=>{
+      window.location.reload(false);
+    });
+
+  }
 
   return (
     <div className={classes.root}>
