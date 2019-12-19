@@ -1,14 +1,16 @@
-module.exports = (sequelize, type) => sequelize.define("project_grades", {
+module.exports = (sequelize, type) => sequelize.define("ProjectGrades", {
   id: {
     type: type.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  project_id: {
+  phaseId: { //projectId
+    // foreignKey -> this should link the ProjectGrades table with ProjectPhases table
     type: type.INTEGER,
+    required: true,
     allowNull: false,
   },
-  user_id: {
+  userId: {
     type: type.INTEGER,
     allowNull: false,
   },
