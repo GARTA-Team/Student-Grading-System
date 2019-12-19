@@ -101,7 +101,8 @@ export default class App extends Component {
                     <Route path="/team" render={routerProps => (<Team {...routerProps} />)} />
                   </Switch>
                 </Drawer>
-              ) : (
+              )
+                : (
                   <Switch>
                     <Route path="/login" render={routerProps => (<Auth {...routerProps} onSucces={this.loadDashboardData} />)} />
                     <Route
