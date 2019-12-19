@@ -34,6 +34,7 @@ app.use(passport.session());
 const userRouter = require("./routers/user-router");
 const loginRouter = require("./routers/login-router");
 const projectRouter = require("./routers/project-router");
+const teamsRouter = require("./routers/teams-router.js");
 
 app.all("*", (req, resp, next) => {
   // console.log(req.path); // do anything you want here
@@ -43,6 +44,7 @@ app.use("/", loginRouter);
 app.use(isAuthenticated);
 app.use("/user-api", userRouter);
 app.use("/project-api", projectRouter);
+app.use("/team-api", teamsRouter);
 
 app.get("/", (req, res) => {
   res.status(200).redirect("/dashboard");
