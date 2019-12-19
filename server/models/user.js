@@ -35,7 +35,7 @@ module.exports = (sequelize, type) => {
       unique: true,
     },
   });
-  User.addHook("beforeCreate", user => {
+  User.addHook("beforeCreate", (user) => {
     user.pass = bcrypt.hashSync(
       user.pass,
       bcrypt.genSaltSync(saltRounds),
