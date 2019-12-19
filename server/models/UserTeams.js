@@ -6,10 +6,10 @@ module.exports = (sequelize, type) => sequelize.define("UserTeams", {
     },
     userId: {
         type: type.INTEGER,
-        primaryKey: true,
+        allowNull: false,
     },
     teamId: {
         type: type.INTEGER,
-        primaryKey: true,
+        allowNull: false,
     },
 });

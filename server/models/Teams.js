@@ -6,7 +6,7 @@ module.exports = (sequelize, type) => sequelize.define("Teams", {
     },
     name: {
         type: type.STRING,
-        allowNull: true,
+        allowNull: false,
         validate: {
             notEmpty: true,
         },
