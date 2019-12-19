@@ -13,13 +13,12 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhases", {
     phaseNumber: {
         type: type.INTEGER,
         allowNull: false,
-        autoIncrement: true,
     },
     phaseDeadline: {
         type: type.DATE,
         allowNull: true,
         validate: {
-          notEmpty: true,
+            notEmpty: true,
         },
     },
     delivered: {
@@ -30,10 +29,10 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhases", {
     },
     proportion: {
         type: type.INTEGER,
+        allowNull: false,
         validate: {
             notEmpty: true,
-            notNull : true,
             max: 1,
-        }, 
+        },
     },
 });
