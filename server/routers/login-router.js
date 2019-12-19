@@ -24,9 +24,7 @@ router.post("/signup", async (req, res) => {
       await User.create(req.body).then(() => {
         res.status(201).json({ msg: "user created" });
       }).catch((err) => {
-        if (err.original.errno === 1062) {
-          res.status(409).json({ msg: "email used" });
-        }
+        res.status(409).json({ msg: err }); // just for debugging
       });
     }
   } catch (err) {

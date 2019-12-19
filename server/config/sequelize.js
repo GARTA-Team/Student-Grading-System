@@ -4,7 +4,7 @@ const ProjectModel = require("../models/Project");
 const UserProjectAccessModel = require("../models/UsersProjectAccess");
 const ProjectGradesModel = require("../models/ProjectGrades");
 const ProjectDataModel = require("../models/ProjectData");
-const ProjectPhasesModel = require("../models/ProjectPhases")
+const ProjectPhasesModel = require("../models/ProjectPhases");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
