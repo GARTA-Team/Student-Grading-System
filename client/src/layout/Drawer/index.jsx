@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
     color: "white",
   },
   languagePicker: {
-    justifyContent: "end",
+    float: "right",
   },
 }));
 
