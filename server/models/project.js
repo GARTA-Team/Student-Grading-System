@@ -32,6 +32,10 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
       notEmpty: true,
     },
   },
+  teamId: {
+    type: type.INTEGER,
+    allowNull: false,
+  },
   deadline: {
     type: type.DATE,
     allowNull: true,

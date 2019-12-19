@@ -5,6 +5,9 @@ const UserProjectAccessModel = require("../models/UsersProjectAccess");
 const ProjectGradesModel = require("../models/ProjectGrades");
 const ProjectDataModel = require("../models/ProjectData");
 const ProjectPhasesModel = require("../models/ProjectPhases");
+const GradesModel = require("../models/Grades");
+const TeamsModel = require("../models/Teams");
+const UserTeamsModel = require("../models/UserTeams");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -28,6 +31,9 @@ const ProjectGrades = ProjectGradesModel(sequelize, Sequelize);
 const UserProjectAccess = UserProjectAccessModel(sequelize, Sequelize);
 const ProjectData = ProjectDataModel(sequelize, Sequelize);
 const ProjectPhases = ProjectPhasesModel(sequelize, Sequelize);
+const Grades = GradesModel(sequelize, Sequelize);
+const Teams = TeamsModel(sequelize, Sequelize);
+const UserTeams = UserTeamsModel(sequelize, Sequelize);
 
 sequelize.sync({ force: false }).then(() => {
   console.log("Database sync completed!");
@@ -40,5 +46,8 @@ module.exports = {
   UserProjectAccess,
   ProjectData,
   ProjectPhases,
+  Grades,
+  Teams,
+  UserTeams,
   sequelize,
 };
