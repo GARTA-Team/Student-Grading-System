@@ -6,7 +6,7 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
   },
   name: {
     type: type.STRING,
-    allowNull: true,
+    allowNull: false,
     validate: {
       notEmpty: true,
     },
@@ -18,23 +18,9 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
       notEmpty: true,
     },
   },
-  dateCreated: {
-    type: type.DATE,
-    allowNull: true,
-    validate: {
-      notEmpty: true,
-    },
-  },
-  lastModified: {
-    type: type.DATE,
-    allowNull: true,
-    validate: {
-      notEmpty: true,
-    },
-  },
   teamId: {
     type: type.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   deadline: {
     type: type.DATE,

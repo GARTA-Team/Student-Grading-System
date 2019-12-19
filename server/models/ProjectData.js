@@ -17,10 +17,4 @@ module.exports = (sequelize, type) => sequelize.define("ProjectData",{
             notEmpty: true,
         },
     },
-    createAt: {
-        type : type.DATE,
-    },
-    updatedAt: {
-        type : type.DATE,
-    },
 });
