@@ -13,13 +13,20 @@ export default class index extends Component {
 
     await onSucces();
     history.replace("/dashboard");
-  }
+  };
+
+  handleRegisterSubmit = async () => {
+    const { history, onSucces } = this.props;
+
+    history.replace("/login");
+  };
 
   render() {
     return (
       <div>
         <ul>
           <li><Link to="/register">Register</Link></li>
+          <li><Link to="/login">Login</Link></li>
         </ul>
         <p>Authentication</p>
         <Switch>
@@ -27,7 +34,7 @@ export default class index extends Component {
             <Login handleLoginSubmit={this.handleLoginSubmit} />
           </Route>
           <Route exact path="/register">
-            <Register />
+            <Register handleRegisterSubmit={this.handleRegisterSubmit} />
           </Route>
         </Switch>
       </div>

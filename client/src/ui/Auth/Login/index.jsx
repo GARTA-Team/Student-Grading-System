@@ -52,7 +52,7 @@ export default class App extends Component {
         <TextField
           required
           id="standard-required"
-          label="Required"
+          label="Email"
           // className={classes.textField}
           margin="normal"
           onChange={this.handleChange("email")}
