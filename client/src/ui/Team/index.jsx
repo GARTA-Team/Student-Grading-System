@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Axios from "axios";
+import Tabs from './utils/Tabs';
 
 export default class index extends Component {
   state = {
@@ -13,7 +14,7 @@ export default class index extends Component {
     }
   };
   async componentDidMount() {
-    const userData = await Axios.get("/user_data");
+    const userData = await Axios.get("/user-data");
     const yourTeams = await Axios.get(`/team-api/own/${userData.data.id}`);
     yourTeams.data.forEach(async (team) => {
       const teamData = await Axios.get(`/team-api/teams/${team.teamId}`);
@@ -26,7 +27,8 @@ export default class index extends Component {
   render() {
     return (
       <div>
-        <p>Team</p>
+        <Tabs />
+        
       </div>
     );
   }
