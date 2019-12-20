@@ -20,5 +20,11 @@
     "Team": "Echipa",
     "Profile": "Profil",
     "Logout": "Logout"
+  },
+  "Auth":{
+    "Authentication":"Autentificare",
+    "Register":"Inregistrare",
+    "Password":"Parola",
+    "Username":"Nume de utilizator"
   }
 }

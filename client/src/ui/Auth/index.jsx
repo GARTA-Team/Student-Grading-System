@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { t } from "react-i18nify";
 import {
   Switch,
   Route,
@@ -25,10 +26,10 @@ export default class index extends Component {
     return (
       <div>
         <ul>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/register">{t("Auth.Register")}</Link></li>
+          <li><Link to="/login">{t("Auth.Login")}</Link></li>
         </ul>
-        <p>Authentication</p>
+        <p>{t("Auth.Authentication")}</p>
         <Switch>
           <Route exact path="/login">
             <Login handleLoginSubmit={this.handleLoginSubmit} />

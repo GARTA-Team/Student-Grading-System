@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
+import { t } from "react-i18nify";
 import Axios from "axios";
 
 export default class App extends Component {
@@ -59,7 +60,7 @@ export default class App extends Component {
         />
         <TextField
           id="standard-password-input"
-          label="Password"
+          label={t("Auth.Password")}
           // className={classes.textField}
           type="password"
           autoComplete="current-password"

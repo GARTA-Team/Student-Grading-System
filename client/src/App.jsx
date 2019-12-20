@@ -9,7 +9,6 @@ import Projects from "./ui/Projects";
 import Team from "./ui/Team";
 import Drawer from "./layout/Drawer";
 import Loader from "./components/Loader";
-import Register from "./ui/Auth/Register";
 
 const theme = createMuiTheme({
   palette: {

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
+import { t } from "react-i18nify";
 import { Button } from "@material-ui/core";
 import Axios from "axios";
 
@@ -53,7 +54,7 @@ export default class App extends Component {
 				<TextField
 					required
 					id="standard-required"
-					label="Username"
+					label={t("Auth.Username")}
 					// className={classes.textField}
 					margin="normal"
 					onChange={this.handleChange("username")}
@@ -68,7 +69,7 @@ export default class App extends Component {
 				/>
 				<TextField
 					id="standard-password-input"
-					label="Password"
+					label={t("Auth.Password")}
 					// className={classes.textField}
 					type="password"
 					autoComplete="current-password"
@@ -77,7 +78,7 @@ export default class App extends Component {
 				/>
 
 
-				<Button type="submit">Register</Button>
+				<Button type="submit">{t("Auth.Register")}</Button>
 			</form>
 		);
 	}
