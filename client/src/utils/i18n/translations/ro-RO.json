@@ -31,5 +31,9 @@
     "LoginMessage": "Nu ai cont? Inregistreaza-te",
     "Remember": "Tine-ma minte",
     "Forgot": "Ai uitat parola?"
+  },
+  "Home":{
+    "Title":"Sistem Notare Anonima Garta",
+    "Slogan":"Aici vei juriza proiectele colegilor tai."
   }
 }

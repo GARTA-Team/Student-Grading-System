@@ -16,5 +16,9 @@
     "LoginMessage": "Don't have an account? Sign up",
     "Remember": "Remember me",
     "Forgot": "Forgot password?"
+  },
+  "Home":{
+    "Title":"Garta Student Anonymous Grading System",
+    "Slogan":"This is where you're gonna grade your colleagues projects."
   }
 }
