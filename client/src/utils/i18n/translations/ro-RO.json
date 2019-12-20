@@ -21,10 +21,15 @@
     "Profile": "Profil",
     "Logout": "Logout"
   },
-  "Auth":{
-    "Authentication":"Autentificare",
-    "Register":"Inregistrare",
-    "Password":"Parola",
-    "Username":"Nume de utilizator"
+  "Auth": {
+    "Authentication": "Autentificare",
+    "Login": "Login",
+    "Register": "Inregistrare",
+    "Password": "Parola",
+    "Username": "Nume de utilizator",
+    "RegisterMessage": "Ai deja cont? Login",
+    "LoginMessage": "Nu ai cont? Inregistreaza-te",
+    "Remember": "Tine-ma minte",
+    "Forgot": "Ai uitat parola?"
   }
 }

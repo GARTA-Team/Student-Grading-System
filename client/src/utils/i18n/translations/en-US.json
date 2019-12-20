@@ -6,10 +6,15 @@
   },
   "Languages": {},
   "Navigation": {},
-  "Auth":{
-    "Authentication":"Authentication",
-    "Register":"Register",
-    "Password":"Password",
-    "Username":"Username"
+  "Auth": {
+    "Authentication": "Authentication",
+    "Login": "Login",
+    "Register": "Register",
+    "Password": "Password",
+    "Username": "Username",
+    "RegisterMessage": "Already have an account? Login",
+    "LoginMessage": "Don't have an account? Sign up",
+    "Remember": "Remember me",
+    "Forgot": "Forgot password?"
   }
 }
