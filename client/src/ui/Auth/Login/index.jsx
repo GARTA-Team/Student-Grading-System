@@ -88,7 +88,7 @@ class Login extends Component {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+          {t("Auth.Login")}
         </Typography>
           <form className={classes.form} noValidate onSubmit={this.handleSubmit}>
             <TextField
@@ -117,7 +117,7 @@ class Login extends Component {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label={t("Auth.Remember")}
             />
             <Button
               type="submit"
@@ -126,18 +126,17 @@ class Login extends Component {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              {t("Auth.Login")}
           </Button>
-            {/* <Button type="submit">Login</Button> */}
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                {t("Auth.Forgot")}
               </Link>
               </Grid>
               <Grid item>
                 <NavLink href="#" to="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                {t("Auth.LoginMessage")}
                 </NavLink>
               </Grid>
             </Grid>

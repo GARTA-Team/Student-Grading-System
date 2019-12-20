@@ -3,8 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import { NavLink } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
@@ -129,10 +127,6 @@ class Register extends Component {
               autoComplete="current-password"
               onChange={this.handleChange("password")}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -142,16 +136,15 @@ class Register extends Component {
             >
               {t("Auth.Register")}
           </Button>
-            {/* <Button type="submit">Login</Button> */}
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                {t("Auth.Forgot")}
               </Link>
               </Grid>
               <Grid item>
-                <NavLink href="#" to="/register" variant="body2">
-                  {"Already have an account? Log in"}
+                <NavLink href="#" to="/login" variant="body2">
+                {t("Auth.RegisterMessage")}
                 </NavLink>
               </Grid>
             </Grid>
