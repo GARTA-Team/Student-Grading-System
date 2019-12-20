@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import Select, { components } from "react-select";
 import { t, setLocale, getLocale } from "react-i18nify";
+import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Avatar, Typography } from "@material-ui/core";
 import { getLanguageOptions } from "../../utils/i18n/initalize-i18n";
@@ -72,6 +73,7 @@ export default function LanguagePicker({ className }) {
 
     setLocale(locale);
     setSelectedLanguage(language);
+    moment.locale(locale);
   };
 
   // also take the user suplied classes and add it to ours

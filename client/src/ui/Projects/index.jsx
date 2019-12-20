@@ -1,11 +1,17 @@
-import React, { Component } from "react";
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import ProjectsDashboard from "./Dashboard";
+import ProjectDetails from "./Details";
+import AddProject from "./Add";
 
-export default class index extends Component {
-  render() {
-    return (
-      <div>
-        <p>Projects</p>
-      </div>
-    );
-  }
+export default function ProjectsPage(props) {
+  const { history = {}, path = "" } = props;
+
+  return (
+    <Switch>
+      <Route exact path={path} render={routerProps => (<ProjectsDashboard {...routerProps} history={history} />)} />
+      <Route path={`${path}/add`} render={routerProps => (<AddProject {...routerProps} />)} />
+      <Route path={`${path}/:projectId`} render={routerProps => (<ProjectDetails {...routerProps} />)} />
+    </Switch>
+  )
 }
