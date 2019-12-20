@@ -5,5 +5,11 @@
     "CompletedProjects": "Completed projects"
   },
   "Languages": {},
-  "Navigation": {}
+  "Navigation": {},
+  "Auth":{
+    "Authentication":"Authentication",
+    "Register":"Register",
+    "Password":"Password",
+    "Username":"Username"
+  }
 }

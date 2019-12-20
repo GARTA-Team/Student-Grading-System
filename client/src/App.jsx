@@ -104,6 +104,7 @@ export default class App extends Component {
               )
                 : (
                   <Switch>
+                    <Route path="/register" render={routerProps => (<Auth {...routerProps} />)} />
                     <Route path="/login" render={routerProps => (<Auth {...routerProps} onSucces={this.loadDashboardData} />)} />
                     <Route
                       path="/"
