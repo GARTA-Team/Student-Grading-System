@@ -15,6 +15,9 @@
     "RegisterMessage": "Already have an account? Login",
     "LoginMessage": "Don't have an account? Sign up",
     "Remember": "Remember me",
-    "Forgot": "Forgot password?"
+    "Forgot": "Forgot password?",
+    "UsernameLength": "Username needs to be at least 8 characters long",
+    "InvalidEmail": "Invalid email",
+    "PasswordLength": "Password needs to be at least 8 characters long"
   }
 }
