@@ -1,6 +1,7 @@
 
 import React, { forwardRef } from "react";
 import MaterialTable from "material-table";
+import Paper from '@material-ui/core/Paper';
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -38,7 +39,24 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-
+/**
+ * Wrapper for MaterialTable
+ *
+ * Sets the icons and
+ * Allows the passign of className to the container component
+ */
 export default function DataTable(props) {
-  return <MaterialTable icons={tableIcons} {...props} />;
+  const { className, ...rest } = props;
+
+  return (
+    <MaterialTable
+      icons={tableIcons}
+      components={{
+        Container: containerProps => (
+          <Paper elevation={2} {...containerProps} className={className} />
+        ),
+      }}
+      {...rest}
+    />
+  );
 }

@@ -12,7 +12,7 @@ const styles = {
   }
 };
 
-const PROJECTS_PER_PAGE = 10;
+const PROJECTS_PER_PAGE = 10; // TODO add pagination
 
 /**
  * Renders a list of all the users projects
