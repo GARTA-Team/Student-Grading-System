@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
   Switch,
   Route,
-  Link,
 } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
@@ -13,21 +12,23 @@ export default class index extends Component {
 
     await onSucces();
     history.replace("/dashboard");
-  }
+  };
+
+  handleRegisterSubmit = async () => {
+    const { history } = this.props;
+
+    history.replace("/login");
+  };
 
   render() {
     return (
       <div>
-        <ul>
-          <li><Link to="/register">Register</Link></li>
-        </ul>
-        <p>Authentication</p>
         <Switch>
           <Route exact path="/login">
             <Login handleLoginSubmit={this.handleLoginSubmit} />
           </Route>
           <Route exact path="/register">
-            <Register />
+            <Register handleRegisterSubmit={this.handleRegisterSubmit} />
           </Route>
         </Switch>
       </div>
