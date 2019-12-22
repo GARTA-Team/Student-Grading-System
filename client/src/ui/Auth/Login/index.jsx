@@ -17,7 +17,7 @@ import Container from "@material-ui/core/Container";
 import { t } from "react-i18nify";
 import axios from "axios";
 import FormikTextField from "../../../components/FormFields/TextField";
-
+import Snackbar from "../../../components/Snackbar";
 
 const styles = theme => ({
   paper: {
@@ -40,10 +40,19 @@ const styles = theme => ({
 });
 
 class Login extends Component {
-
+  state = {
+    variant: "success",
+    open: false,
+    message: "",
+  };
   handleSubmit = async (user) => {
     const { email, password } = user;
-
+    this.setState({
+      variant: "error",
+      open: true,
+      message: "nu mere",
+    });
+    console.log(this.state);
     try {
       const response = await axios.post(
         "/login",
@@ -55,7 +64,6 @@ class Login extends Component {
 
         handleLoginSubmit();
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -63,75 +71,82 @@ class Login extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        validationSchema={Yup.object({
-          email: Yup.string().required("Required").email(t("Auth.InvalidEmail")),
-          password: Yup.string(),
-        })}
-        onSubmit={async (user, { setSubmitting }) => {
-          await this.handleSubmit(user);
-          setSubmitting(false);
-        }}
-      >
-        <Form>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                {t("Auth.Login")}
-              </Typography>
-              <FormikTextField
-                margin="normal"
-                fullWidth
-                label="Email"
-                name="email"
-                autoComplete="email"
-              />
-              <FormikTextField
-                margin="normal"
-                fullWidth
-                label={t("Auth.Password")}
-                name="password"
-                type="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label={t("Auth.Remember")}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                {t("Auth.Login")}
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    {t("Auth.Forgot")}
-                  </Link>
+      <div>
+        <Snackbar
+          variant={this.state.variant}
+          message={this.state.message}
+          open={this.state.open}
+        />
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={Yup.object({
+            email: Yup.string().required("Required").email(t("Auth.InvalidEmail")),
+            password: Yup.string(),
+          })}
+          onSubmit={async (user, { setSubmitting }) => {
+            await this.handleSubmit(user);
+            setSubmitting(false);
+          }}
+        >
+          <Form>
+            <Container component="main" maxWidth="xs">
+              <CssBaseline />
+              <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  {t("Auth.Login")}
+                </Typography>
+                <FormikTextField
+                  margin="normal"
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  autoComplete="email"
+                />
+                <FormikTextField
+                  margin="normal"
+                  fullWidth
+                  label={t("Auth.Password")}
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                />
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label={t("Auth.Remember")}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  {t("Auth.Login")}
+                </Button>
+                <Grid container>
+                  <Grid item xs>
+                    <Link href="#" variant="body2">
+                      {t("Auth.Forgot")}
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <NavLink href="#" to="/register" variant="body2">
+                      {t("Auth.LoginMessage")}
+                    </NavLink>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <NavLink href="#" to="/register" variant="body2">
-                    {t("Auth.LoginMessage")}
-                  </NavLink>
-                </Grid>
-              </Grid>
-            </div>
-            <Box mt={8} />
-          </Container>
-        </Form>
-      </Formik>
+              </div>
+              <Box mt={8} />
+            </Container>
+          </Form>
+        </Formik>
+      </div>
     );
   }
 }
