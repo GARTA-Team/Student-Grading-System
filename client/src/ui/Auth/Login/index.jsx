@@ -41,22 +41,16 @@ const styles = theme => ({
 
 class Login extends Component {
   state = {
-    variant: "success",
+    variant: "",
     open: false,
     message: "",
   };
   handleSubmit = async (user) => {
     const { email, password } = user;
-    this.setState({
-      variant: "error",
-      open: true,
-      message: "nu mere",
-    });
-    console.log(this.state);
     try {
       const response = await axios.post(
         "/login",
-        { email, pass: password },
+        { email, password },
       );
       console.warn(response);
       if (response.status === 202) {
@@ -65,7 +59,7 @@ class Login extends Component {
         handleLoginSubmit();
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
   render() {
@@ -76,6 +70,7 @@ class Login extends Component {
           variant={this.state.variant}
           message={this.state.message}
           open={this.state.open}
+          handleClose={() => this.setState({ open: false })}
         />
         <Formik
           initialValues={{

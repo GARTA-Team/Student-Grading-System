@@ -13,7 +13,7 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "pass",
+      passwordField: "password",
     },
     async (email, pass, done) => {
       if (email && pass) {
@@ -23,7 +23,7 @@ passport.use(
             message: "Incorrect email.",
           });
         }
-        if (!bcrypt.compareSync(pass, user.pass)) {
+        if (!bcrypt.compareSync(pass, user.password)) {
           return done(null, false, {
             message: "Incorrect password.",
           });

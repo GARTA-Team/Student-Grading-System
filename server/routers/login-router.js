@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
       res.status(406).json({ msg: "missing username" });
     } else if (!req.body.email) {
       res.status(406).json({ msg: "missing email" });
-    } else if (!req.body.pass) {
+    } else if (!req.body.password) {
       res.status(406).json({ msg: "missing password" });
     } else {
       await User.create(req.body).then(() => {

@@ -35,7 +35,7 @@ const Grades = GradesModel(sequelize, Sequelize);
 const Teams = TeamsModel(sequelize, Sequelize);
 const UserTeams = UserTeamsModel(sequelize, Sequelize);
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   console.log("Database sync completed!");
 });
 

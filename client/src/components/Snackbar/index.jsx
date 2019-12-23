@@ -77,41 +77,24 @@ SnackbarContentWrapper.propTypes = {
   variant: PropTypes.oneOf(["error", "info", "success", "warning"]).isRequired,
 };
 
-export default class CustomSnackbar extends Component() {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: this.props.open,
-    };
-  }
-
-  handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
-
-  render() {
-    return (
-      <div>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          open={this.state}
-          autoHideDuration={1500}
-          onClose={this.handleClose}
-        >
-          <SnackbarContentWrapper
-            onClose={this.handleClose}
-            variant={this.props.variant}
-            message={this.props.message}
-          />
-        </Snackbar>
-      </div>
-    );
-  }
+export default function CustomSnackbar(props) {
+  return (
+    <div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={props.open}
+        autoHideDuration={1500}
+        onClose={props.handleClose}
+      >
+        <SnackbarContentWrapper
+          onClose={props.handleClose}
+          variant={props.variant}
+          message={props.message}
+        />
+      </Snackbar>
+    </div>
+  );
 }
