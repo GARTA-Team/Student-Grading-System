@@ -34,8 +34,10 @@ Team.belongsToMany(User, { through: "UserTeams", foreignKey: "teamId" });
 
 Team.hasMany(Project, { foreignKey: "teamId" });
 Project.belongsTo(Team, { foreignKey: "teamId" });
+
 Team.hasMany(Project, { foreignKey: "judgeTeamId"});
 Project.belongsTo(Team, { foreignKey: "judgeTeamId" });
+
 Team.hasMany(Project, { foreignKey: "professorTeamId"});
 Project.belongsTo(Team, { foreignKey: "professorTeamId" });
 
@@ -50,9 +52,6 @@ Grade.belongsTo(ProjectPhase);
 
 User.hasMany(Grade);
 Grade.belongsTo(User);
-
-
-// TODO relatii pentru restul, o sa fie nevoie sa scot coloane din mai multe tabele
 
 sequelize.sync({ force: false }).then(() => {
   console.log("Database sync completed!");
