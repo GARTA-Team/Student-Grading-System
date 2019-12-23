@@ -119,7 +119,7 @@ class AddProject extends Component {
               <Grid item xs={12} className={classes.item}>
                 <FormikSelect
                   defaultValue={1}
-                  name="color"
+                  name="team"
                   options={[{ label: "1", value: 1 }]}
                 />
               </Grid>

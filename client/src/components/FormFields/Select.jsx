@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useField, useFormikContext, ErrorMessage } from "formik";
 import Select from "react-select";
-
+import FormGroup from "@material-ui/core/FormGroup";
 
 /**
  * Wrapper around material-ui TextField.
@@ -13,20 +13,20 @@ export default function FormikSelect(props) {
   const [field, meta] = useField(props);
   const { setFieldValue } = useFormikContext();
 
+  console.log(meta.touched && meta.error)
+
   return (
-    <FormGroup>
-      <label htmlFor={field.name}>{props.label}</label>
-      <Select
-        error={meta.touched && meta.error}
-        helperText={meta.error}
-        {...field}
-        {...props}
-        onChange={object => setFieldValue(field.name, object)}
-      />
-      {meta.touched && meta.error && (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      )}
-    </FormGroup>
+    <Select
+      {...field}
+      {...props}
+      onChange={object => setFieldValue(field.name, object)}
+      styles={{
+        control: provided => ({
+          ...provided,
+          borderColor: meta.touched && meta.error ? "red" : provided.borderColor,
+        }),
+      }}
+    />
   );
 }
 
