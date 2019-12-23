@@ -1,13 +1,11 @@
 const Sequelize = require("sequelize");
 const UserModel = require("../models/User");
+const UserTeamsModel = require("../models/UserTeams");
+const TeamModel = require("../models/Team");
 const ProjectModel = require("../models/Project");
-const UserProjectAccessModel = require("../models/UsersProjectAccess");
-const ProjectGradesModel = require("../models/ProjectGrades");
 const ProjectDataModel = require("../models/ProjectData");
 const ProjectPhasesModel = require("../models/ProjectPhases");
 const GradesModel = require("../models/Grades");
-const TeamsModel = require("../models/Teams");
-const UserTeamsModel = require("../models/UserTeams");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -26,14 +24,17 @@ const sequelize = new Sequelize(
 );
 
 const User = UserModel(sequelize, Sequelize);
+// const UserTeams = UserTeamsModel(sequelize, Sequelize);
+const Team = TeamModel(sequelize, Sequelize);
 const Project = ProjectModel(sequelize, Sequelize);
-const ProjectGrades = ProjectGradesModel(sequelize, Sequelize);
-const UserProjectAccess = UserProjectAccessModel(sequelize, Sequelize);
 const ProjectData = ProjectDataModel(sequelize, Sequelize);
 const ProjectPhases = ProjectPhasesModel(sequelize, Sequelize);
 const Grades = GradesModel(sequelize, Sequelize);
-const Teams = TeamsModel(sequelize, Sequelize);
-const UserTeams = UserTeamsModel(sequelize, Sequelize);
+
+User.belongsToMany(Team, { through: "UserTeams", foreignKey: "userId" });
+Team.belongsToMany(User, { through: "UserTeams", foreignKey: "teamId" });
+
+// TODO relatii pentru restul, o sa fie nevoie sa scot coloane din mai multe tabele
 
 sequelize.sync({ force: true }).then(() => {
   console.log("Database sync completed!");
@@ -42,12 +43,9 @@ sequelize.sync({ force: true }).then(() => {
 module.exports = {
   User,
   Project,
-  ProjectGrades,
-  UserProjectAccess,
   ProjectData,
   ProjectPhases,
   Grades,
-  Teams,
-  UserTeams,
+  Team,
   sequelize,
 };

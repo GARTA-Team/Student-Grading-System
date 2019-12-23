@@ -18,10 +18,6 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
       notEmpty: true,
     },
   },
-  teamId: {
-    type: type.INTEGER,
-    allowNull: true,
-  },
   deadline: {
     type: type.DATE,
     allowNull: true,
@@ -34,13 +30,19 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
     allowNull: true,
     validate: {
       notEmpty: true,
+      isIn: [["NOT STARTED", "IN PROGRESS", "FINISHED", "OVERDUE"]],
     },
   },
-  grading: {
+  teamId: {
+    type: type.INTEGER,
+    allowNull: false,
+  },
+  judgeTeamId: {
     type: type.INTEGER,
     allowNull: true,
-    validate: {
-      notEmpty: true,
-    },
+  },
+  professorTeamId: {
+    type: type.INTEGER,
+    allowNull: false,
   },
 });
