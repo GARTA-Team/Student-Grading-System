@@ -31,8 +31,8 @@
     "LoginMessage": "Nu ai cont? Inregistreaza-te",
     "Remember": "Tine-ma minte",
     "Forgot": "Ai uitat parola?",
-    "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 8 caractere",
+    "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
-    "PasswordLength": "Numele de utilizator trebuie sa aiba cel putin 8 caractere"
+    "PasswordLength": "Parola trebuie sa aiba cel putin 5 caractere"
   }
 }

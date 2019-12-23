@@ -4,11 +4,6 @@ module.exports = (sequelize, type) => sequelize.define("ProjectData", {
     primaryKey: true,
     autoIncrement: true,
   },
-  projectId: {
-    type: type.INTEGER,
-    required: true,
-    allowNull: false,
-  },
   data: {
     type: type.INTEGER,
     allowNull: true,

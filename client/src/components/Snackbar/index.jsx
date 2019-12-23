@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -86,7 +86,7 @@ export default function CustomSnackbar(props) {
           horizontal: "right",
         }}
         open={props.open}
-        autoHideDuration={1500}
+        autoHideDuration={2000}
         onClose={props.handleClose}
       >
         <SnackbarContentWrapper

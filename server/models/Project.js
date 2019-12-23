@@ -33,16 +33,4 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
       isIn: [["NOT STARTED", "IN PROGRESS", "FINISHED", "OVERDUE"]],
     },
   },
-  teamId: {
-    type: type.INTEGER,
-    allowNull: false,
-  },
-  judgeTeamId: {
-    type: type.INTEGER,
-    allowNull: true,
-  },
-  professorTeamId: {
-    type: type.INTEGER,
-    allowNull: false,
-  },
 });

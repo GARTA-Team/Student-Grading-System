@@ -1,11 +1,10 @@
 const Sequelize = require("sequelize");
 const UserModel = require("../models/User");
-const UserTeamsModel = require("../models/UserTeams");
 const TeamModel = require("../models/Team");
 const ProjectModel = require("../models/Project");
 const ProjectDataModel = require("../models/ProjectData");
-const ProjectPhasesModel = require("../models/ProjectPhases");
-const GradesModel = require("../models/Grades");
+const ProjectPhaseModel = require("../models/ProjectPhase");
+const GradeModel = require("../models/Grade");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -24,19 +23,38 @@ const sequelize = new Sequelize(
 );
 
 const User = UserModel(sequelize, Sequelize);
-// const UserTeams = UserTeamsModel(sequelize, Sequelize);
 const Team = TeamModel(sequelize, Sequelize);
 const Project = ProjectModel(sequelize, Sequelize);
 const ProjectData = ProjectDataModel(sequelize, Sequelize);
-const ProjectPhases = ProjectPhasesModel(sequelize, Sequelize);
-const Grades = GradesModel(sequelize, Sequelize);
+const ProjectPhase = ProjectPhaseModel(sequelize, Sequelize);
+const Grade = GradeModel(sequelize, Sequelize);
 
 User.belongsToMany(Team, { through: "UserTeams", foreignKey: "userId" });
 Team.belongsToMany(User, { through: "UserTeams", foreignKey: "teamId" });
 
+Team.hasMany(Project, { foreignKey: "teamId" });
+Project.belongsTo(Team, { foreignKey: "teamId" });
+Team.hasMany(Project, { foreignKey: "judgeTeamId"});
+Project.belongsTo(Team, { foreignKey: "judgeTeamId" });
+Team.hasMany(Project, { foreignKey: "professorTeamId"});
+Project.belongsTo(Team, { foreignKey: "professorTeamId" });
+
+Project.hasMany(ProjectData);
+ProjectData.belongsTo(Project);
+
+Project.hasMany(ProjectPhase);
+ProjectPhase.belongsTo(Project);
+
+ProjectPhase.hasMany(Grade);
+Grade.belongsTo(ProjectPhase);
+
+User.hasMany(Grade);
+Grade.belongsTo(User);
+
+
 // TODO relatii pentru restul, o sa fie nevoie sa scot coloane din mai multe tabele
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   console.log("Database sync completed!");
 });
 
@@ -44,8 +62,8 @@ module.exports = {
   User,
   Project,
   ProjectData,
-  ProjectPhases,
-  Grades,
+  ProjectPhase,
+  Grade,
   Team,
   sequelize,
 };

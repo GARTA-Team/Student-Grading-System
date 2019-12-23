@@ -54,12 +54,23 @@ class Login extends Component {
       );
       console.warn(response);
       if (response.status === 202) {
+        // this dissapears immediately, I think we need to use content-flash with passport to display it on the page we redirect to after login
+        // whatever page that may be
+        this.setState({
+          variant: "success",
+          message: `${response.status} ${response.statusText}`,
+          open: true,
+        });
         const { handleLoginSubmit } = this.props;
 
         handleLoginSubmit();
       }
     } catch (error) {
-      console.log(error.response);
+      this.setState({
+        variant: "error",
+        message: `${error.response.status} ${error.response.statusText}`,
+        open: true,
+      });
     }
   };
   render() {

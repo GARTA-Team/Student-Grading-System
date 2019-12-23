@@ -1,13 +1,8 @@
-module.exports = (sequelize, type) => sequelize.define("ProjectPhases", {
+module.exports = (sequelize, type) => sequelize.define("ProjectPhase", {
   id: {
     type: type.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-  },
-  projectId: {
-    type: type.INTEGER,
-    required: true,
-    allowNull: false,
   },
   phaseNumber: {
     type: type.INTEGER,
