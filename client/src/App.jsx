@@ -95,7 +95,7 @@ export default class App extends Component {
         <Loader isLoading={isLoading}>
           <Router>
             {
-              isAuthenticated ? (
+              true ? (
                 <Drawer>
                   <Switch>
                     <Route exact path="/" render={routerProps => (<Redirect {...routerProps} to="/dashboard" />)} />

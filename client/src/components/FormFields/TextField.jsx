@@ -15,7 +15,7 @@ export default function FormikTextField(props) {
     <TextField
       fullWidth
       variant="outlined"
-      error={meta.touched && meta.error}
+      error={!!(meta.touched && meta.error)} // must be boolean
       helperText={meta.error}
       {...field}
       {...props}
