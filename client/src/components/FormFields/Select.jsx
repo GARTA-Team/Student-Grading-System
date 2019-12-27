@@ -1,36 +1,45 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useField, useFormikContext, ErrorMessage } from "formik";
-import Select from "react-select";
-import { FormGroup } from "@material-ui/core";
+import { useField, useFormikContext } from "formik";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
 
 
 /**
- * Wrapper around material-ui TextField.
+ * Wrapper around material-ui Autocomplete.
  * Adds Formik functionality.
  */
-export default function FormikSelect(props) {
+export default function FormikSelect({ label, textFieldProps, ...rest }) {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  const [field, meta] = useField(props);
+  const [field, meta] = useField(rest);
   const { setFieldValue } = useFormikContext();
 
   return (
-    <FormGroup>
-      <label htmlFor={field.name}>{props.label}</label>
-      <Select
-        error={meta.touched && meta.error}
-        helperText={meta.error}
-        {...field}
-        {...props}
-        onChange={object => setFieldValue(field.name, object)}
-      />
-      {meta.touched && meta.error && (
-        <ErrorMessage>{meta.error}</ErrorMessage>
+    <Autocomplete
+      getOptionLabel={option => option.label || ""}
+      renderInput={params => (
+        <TextField
+          {...params}
+          {...textFieldProps}
+          label={label}
+          variant="outlined"
+          fullWidth
+          error={!!(meta.touched && meta.error)} // must be boolean
+          helperText={JSON.stringify(meta.error)}
+        />
       )}
-    </FormGroup>
+      {...field}
+      {...rest}
+      onChange={(event, object) => setFieldValue(field.name, object)}
+    />
   );
 }
 
 FormikSelect.propTypes = {
   name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.any.isRequired,
+  })),
 };
