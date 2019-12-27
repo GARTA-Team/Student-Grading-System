@@ -9,6 +9,7 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
   // They won't get this or even be able to access this page if they aren't authed
   res.status(202).json({ msg: "ok" });
 });
+
 // Route for signing up a user. The user's password is automatically hashed and stored securely
 // thanks to how we configured our Sequelize User Model. If the user is created successfully,
 // proceed to log the user in, otherwise send back an error
@@ -17,8 +18,8 @@ router.post("/signup", async (req, res) => {
     if (!req.body.username) {
       res.status(406).json({ msg: "missing username" });
     } else if (!req.body.email) {
-      res.status(406).json({ msg: "missing username" });
-    } else if (!req.body.pass) {
+      res.status(406).json({ msg: "missing email" });
+    } else if (!req.body.password) {
       res.status(406).json({ msg: "missing password" });
     } else {
       await User.create(req.body).then(() => {
