@@ -34,5 +34,36 @@
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
     "PasswordLength": "Parola trebuie sa aiba cel putin 5 caractere"
+  },
+  "Projects": {
+    "Add": {
+      "ProjectData": "Date proiect",
+      "ProjectName": "Nume",
+      "ProjectSummary": "Rezumat",
+      "ProjectTeam": "Echipa",
+      "AddDeliverable": "Adauga livrabil",
+      "Cancel": "Anuleaza",
+      "Submit": "Trimite",
+      "Deliverables": "Livrabile",
+      "Deliverable": {
+        "Edit": "Editare",
+        "Delete": "Sterge",
+        "Name": "Nume",
+        "Description": "Descriere",
+        "Weight": "Pondere",
+        "Deadline": "Termen",
+        "Title": "Livrabil"
+      }
+    }
+  },
+  "Errors": {
+    "Required": "Camp necesar",
+    "Pozitive": "Numarul introdus trebuie sa fie pozitiv",
+    "Subunit": "Numarul trebuie sa fie subunitar",
+    "Number": "Valoarea introdusa trebuie sa fie de tip numeric",
+    "Min": "Sunt necesare %{value} %{name}",
+    "Max": "Maxim %{value} %{name}",
+    "MinDate": "Nu poti selecta o data mai mica decat %{date}",
+    "MaxDate": "Data maxima este %{date}"
   }
 }

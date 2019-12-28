@@ -1,6 +1,6 @@
 import React from "react";
 import { t } from "react-i18nify";
-import { Formik, Form } from "formik";
+import { Formik, Form, useFormikContext, useField } from "formik";
 import * as Yup from "yup";
 import { withStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -26,11 +26,13 @@ const styles = {
 };
 
 function DelivarableFormDialog(props) {
-  const { open, handleClose, classes, handleSubmit } = props;
+  const { open, handleClose, classes } = props;
+  const { setFieldValue } = useFormikContext();
+  const [field] = useField(props);
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{t("Projects.Add.DeliverableForm.Title")}</DialogTitle>
+      <DialogTitle id="form-dialog-title">{t("Projects.Add.Deliverable.Title")}</DialogTitle>
       <DialogContent>
 
         <Formik
@@ -41,23 +43,28 @@ function DelivarableFormDialog(props) {
             deadline: new Date(),
           }}
           validationSchema={Yup.object({
-            name: Yup.string().required('Required'),
-            description: Yup.string().required('Required'),
-            weight: Yup.number().positive().lessThan(1, "TODO").required(),
-            deadline: Yup.date().min(new Date()).required(),
+            name: Yup.string().required(t("Errors.Required")),
+            description: Yup.string().required(t("Errors.Required")),
+            weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).lessThan(1, t("Errors.Subunit")).required(t("Errors.Required")),
+            deadline: Yup.date().min(new Date(), t("Errors.MinDate", { date: new Date() })).required(t("Errors.Required")),
           })}
           onSubmit={(deliverable, { setSubmitting }) => {
-            handleSubmit(deliverable);
+            const { value = [] } = field;
+
+            value.push(deliverable);
+
+            setFieldValue(field.name, value);
+
             setSubmitting(false);
+            handleClose();
           }}
         >
           <Form>
             <Grid container>
 
-              {/* TODO mesaje de erroare */}
               <Grid item xs={12} className={classes.item}>
                 <FormikTextField
-                  label={t("Projects.Add.DeliverableForm.Name")}
+                  label={t("Projects.Add.Deliverable.Name")}
                   name="name"
                   type="text"
                 />
@@ -65,15 +72,17 @@ function DelivarableFormDialog(props) {
 
               <Grid item xs={12} className={classes.item}>
                 <FormikTextField
-                  label={t("Projects.Add.DeliverableForm.Description")}
+                  label={t("Projects.Add.Deliverable.Description")}
                   name="description"
                   type="text"
+                  multiline
+                  rows="5"
                 />
               </Grid>
 
               <Grid item xs={12} className={classes.item}>
                 <FormikTextField
-                  label={t("Projects.Add.DeliverableForm.Weight")}
+                  label={t("Projects.Add.Deliverable.Weight")}
                   name="weight"
                   type="text"
                 />
@@ -81,7 +90,7 @@ function DelivarableFormDialog(props) {
 
               <Grid item xs={12} className={classes.item}>
                 <FormikDateTimePicker
-                  label={t("Projects.Add.DeliverableForm.Deadline")}
+                  label={t("Projects.Add.Deliverable.Deadline")}
                   name="deadline"
                   disablePast
                 />
@@ -92,10 +101,10 @@ function DelivarableFormDialog(props) {
 
             <DialogActions>
               <Button onClick={handleClose} color="primary">
-                {t("Projects.Add.DeliverableForm.Cancel")}
+                {t("Projects.Add.Cancel")}
               </Button>
-              <Button /* onClick={handleClose} */ color="primary" type="submit">
-                {t("Projects.Add.DeliverableForm.Submit")}
+              <Button color="primary" type="submit">
+                {t("Projects.Add.Submit")}
               </Button>
             </DialogActions>
 
