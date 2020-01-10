@@ -60,13 +60,13 @@ app.get("/dashboard", async (req, res) => {
 
     const userJudgeTeams = await user.getTeams({
       where: {
-        type: "judge",
+        type: "JUDGE",
       },
     });
 
     const teams = await user.getTeams({
       where: {
-        type: "student",
+        type: "STUDENT",
       },
     });
 
@@ -92,6 +92,16 @@ app.get("/dashboard", async (req, res) => {
       let projectsTemp = await teams[i].getProjects();
       if (projectsTemp != null) {
         for (let j = 0; j < projectsTemp.length; j++) {
+          let phases = await projectsTemp[j].getProjectPhases();
+          if (phases) {
+            let phasesDone = 0;
+            for (let k = 0; k < phases.length; k++) {
+              if (phases.data) {
+                phasesDone++;
+              }
+            }
+            projectsTemp[j].percentage = (phasesDone / phases.length) * 100;
+          }
           dashboard.projects.push(projectsTemp[j]);
         }
       }
