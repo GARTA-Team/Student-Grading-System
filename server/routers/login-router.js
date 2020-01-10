@@ -21,6 +21,8 @@ router.post("/signup", async (req, res) => {
       res.status(406).json({ msg: "missing email" });
     } else if (!req.body.password) {
       res.status(406).json({ msg: "missing password" });
+    } else if (!req.body.type) {
+      res.status(406).json({ msg: "missing user type" });
     } else {
       await User.create(req.body).then(() => {
         res.status(201).json({ msg: "user created" });

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Select } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
@@ -14,6 +14,7 @@ import Container from "@material-ui/core/Container";
 import { t } from "react-i18nify";
 import axios from "axios";
 import FormikTextField from "../../../components/FormFields/TextField";
+import FormikSelect from "../../../components/FormFields/Select";
 import Snackbar from "../../../components/Snackbar";
 
 const styles = theme => ({
@@ -43,12 +44,12 @@ class Register extends Component {
     message: "",
   };
   handleSubmit = async (user) => {
-    const { username, email, password } = user;
+    const { username, email, password, type } = user;
 
     try {
       const response = await axios.post(
         "/signup",
-        { username, email, pass: password },
+        { username, email, password, type: type.value },
       );
       if (response.status === 201) {
         this.setState({
@@ -84,11 +85,13 @@ class Register extends Component {
             username: "",
             email: "",
             password: "",
+            type: ""
           }}
           validationSchema={Yup.object({
             username: Yup.string().required("Required").min(5, t("Auth.UsernameLength")).max(20),
             email: Yup.string().required("Required").email(t("Auth.InvalidEmail")),
             password: Yup.string().required("Required").min(5, t("Auth.PasswordLength")),
+            type: Yup.string().required("Required"),
           })}
           onSubmit={async (user, { setSubmitting }) => {
             await this.handleSubmit(user);
@@ -101,37 +104,59 @@ class Register extends Component {
                 <Avatar className={classes.avatar}>
                   <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
-                  {t("Auth.Register")}
-                </Typography>
-                <FormikTextField
-                  margin="normal"
-                  label={t("Auth.Username")}
-                  name="username"
-                  autoComplete="username"
-                />
-                <FormikTextField
-                  margin="normal"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                />
-                <FormikTextField
-                  margin="normal"
-                  label={t("Auth.Password")}
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  {t("Auth.Register")}
-                </Button>
+                <Grid container>
+                  <Grid item xs={12} className={classes.item}>
+                    <Typography component="h1" variant="h5">
+                      {t("Auth.Register")}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} className={classes.item}>
+                    <FormikTextField
+                      margin="normal"
+                      label={t("Auth.Username")}
+                      name="username"
+                      autoComplete="username"
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.item}>
+                    <FormikTextField
+                      margin="normal"
+                      label="Email"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.item}>
+                    <FormikTextField
+                      margin="normal"
+                      label={t("Auth.Password")}
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.item}>
+                    <FormikSelect
+                      margin="normal"
+                      label="Tip user"
+                      name="type"
+                      options={[
+                        { label: t("Auth.Student"), value: "STUDENT" },
+                        { label: t("Auth.Professor"), value: "PROFESSOR" }]}
+                    />
+                  </Grid>
+                  <Grid item xs={12} className={classes.item}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                    >
+                      {t("Auth.Register")}
+                    </Button>
+                  </Grid>
+                </Grid>
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
