@@ -12,10 +12,11 @@ module.exports = (sequelize, type) => sequelize.define("Team", {
     },
   },
   type: {
-    type: type.INTEGER,
+    type: type.STRING,
     allowNull: false,
     validate: {
-      len: [0, 2],
+      isIn: [["STUDENT", "JUDGE", "PROFESSOR"]],
+      notEmpty: true,
     },
   },
 });

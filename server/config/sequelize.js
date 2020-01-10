@@ -2,7 +2,6 @@ const Sequelize = require("sequelize");
 const UserModel = require("../models/User");
 const TeamModel = require("../models/Team");
 const ProjectModel = require("../models/Project");
-const ProjectDataModel = require("../models/ProjectData");
 const ProjectPhaseModel = require("../models/ProjectPhase");
 const GradeModel = require("../models/Grade");
 
@@ -25,7 +24,6 @@ const sequelize = new Sequelize(
 const User = UserModel(sequelize, Sequelize);
 const Team = TeamModel(sequelize, Sequelize);
 const Project = ProjectModel(sequelize, Sequelize);
-const ProjectData = ProjectDataModel(sequelize, Sequelize);
 const ProjectPhase = ProjectPhaseModel(sequelize, Sequelize);
 const Grade = GradeModel(sequelize, Sequelize);
 
@@ -40,9 +38,6 @@ Project.belongsTo(Team, { as: "JudgeTeam", foreignKey: "judgeTeamId" });
 
 Team.hasMany(Project, { foreignKey: "professorTeamId" });
 Project.belongsTo(Team, { as: "ProfessorTeam", foreignKey: "professorTeamId" });
-
-Project.hasMany(ProjectData);
-ProjectData.belongsTo(Project);
 
 Project.hasMany(ProjectPhase);
 ProjectPhase.belongsTo(Project);
@@ -60,7 +55,6 @@ sequelize.sync({ force: false }).then(() => {
 module.exports = {
   User,
   Project,
-  ProjectData,
   ProjectPhase,
   Grade,
   Team,

@@ -33,7 +33,9 @@
     "Forgot": "Ai uitat parola?",
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
-    "PasswordLength": "Parola trebuie sa aiba cel putin 5 caractere"
+    "PasswordLength": "Parola trebuie sa aiba cel putin 5 caractere",
+    "Student": "Student",
+    "Professor": "Profesor"
   },
   "Projects": {
     "Dashboard": {
