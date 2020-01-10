@@ -65,16 +65,6 @@ export default function FullWidthTabs() {
     console.warn("CENVAVAPNSFOAS");
     
   }
-    // const projectCards = () => {
-    //   if ( this.props.projects.length !== 0 ) {
-    //     console.warn("Clicked here!");
-    //     return this.props.projects.map( project => 
-    //        <Card fluid color='green' header={project.name} />
-    //     )
-    //   }
-    // }
-
-
 
   return (
     <div className={classes.root}>
