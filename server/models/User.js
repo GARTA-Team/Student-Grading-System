@@ -34,6 +34,13 @@ module.exports = (sequelize, type) => {
       },
       unique: true,
     },
+    type: {
+      type: type.STRING,
+      validate: {
+        isIn: [["STUDENT", "PROFESSOR"]],
+        notEmpty: true,
+      },
+    }
   });
   User.addHook("beforeCreate", (user) => {
     // eslint-disable-next-line no-param-reassign
