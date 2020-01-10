@@ -15,7 +15,7 @@ module.exports = (sequelize, type) => {
         len: [5, 20],
       },
     },
-    pass: {
+    password: {
       type: type.STRING,
       allowNull: false,
     },
@@ -36,8 +36,9 @@ module.exports = (sequelize, type) => {
     },
   });
   User.addHook("beforeCreate", (user) => {
-    user.pass = bcrypt.hashSync(
-      user.pass,
+    // eslint-disable-next-line no-param-reassign
+    user.password = bcrypt.hashSync(
+      user.password,
       bcrypt.genSaltSync(saltRounds),
       null,
     );

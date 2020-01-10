@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Home from "./ui/Home";
 import Dashboard from "./ui/Dashboard";
 import Auth from "./ui/Auth";
@@ -65,7 +66,7 @@ export default class App extends Component {
     isLoading: true,
     isAuthenticated: false,
     dashboardData: [],
-  }
+  };
 
   async componentDidMount() {
     this.loadDashboardData();
@@ -81,14 +82,16 @@ export default class App extends Component {
 
       console.error(error);
     }
-  }
+  };
 
 
   render() {
     const { isAuthenticated = false, isLoading = true, dashboardData = {} } = this.state;
 
     return (
+
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Loader isLoading={isLoading}>
           <Router>
             {
@@ -97,12 +100,14 @@ export default class App extends Component {
                   <Switch>
                     <Route exact path="/" render={routerProps => (<Redirect {...routerProps} to="/dashboard" />)} />
                     <Route path="/dashboard" render={routerProps => (<Dashboard {...routerProps} data={dashboardData} />)} />
-                    <Route path="/projects" render={routerProps => (<Projects {...routerProps} />)} />
+                    <Route path="/projects" render={routerProps => (<Projects {...routerProps} path="/projects" />)} />
                     <Route path="/team" render={routerProps => (<Team {...routerProps} />)} />
                   </Switch>
                 </Drawer>
-              ) : (
+              )
+                : (
                   <Switch>
+                    <Route path="/register" render={routerProps => (<Auth {...routerProps} />)} />
                     <Route path="/login" render={routerProps => (<Auth {...routerProps} onSucces={this.loadDashboardData} />)} />
                     <Route
                       path="/"

@@ -1,13 +1,10 @@
 const Sequelize = require("sequelize");
 const UserModel = require("../models/User");
+const TeamModel = require("../models/Team");
 const ProjectModel = require("../models/Project");
-const UserProjectAccessModel = require("../models/UsersProjectAccess");
-const ProjectGradesModel = require("../models/ProjectGrades");
 const ProjectDataModel = require("../models/ProjectData");
-const ProjectPhasesModel = require("../models/ProjectPhases");
-const GradesModel = require("../models/Grades");
-const TeamsModel = require("../models/Teams");
-const UserTeamsModel = require("../models/UserTeams");
+const ProjectPhaseModel = require("../models/ProjectPhase");
+const GradeModel = require("../models/Grade");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -26,14 +23,35 @@ const sequelize = new Sequelize(
 );
 
 const User = UserModel(sequelize, Sequelize);
+const Team = TeamModel(sequelize, Sequelize);
 const Project = ProjectModel(sequelize, Sequelize);
-const ProjectGrades = ProjectGradesModel(sequelize, Sequelize);
-const UserProjectAccess = UserProjectAccessModel(sequelize, Sequelize);
 const ProjectData = ProjectDataModel(sequelize, Sequelize);
-const ProjectPhases = ProjectPhasesModel(sequelize, Sequelize);
-const Grades = GradesModel(sequelize, Sequelize);
-const Teams = TeamsModel(sequelize, Sequelize);
-const UserTeams = UserTeamsModel(sequelize, Sequelize);
+const ProjectPhase = ProjectPhaseModel(sequelize, Sequelize);
+const Grade = GradeModel(sequelize, Sequelize);
+
+User.belongsToMany(Team, { through: "UserTeams", foreignKey: "userId" });
+Team.belongsToMany(User, { through: "UserTeams", foreignKey: "teamId" });
+
+Team.hasMany(Project, { foreignKey: "teamId" });
+Project.belongsTo(Team, { as: "ProjectTeam", foreignKey: "teamId" });
+
+Team.hasMany(Project, { foreignKey: "judgeTeamId" });
+Project.belongsTo(Team, { as: "JudgeTeam", foreignKey: "judgeTeamId" });
+
+Team.hasMany(Project, { foreignKey: "professorTeamId" });
+Project.belongsTo(Team, { as: "ProfessorTeam", foreignKey: "professorTeamId" });
+
+Project.hasMany(ProjectData);
+ProjectData.belongsTo(Project);
+
+Project.hasMany(ProjectPhase);
+ProjectPhase.belongsTo(Project);
+
+ProjectPhase.hasMany(Grade);
+Grade.belongsTo(ProjectPhase);
+
+User.hasMany(Grade);
+Grade.belongsTo(User);
 
 sequelize.sync({ force: false }).then(() => {
   console.log("Database sync completed!");
@@ -42,12 +60,9 @@ sequelize.sync({ force: false }).then(() => {
 module.exports = {
   User,
   Project,
-  ProjectGrades,
-  UserProjectAccess,
   ProjectData,
-  ProjectPhases,
-  Grades,
-  Teams,
-  UserTeams,
+  ProjectPhase,
+  Grade,
+  Team,
   sequelize,
 };
