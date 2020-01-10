@@ -6,9 +6,10 @@ import TabPanel from "../../../components/TabPanel";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { withStyles, Grid, Box } from "@material-ui/core";
+import { withStyles, Grid, Button } from "@material-ui/core";
 
 import Overview from "./panels/Overview";
+import DeliverablesTab from "./panels/Deliverables";
 
 const styles = theme => ({
   status: {
@@ -31,6 +32,11 @@ const styles = theme => ({
     flexGrow: 1,
     marginTop: theme.spacing(3),
   },
+  button: {
+    float: "right",
+    marginTop: theme.spacing(5),
+    marginRight: theme.spacing(6),
+  },
 });
 
 class ProjectDetails extends Component {
@@ -38,6 +44,7 @@ class ProjectDetails extends Component {
     project: {
       name: "TEST",
       status: "Active",
+      summary: "Lasfafasfasfafasfafsaf"
     },
     tab: 0,
   }
@@ -45,7 +52,7 @@ class ProjectDetails extends Component {
   handleChange = (event, newTab) => this.setState({ tab: newTab });
 
   render() {
-    const { classes } = this.props;
+    const { classes, history } = this.props;
 
     const { tab = 0, project = {} } = this.state;
     return (
@@ -72,23 +79,22 @@ class ProjectDetails extends Component {
             variant="fullWidth"
             indicatorColor="primary"
             textColor="primary"
-            aria-label="icon tabs example"
+            aria-label="tabs"
           >
             <Tab label={t("Projects.Details.Tabs.Overview")} aria-label={t("Projects.Details.Tabs.Overview")} />
-            <Tab label={t("Projects.Details.Tabs.Data")} aria-label={t("Projects.Details.Tabs.Data")} />
-            <Tab label={t("Projects.Details.Tabs.History")} aria-label={t("Projects.Details.Tabs.History")} />
-            <Tab label={t("Projects.Details.Tabs.Chat")} aria-label={t("Projects.Details.Tabs.Chat")} />
+            <Tab label={t("Projects.Details.Tabs.Deliverables")} aria-label={t("Projects.Details.Tabs.Deliverables")} />
           </Tabs>
           <TabPanel tab={tab} index={0}>
-            <Overview />
+            <Overview project={project} />
           </TabPanel>
           <TabPanel tab={tab} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel tab={tab} index={2}>
-            Item Three
+            <DeliverablesTab project={project} />
           </TabPanel>
         </div>
+
+        <Button variant="contained" onClick={history.goBack} color="secondary" className={classes.button}>
+          {t("Projects.Details.Back")}
+        </Button>
       </div>
     );
   }

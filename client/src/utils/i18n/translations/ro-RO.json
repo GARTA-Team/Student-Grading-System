@@ -54,6 +54,7 @@
       "ProjectName": "Nume",
       "ProjectSummary": "Rezumat",
       "ProjectTeam": "Echipa",
+      "ProjectProfessor": "Profesor",
       "AddDeliverable": "Adauga livrabil",
       "Cancel": "Anuleaza",
       "Submit": "Trimite",
@@ -67,6 +68,22 @@
         "Deadline": "Termen",
         "Title": "Livrabil"
       }
+    },
+    "Details": {
+      "Tabs": {
+        "Overview": "Prezentare generala",
+        "Deliverables": "Livrabile"
+      },
+      "Professor": "Profesor",
+      "NextDeadline": "Urmatorul termen",
+      "TeamMembers": "Membri echipa",
+      "Summary": "Summar",
+      "FinishDeliverable": "Finalizeaza",
+      "Sure": "Esti sigur ca vrei sa trimiti?",
+      "Back":"Inapoi"
+    },
+    "Deliverables": {
+      "Overdue": "Depasit"
     }
   },
   "Errors": {
@@ -77,6 +94,7 @@
     "Min": "Sunt necesare %{value} %{name}",
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
-    "MaxDate": "Data maxima este %{date}"
+    "MaxDate": "Data maxima este %{date}",
+    "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!"
   }
 }

@@ -68,25 +68,20 @@ class AddProjectPage extends Component {
     variant: "",
     message: "",
     open: false,
+    deliverableToEdit: null,
+    sum: 0,
   }
-
-  componentDidMount() {
-    console.log(this.props)
-    const { match = {} } = this.props;
-    const { projectId } = match.params;
-
-    if (projectId) {
-      
-    }
-  }
-
 
   handleDeliverableFormOpen = () => this.setState({ isFormOpen: true })
 
   handleDeliverableFormClose = () => this.setState({ isFormOpen: false })
 
+  handleEdit = (deliverable) => this.setState({ isFormOpen: true, deliverableToEdit: deliverable })
+
   handleSubmit = () => {
     console.log(this.state);
+
+    // TODO
   }
 
   render() {
@@ -101,8 +96,8 @@ class AddProjectPage extends Component {
       variant,
       message,
       open,
+      deliverableToEdit,
     } = this.state;
-
 
     return (
       <Formik
@@ -111,6 +106,11 @@ class AddProjectPage extends Component {
           name: Yup.string().required(t("Errors.Required")),
           summary: Yup.string().required(t("Errors.Required")),
           team: Yup.object({
+            label: Yup.string().required(t("Errors.Required")),
+            value: Yup.number(t("Errors.Number")).positive(t("Errors.Positive")).required(t("Errors.Required")),
+          })
+            .required(t("Errors.Required")),
+          professor: Yup.object({
             label: Yup.string().required(t("Errors.Required")),
             value: Yup.number(t("Errors.Number")).positive(t("Errors.Positive")).required(t("Errors.Required")),
           })
@@ -126,16 +126,21 @@ class AddProjectPage extends Component {
             )
             .required(t("Errors.Required"))
             .min(1, t("Errors.Min", { value: 1, name: t("Projects.Add.Deliverables") }))
-            .max(6, t("Errors.Max", { value: 6, name: t("Projects.Add.Deliverables") })),
+            .max(6, t("Errors.Max", { value: 6, name: t("Projects.Add.Deliverables") }))
+            .test(
+              "sums-to-1",
+              t("Errors.SumTo1"),
+              value => value.reduce((accumulator, currentValue) => console.log(accumulator, currentValue) || accumulator + currentValue.weight, 0) === 1,
+            ),
         })}
         onSubmit={(finalData, { setSubmitting }) => {
-
+          // TODO submit
 
           console.log(finalData)
           setSubmitting(false);
         }}
       >
-        {({ errors, values }) => (
+        {({ errors, values, setFieldValue }) => (
           <Form>
             {/* Project data */}
             <Typography variant="h5" className={classes.header}>{t("Projects.Add.ProjectData")}</Typography>
@@ -159,7 +164,14 @@ class AddProjectPage extends Component {
                 </Grid>
 
                 <Grid item xs={12} className={classes.item}>
-                  {/* TODO make summary a big text field */}
+                  <FormikSelect
+                    label={t("Projects.Add.ProjectProfessor")}
+                    name="professor"
+                    options={[{ label: "Toma", value: 1 }]}
+                  />
+                </Grid>
+
+                <Grid item xs={12} className={classes.item}>
                   <FormikTextField
                     label={t("Projects.Add.ProjectSummary")}
                     name="summary"
@@ -195,7 +207,7 @@ class AddProjectPage extends Component {
             </div>
 
             <Grid container spacing={4}>
-              {values.deliverables.map((deliverable) => {
+              {values.deliverables.map((deliverable, index) => {
 
                 return (
                   <Grid item xs={6} md={4} justify="space-between">
@@ -226,13 +238,13 @@ class AddProjectPage extends Component {
                             </TableRow>
                             <TableRow selected>
                               <TableCell>
-                                <Translate value="Projects.Add.Deliverable.Name" />
+                                <Translate value="Projects.Add.Deliverable.Deadline" />
                               </TableCell>
                               <TableCell>{deliverable.deadline.toString()}</TableCell>
                             </TableRow>
                             <TableRow >
                               <TableCell>
-                                <Translate value="Projects.Add.Deliverable.Description" />
+                                <Translate value="Projects.Add.Deliverable.Weight" />
                               </TableCell>
                               <TableCell>{deliverable.weight}</TableCell>
                             </TableRow>
@@ -241,10 +253,16 @@ class AddProjectPage extends Component {
 
                       </CardContent>
                       <CardActions disableSpacing>
-                        <IconButton aria-label={t("Projects.Add.Deliverable.Edit")}>
+                        <IconButton aria-label={t("Projects.Add.Deliverable.Edit")} onClick={() => console.log(deliverable) || this.handleEdit(deliverable)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton aria-label={t("Projects.Add.Deliverable.Delete")}>
+                        <IconButton aria-label={t("Projects.Add.Deliverable.Delete")} onClick={() => {
+                          const deliverables = values.deliverables;
+
+                          deliverables.splice(index, 1);
+
+                          setFieldValue("deliverables", deliverables);
+                        }}>
                           <DeleteIcon />
                         </IconButton>
                       </CardActions>
@@ -259,6 +277,7 @@ class AddProjectPage extends Component {
               name="deliverables"
               open={isFormOpen}
               handleClose={this.handleDeliverableFormClose}
+              initialData={deliverableToEdit}
             />
 
             <div className={classes.buttonsContainer}>

@@ -32,10 +32,17 @@
       "ProjectName": "Name",
       "ProjectSummary": "Summary",
       "ProjectTeam": "Team",
+      "ProjectProfessor": "Professor",
       "AddDeliverable": "Add deliverable",
       "Deliverable": {
         "Title": "Deliverable"
       }
+    },
+    "Details": {
+      "NextDeadline": "Next deadline",
+      "TeamMembers": "Team members",
+      "FinishDeliverable": "Finish deliverable",
+      "Sure": "Are you sure you want to continue?"
     }
   },
   "Errors": {
@@ -46,6 +53,7 @@
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
-    "MaxDate": "Maximum date is %{date}"
+    "MaxDate": "Maximum date is %{date}",
+    "SumTo1": "The sum of all the weights must be 1!"
   }
 }

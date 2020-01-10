@@ -26,7 +26,7 @@ const styles = {
 };
 
 function DelivarableFormDialog(props) {
-  const { open, handleClose, classes } = props;
+  const { open, handleClose, classes, initialData } = props;
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 
@@ -36,12 +36,13 @@ function DelivarableFormDialog(props) {
       <DialogContent>
 
         <Formik
-          initialValues={{
-            name: "",
-            description: "",
-            weight: "",
-            deadline: new Date(),
-          }}
+          initialValues={
+            initialData || {
+              name: "",
+              description: "",
+              weight: "",
+              deadline: new Date(),
+            }}
           validationSchema={Yup.object({
             name: Yup.string().required(t("Errors.Required")),
             description: Yup.string().required(t("Errors.Required")),
@@ -51,7 +52,14 @@ function DelivarableFormDialog(props) {
           onSubmit={(deliverable, { setSubmitting }) => {
             const { value = [] } = field;
 
-            value.push(deliverable);
+            if (initialData) {
+              const index = value.findIndex(e => e === initialData);
+
+              value[index] = deliverable;
+            } else {
+              value.push(deliverable);
+            }
+
 
             setFieldValue(field.name, value);
 
