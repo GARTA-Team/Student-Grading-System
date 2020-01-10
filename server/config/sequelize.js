@@ -48,7 +48,7 @@ Grade.belongsTo(ProjectPhase);
 User.hasMany(Grade);
 Grade.belongsTo(User);
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   console.log("Database sync completed!");
 });
 
