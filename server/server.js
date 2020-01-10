@@ -1,4 +1,5 @@
 const express = require("express");
+const Sequelize = require("sequelize");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -47,58 +48,70 @@ app.get("/", (req, res) => {
 });
 
 app.get("/dashboard", async (req, res) => {
-  const dashboard = { completedCount: 0, toBeGradedCount: 0, projects: [] };
-  console.log(req.user);
+  const dashboard = {
+    inProgress: 0,
+    completedCount: 0,
+    toBeGradedCount: 0,
+    projects: [],
+  };
 
   try {
-    const completed = await Project.findAll({
-      where: {
-        status: "FINISHED",
-      },
-    });
-
     const user = await User.findByPk(req.user.id);
 
-    const teams = user.getTeams({
+    const userJudgeTeams = await user.getTeams({
       where: {
         type: "judge",
       },
     });
 
+    const teams = await user.getTeams({
+      where: {
+        type: "student",
+      },
+    });
+
     for (let i = 0; i < teams.length; i++) {
-      let projects = await team.getProjects();
-      console.log(projects);
+      let projects = await teams[i].getProjects({
+        where: {
+          status: "FINISHED",
+        },
+      });
+      dashboard.completedCount += projects.length;
     }
 
-    // console.log(teams);
+    for (let i = 0; i < teams.length; i++) {
+      let projects = await teams[i].getProjects({
+        where: {
+          status: "IN PROGRESS",
+        },
+      });
+      dashboard.inProgress += projects.length;
+    }
 
-    // const teams = await req.user.getTeams({
-    //   where: {
-    //     userId: req.user.id,
-    //   },
-    // });
+    for (let i = 0; i < teams.length; i++) {
+      let projectsTemp = await teams[i].getProjects();
+      if (projectsTemp != null) {
+        for (let j = 0; j < projectsTemp.length; j++) {
+          dashboard.projects.push(projectsTemp[j]);
+        }
+      }
+    }
 
-    // console.log(teams);
-
-    dashboard.completedCount = completed.length;
+    for (let i = 0; i < userJudgeTeams.length; i++) {
+      let projects = await userJudgeTeams[i].getProjects({
+        where: {
+          status: {
+            [Sequelize.Op.not]: "FINISHED",
+          },
+        },
+      });
+      dashboard.toBeGradedCount += projects.length;
+    }
 
     res.status(200).send(dashboard);
   } catch (error) {
     console.warn(error);
   }
-
-  // const teams = await Team.findAll({
-  //   where: {
-  //     teamId:
-  //     type: 1,
-  //   },
-  // });
-
-  // const toBeGraded = await Project.findAll({
-  //   where: {
-  //     status: "FINISHED",
-  //   },
-  // });
 });
 
 app.get("/create", async (req, res) => {
