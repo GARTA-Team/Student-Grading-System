@@ -56,9 +56,9 @@ const styles = theme => ({
   }
 });
 
-class AddProject extends Component {
+class AddProjectPage extends Component {
   state = {
-    data: {
+    initialValues: {
       name: "",
       summary: "",
       teamId: "",
@@ -70,6 +70,17 @@ class AddProject extends Component {
     open: false,
   }
 
+  componentDidMount() {
+    console.log(this.props)
+    const { match = {} } = this.props;
+    const { projectId } = match.params;
+
+    if (projectId) {
+      
+    }
+  }
+
+
   handleDeliverableFormOpen = () => this.setState({ isFormOpen: true })
 
   handleDeliverableFormClose = () => this.setState({ isFormOpen: false })
@@ -79,10 +90,13 @@ class AddProject extends Component {
   }
 
   render() {
-    const { classes, history = {} } = this.props;
+    const {
+      classes,
+      history = {}
+    } = this.props;
 
     const {
-      data = {},
+      initialValues,
       isFormOpen = false,
       variant,
       message,
@@ -92,12 +106,7 @@ class AddProject extends Component {
 
     return (
       <Formik
-        initialValues={{
-          name: "",
-          summary: "",
-          team: "",
-          deliverables: [],
-        }}
+        initialValues={initialValues}
         validationSchema={Yup.object({
           name: Yup.string().required(t("Errors.Required")),
           summary: Yup.string().required(t("Errors.Required")),
@@ -277,4 +286,4 @@ class AddProject extends Component {
   }
 }
 
-export default withStyles(styles)(AddProject);
+export default withStyles(styles)(AddProjectPage);

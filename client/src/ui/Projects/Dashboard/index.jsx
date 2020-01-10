@@ -1,116 +1,51 @@
 import React, { Component } from "react";
+import axios from "axios";
+import { t } from "react-i18nify";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import ProjectSummary from "./ProjectSummary";
+import Loader from "../../../components/Loader";
+
 
 const styles = {
   header: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "1em",
-  }
+  },
 };
 
-const PROJECTS_PER_PAGE = 10; // TODO add pagination
+const PROJECTS_PER_PAGE = 10;
 
 /**
  * Renders a list of all the users projects
  */
 class ProjectsDashboard extends Component {
   state = {
-    allProjects: [
-      {
-        id: 1,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 2,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 3,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 4,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-    ],
-    displayedProjects: [
-      {
-        id: 5,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 6,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 7,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-      {
-        id: 8,
-        name: "Test",
-        summary: "Proiect test",
-        teamName: "Garta",
-        status: "status Test",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deadline: new Date(),
-      },
-    ],
+    allProjects: [],
+    displayedProjects: [],
     currentPage: 0,
+    isLoading: true,
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    try {
+      // fetch data
+      const response = await axios.get("/projects");
+      const projects = response.data;
 
+      this.setState({
+        allProjects: projects,
+        displayedProjects: projects.slice(0, PROJECTS_PER_PAGE),
+        isLoading: false,
+      });
+    } catch (error) {
+      // TODO
+    }
   }
 
-  handleClick = (id) => {
+  handleProjectClick = (id) => {
     const { history = {} } = this.props;
     const { location } = history;
     const { pathname = "" } = location;
@@ -126,32 +61,45 @@ class ProjectsDashboard extends Component {
     history.push(`${pathname}/add`);
   }
 
+  handleNext = () => this.setState(prevState => ({
+    currentPage: prevState.currentPage + 1,
+    displayedProjects: prevState.allProjects.slice((prevState.currentPage + 1) * PROJECTS_PER_PAGE, (prevState.currentPage + 2) * PROJECTS_PER_PAGE),
+  }))
+
+  handleBack = () => this.setState(prevState => ({
+    currentPage: prevState.currentPage - 1,
+    displayedProjects: prevState.allProjects.slice((prevState.currentPage - 1) * PROJECTS_PER_PAGE, (prevState.currentPage) * PROJECTS_PER_PAGE),
+  }))
+
   render() {
     const { classes } = this.props;
 
     const {
       displayedProjects = [],
       currentPage,
+      isLoading = true,
     } = this.state;
 
     return (
-      <div>
+      <Loader isLoading={isLoading}>
+        <div>
 
-        <div className={classes.header}>
-          <Typography variant="h5">ProjectsTODO</Typography>
+          <div className={classes.header}>
+            <Typography variant="h5">{t("Projects.Dashboard.Projects")}</Typography>
 
-          <Button onClick={this.handleAdd}>Add TODO</Button>
+            <Button onClick={this.handleAdd}>{t("Projects.Dashboard.Add")}</Button>
+          </div>
+
+          {
+            displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
+          }
+
+          <Button onClick={this.handleBack}>{t("Projects.Dashboard.Back")}</Button>
+          {currentPage}
+          <Button onClick={this.handleNext}>{t("Projects.Dashboard.Next")}</Button>
+
         </div>
-
-        {
-          displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleClick} key={project.id} />)
-        }
-
-        <Button>NextTODO</Button>
-        {currentPage}
-        <Button>BackTODO</Button>
-
-      </div>
+      </Loader>
     );
   }
 }

@@ -36,6 +36,17 @@
     "PasswordLength": "Parola trebuie sa aiba cel putin 5 caractere"
   },
   "Projects": {
+    "Dashboard": {
+      "Projects": "Proiecte",
+      "Add": "Adauga",
+      "Next": "Inainte",
+      "Back": "Inapoi",
+      "CreatedAt": "Creat la",
+      "UpdatedAt": "Actualizat la",
+      "Deadline": "Termen",
+      "By": "De",
+      "Details": "Detali"
+    },
     "Add": {
       "ProjectData": "Date proiect",
       "ProjectName": "Nume",

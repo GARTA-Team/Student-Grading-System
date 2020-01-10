@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "react-i18nify";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
@@ -38,47 +39,56 @@ function ProjectSummary({ project, handleClick }) {
       {/* we use card header because it has all the required styling that we need */}
       <CardHeader
         avatar={
+          // TODO
           <Avatar alt="Remy Sharp" src="/logo192.png" />
         }
         title={name}
-        subheader={`by ${teamName} TODO`}
+        subheader={`${t("Projects.Dashboard.By")} ${teamName}`}
       />
       <CardHeader
         title={moment(createdAt).format("DD-MM-YYYY")}
-        subheader={"Created at todo"}
+        subheader={t("Projects.Dashboard.CreatedAt")}
         titleTypographyProps={{ variant: "body2" }}
         subheaderTypographyProps={{ variant: "body2" }}
       />
 
       <CardHeader
         title={moment(deadline).format("DD-MM-YYYY")}
-        subheader={"Deadline todo"}
+        subheader={t("Projects.Dashboard.Deadline")}
         titleTypographyProps={{ variant: "body2" }}
         subheaderTypographyProps={{ variant: "body2" }}
       />
 
       <CardHeader
-        title={moment(status).format("DD-MM-YYYY")}
-        subheader={"Project status TODO"}
+        title={status}
+        subheader={t("Projects.Dashboard.Status")}
         titleTypographyProps={{ variant: "body2" }}
         subheaderTypographyProps={{ variant: "body2" }}
       />
 
       <CardHeader
         title={moment(updatedAt).format("DD-MM-YYYY")}
-        subheader={"Updated at TODO"}
+        subheader={t("Projects.Dashboard.UpdatedAt")}
         titleTypographyProps={{ variant: "body2" }}
         subheaderTypographyProps={{ variant: "body2" }}
       />
 
-      <Button onClick={() => handleClick(id)}>View TODO</Button>
+      <Button onClick={() => handleClick(id)}>{t("Projects.Dashboard.Details")}</Button>
     </Paper>
   );
 }
 
 
 ProjectSummary.propTypes = {
-
+  project: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    teamName: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    deadline: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 export default ProjectSummary;

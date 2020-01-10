@@ -33,13 +33,13 @@ User.belongsToMany(Team, { through: "UserTeams", foreignKey: "userId" });
 Team.belongsToMany(User, { through: "UserTeams", foreignKey: "teamId" });
 
 Team.hasMany(Project, { foreignKey: "teamId" });
-Project.belongsTo(Team, { foreignKey: "teamId" });
+Project.belongsTo(Team, { as: "ProjectTeam", foreignKey: "teamId" });
 
-Team.hasMany(Project, { foreignKey: "judgeTeamId"});
-Project.belongsTo(Team, { foreignKey: "judgeTeamId" });
+Team.hasMany(Project, { foreignKey: "judgeTeamId" });
+Project.belongsTo(Team, { as: "JudgeTeam", foreignKey: "judgeTeamId" });
 
-Team.hasMany(Project, { foreignKey: "professorTeamId"});
-Project.belongsTo(Team, { foreignKey: "professorTeamId" });
+Team.hasMany(Project, { foreignKey: "professorTeamId" });
+Project.belongsTo(Team, { as: "ProfessorTeam", foreignKey: "professorTeamId" });
 
 Project.hasMany(ProjectData);
 ProjectData.belongsTo(Project);

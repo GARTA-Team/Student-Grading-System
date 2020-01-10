@@ -21,6 +21,10 @@
     "PasswordLength": "Password needs to be at least 5 characters long"
   },
   "Projects": {
+    "Dashboard": {
+      "CreatedAt": "Created at",
+      "UpdatedAt": "Updated at"
+    },
     "Add": {
       "ProjectData": "Project data",
       "ProjectName": "Name",
