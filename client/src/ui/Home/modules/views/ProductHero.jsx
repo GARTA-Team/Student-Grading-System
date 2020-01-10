@@ -10,10 +10,12 @@ import ProductHeroLayout from "./ProductHeroLayout";
 // const backgroundImage =
 //   "https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80";
 
+const backgroundImage = "images/gartaCorner.png";
+
 const styles = theme => ({
   background: {
-    // backgroundImage: `url(${backgroundImage})`,
-    background: theme.palette.background.default,
+    backgroundImage: `url(${backgroundImage})`,
+    // background: theme.palette.primary.dark,
     backgroundPosition: "center",
   },
   button: {
@@ -38,14 +40,15 @@ function ProductHero(props) {
   return (
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
-      {/* <img style={{ display: "none" }} src={backgroundImage} alt="increase priority" /> */}
+      {/* <img src={"images/gartaCorner.png"} alt="increase priority" /> */}
       <Typography className={classes.slogan} color="textPrimary" align="center" variant="h2" marked="center">
         {t("Home.Slogan")}
       </Typography>
       <Typography color="textPrimary" align="center" variant="h5" className={classes.h5}>
         {t("Home.UnderS")}
       </Typography>
-      <Button color="primary"
+      <Button
+        color="primary"
         variant="contained"
         size="large"
         className={classes.button} component={NavLink} to="/register">

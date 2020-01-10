@@ -10,8 +10,9 @@ function Copyright() {
     <React.Fragment>
       {"© "}
       <Link color="inherit" href="http://localhost:3000">
-        Garta
-      </Link>{" "}
+        GARTA
+      </Link>
+      {" "}
       {new Date().getFullYear()}
     </React.Fragment>
   );
@@ -20,13 +21,17 @@ function Copyright() {
 const useStyles = makeStyles(theme => ({
   root: {
     color: theme.palette.typography.color,
-    display: "flex",
     backgroundColor: theme.palette.primary.main,
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    width: "100%",
   },
   container: {
     justifyContent: "center",
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    margin: "0 auto",
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     display: "flex",
   },
 }));

@@ -50,6 +50,3 @@ AppAppBar.propTypes = {
 };
 
 export default AppAppBar;
-
-
-
