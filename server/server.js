@@ -70,6 +70,13 @@ app.get("/dashboard", async (req, res) => {
       },
     });
 
+    // await Project.create({
+    //   name: "nume",
+    //   summary: "sumar",
+    //   deadline: "10-10-2020",
+    //   status: "IN PROGRESS",
+    // });
+
     for (let i = 0; i < teams.length; i++) {
       let projects = await teams[i].getProjects({
         where: {
