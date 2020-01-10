@@ -10,8 +10,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import FormikTextField from "../../../components/FormFields/TextField";
-import FormikDateTimePicker from "../../../components/FormFields/DateTimePicker";
-
+import FormikMultiselect from "../../../components/FormFields/Multiselect";
 
 const styles = {
   header: {
@@ -38,11 +37,11 @@ function DelivarableFormDialog(props) {
         <Formik
           initialValues={{
             name: "",
-            members: "",
+            // members: "",
           }}
           validationSchema={Yup.object({
             name: Yup.string().required(t("Errors.Required")),
-            members: Yup.string().required(t("Errors.Required")),
+            // members: Yup.string().required(t("Errors.Required")),
           })}
           onSubmit={(teamToBeAdded, { setSubmitting }) => {
             const { value = [] } = field;
@@ -67,14 +66,21 @@ function DelivarableFormDialog(props) {
               </Grid>
 
               <Grid item xs={12} className={classes.item}>
-                <FormikTextField
+                {/* <FormikTextField
+                  label={t("Projects.Add.TeamToBeAdded.Members")}
+                  name="members"
+                  type="text"
+                  rows="5"
+                /> */}
+              </Grid>
+              <Grid item xs={12} className={classes.item}>
+                <FormikMultiselect
                   label={t("Projects.Add.TeamToBeAdded.Members")}
                   name="members"
                   type="text"
                   rows="5"
                 />
               </Grid>
-
             </Grid>
 
 
