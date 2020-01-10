@@ -15,19 +15,33 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhase", {
       isDate: true,
     },
   },
-  delivered: {
-    type: type.STRING,
-    defaultValue: "NO",
-    validate: {
-      isIn: [["NO", "YES"]],
-    }
-  },
   proportion: {
     type: type.INTEGER,
     allowNull: false,
     validate: {
       min: 1,
       max: 100,
+    },
+  },
+  data: {
+    type: type.INTEGER,
+    allowNull: true,
+    validate: {
+      isUrl: true,
+    },
+  },
+  description: {
+    type: type.STRING(150),
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  updateMessage: {
+    type: type.STRING,
+    allowNull: true,
+    validate: {
+      notEmpty: true,
     },
   },
 });

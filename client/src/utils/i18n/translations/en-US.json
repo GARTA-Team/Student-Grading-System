@@ -18,7 +18,9 @@
     "Forgot": "Forgot password?",
     "UsernameLength": "Username needs to be at least 5 characters long",
     "InvalidEmail": "Invalid email",
-    "PasswordLength": "Password needs to be at least 5 characters long"
+    "PasswordLength": "Password needs to be at least 5 characters long",
+    "Student": "Student",
+    "Professor": "Professor"
   },
   "Projects": {
     "Dashboard": {

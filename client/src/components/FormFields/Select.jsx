@@ -17,6 +17,7 @@ export default function FormikSelect({ label, textFieldProps, ...rest }) {
   return (
     <Autocomplete
       getOptionLabel={option => option.label || ""}
+      fullWidth
       renderInput={params => (
         <TextField
           {...params}
