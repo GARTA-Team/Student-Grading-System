@@ -41,19 +41,19 @@ function ProductHero(props) {
     <ProductHeroLayout backgroundClassName={classes.background}>
       {/* Increase the network loading priority of the background image. */}
       {/* <img src={"images/gartaCorner.png"} alt="increase priority" /> */}
-      <Typography className={classes.slogan} color="textPrimary" align="center" variant="h2" marked="center">
+      <Typography className={classes.slogan} color="textPrimary" align="center" variant="h1" marked="center">
         {t("Home.Slogan")}
       </Typography>
-      <Typography color="textPrimary" align="center" variant="h5" className={classes.h5}>
+      {/* <Typography color="textPrimary" align="center" variant="h5" className={classes.h5}>
         {t("Home.UnderS")}
-      </Typography>
-      <Button
+      </Typography> */}
+      {/* <Button
         color="primary"
         variant="contained"
         size="large"
         className={classes.button} component={NavLink} to="/register">
         {"Start"}
-      </Button>
+      </Button> */}
       {/* <Typography color="textPrimary" variant="body2" className={classes.more}>
         Discover the experience
       </Typography> */}

@@ -9,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LanguagePicker from "../../../../components/LanguagePicker";
+import Corner from "./Corner";
+
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -17,8 +19,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.typography.color,
   },
   title: {
-    flexGrow: 1,
     color: theme.palette.typography.color,
+  },
+  tool: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
 }));
 
@@ -29,10 +34,11 @@ function AppAppBar(props) {
     <div>
       <Grid item xs={12}>
         <AppBar position="sticky">
-          <Toolbar>
-            <Typography className={classes.title} variant="h6">
+          <Toolbar className={classes.tool}>
+            <Corner />
+            {/* <Typography className={classes.title} variant="h6">
               {t("Home.Title")}
-            </Typography>
+            </Typography> */}
             <LanguagePicker />
             <Button className={classes.menuButton} component={NavLink} to="/login">
               {"Login"}
