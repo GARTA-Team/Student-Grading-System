@@ -100,7 +100,7 @@ export default class App extends Component {
                   <Switch>
                     <Route exact path="/" render={routerProps => (<Redirect {...routerProps} to="/dashboard" />)} />
                     <Route path="/dashboard" render={routerProps => (<Dashboard {...routerProps} data={dashboardData} />)} />
-                    <Route path="/projects" render={routerProps => (<Projects {...routerProps} />)} />
+                    <Route path="/projects" render={routerProps => (<Projects {...routerProps} path="/projects" />)} />
                     <Route path="/team" render={routerProps => (<Team {...routerProps} />)} />
                   </Switch>
                 </Drawer>

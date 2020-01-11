@@ -20,6 +20,38 @@
   "Home":{
     "Title":"Garta Student Anonymous Grading System",
     "Slogan":"GGS",
-    "UnderS":"En."
+    "UnderS":"En.",
+    "Forgot": "Forgot password?",
+    "UsernameLength": "Username needs to be at least 5 characters long",
+    "InvalidEmail": "Invalid email",
+    "PasswordLength": "Password needs to be at least 5 characters long",
+    "Student": "Student",
+    "Professor": "Professor"
+  },
+  "Projects": {
+    "Dashboard": {
+      "CreatedAt": "Created at",
+      "UpdatedAt": "Updated at"
+    },
+    "Add": {
+      "ProjectData": "Project data",
+      "ProjectName": "Name",
+      "ProjectSummary": "Summary",
+      "ProjectTeam": "Team",
+      "AddDeliverable": "Add deliverable",
+      "Deliverable": {
+        "Title": "Deliverable"
+      }
+    }
+  },
+  "Errors": {
+    "Required": "Field is required",
+    "Pozitive": "The number must pe pozitve",
+    "Subunit": "The number must be smaller or equal to 1",
+    "Number": "Input value must be a number",
+    "Min": "Field requires at least %{value} %{name}",
+    "Max": "You can only have %{value} %{name}",
+    "MinDate": "Minimum date %{date}",
+    "MaxDate": "Maximum date is %{date}"
   }
 }

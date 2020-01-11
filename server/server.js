@@ -12,6 +12,8 @@ const corsOptions = {
   origin: "http://localhost:3000",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
+/** MIDDLEWARE */
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,18 +33,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+/** ROUTES */
 const userRouter = require("./routers/user-router");
 const loginRouter = require("./routers/login-router");
 const projectRouter = require("./routers/project-router");
 
-app.all("*", (req, resp, next) => {
-  // console.log(req.path); // do anything you want here
-  next();
-});
 app.use("/", loginRouter);
 app.use(isAuthenticated);
 app.use("/user-api", userRouter);
-app.use("/project-api", projectRouter);
+app.use("/projects", projectRouter);
 
 app.get("/", (req, res) => {
   res.status(200).redirect("/dashboard");
