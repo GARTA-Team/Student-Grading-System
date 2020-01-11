@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     color: theme.palette.typography.color,
   },
-  slogan: {
-    paddingTop: "5rem",
-  },
 }));
 
 export default function Home(props) {
@@ -30,10 +27,7 @@ export default function Home(props) {
 
   return (
     <div className={classes.root}>
-      {/* <Corner /> */}
-
       <AppAppBar />
-
       <ProductHero />
       <AppFooter />
     </div>
