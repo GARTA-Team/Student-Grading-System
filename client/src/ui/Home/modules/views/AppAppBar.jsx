@@ -2,14 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { t } from "react-i18nify";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LanguagePicker from "../../../../components/LanguagePicker";
-import Corner from "./Corner";
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,12 +30,8 @@ function AppAppBar(props) {
   return (
     <div>
       <Grid item xs={12}>
-        <AppBar position="sticky">
+        <AppBar elevation={0} position="sticky">
           <Toolbar className={classes.tool}>
-            <Corner />
-            {/* <Typography className={classes.title} variant="h6">
-              {t("Home.Title")}
-            </Typography> */}
             <LanguagePicker />
             <Button className={classes.menuButton} component={NavLink} to="/login">
               {"Login"}

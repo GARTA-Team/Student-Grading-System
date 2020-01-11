@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+const backgroundImage = "images/stockBackground.jpg";
 
 const styles = theme => ({
   root: {
@@ -22,6 +22,7 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+
   },
   backdrop: {
     position: "absolute",
@@ -31,7 +32,6 @@ const styles = theme => ({
     bottom: 0,
     backgroundColor: theme.palette.common.black,
     opacity: 0.5,
-    zIndex: -1,
   },
   background: {
     position: "absolute",
@@ -39,9 +39,9 @@ const styles = theme => ({
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    zIndex: -2,
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center bottom',
   },
   arrowDown: {
     position: "absolute",
@@ -50,15 +50,15 @@ const styles = theme => ({
 });
 
 function ProductHeroLayout(props) {
-  const { backgroundClassName, children, classes } = props;
+  const { children, classes } = props;
 
   return (
     <section className={classes.root}>
       <Container className={classes.container}>
 
-        {children}
+        <div className={classes.background} />
         <div className={classes.backdrop} />
-        <div className={clsx(classes.background, backgroundClassName)} />
+        {children}
       </Container>
     </section>
   );

@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppAppBar from "./modules/views/AppAppBar";
 import ProductHero from "./modules/views/ProductHero";
 import AppFooter from "./modules/views/AppFooter";
-import Corner from "./modules/views/Corner";
 
 
 const useStyles = makeStyles(theme => ({

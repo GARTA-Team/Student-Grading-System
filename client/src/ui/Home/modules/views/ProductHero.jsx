@@ -1,23 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import { t } from "react-i18nify";
-import { NavLink } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import ProductHeroLayout from "./ProductHeroLayout";
 
-// const backgroundImage =
-//   "https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400&q=80";
-
-const backgroundImage = "images/gartaCorner.png";
-
 const styles = theme => ({
-  background: {
-    backgroundImage: `url(${backgroundImage})`,
-    // background: theme.palette.primary.dark,
-    backgroundPosition: "center",
-  },
   button: {
     minWidth: 200,
     background: theme.palette.primary.main,
@@ -32,21 +20,23 @@ const styles = theme => ({
   more: {
     marginTop: theme.spacing(2),
   },
+  slogan: {
+    color: theme.palette.typography.color,
+    fontWeight: "bold",
+    zIndex: 1,
+  },
 });
 
 function ProductHero(props) {
   const { classes } = props;
 
   return (
-    <ProductHeroLayout backgroundClassName={classes.background}>
+    <ProductHeroLayout>
       {/* Increase the network loading priority of the background image. */}
-      {/* <img src={"images/gartaCorner.png"} alt="increase priority" /> */}
-      <Typography className={classes.slogan} color="textPrimary" align="center" variant="h1" marked="center">
-        {t("Home.Slogan")}
-      </Typography>
-      {/* <Typography color="textPrimary" align="center" variant="h5" className={classes.h5}>
+      <img width="150" className={classes.slogan} src={"images/logo.png"} alt="logo" />
+      <Typography color="textPrimary" align="center" variant="h5" className={classes.slogan}>
         {t("Home.UnderS")}
-      </Typography> */}
+      </Typography>
       {/* <Button
         color="primary"
         variant="contained"
@@ -54,9 +44,6 @@ function ProductHero(props) {
         className={classes.button} component={NavLink} to="/register">
         {"Start"}
       </Button> */}
-      {/* <Typography color="textPrimary" variant="body2" className={classes.more}>
-        Discover the experience
-      </Typography> */}
     </ProductHeroLayout>
   );
 }

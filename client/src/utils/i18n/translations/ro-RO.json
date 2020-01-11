@@ -34,8 +34,8 @@
   },
   "Home":{
     "Title":"Sistem Notare Anonima Garta",
-    "Slogan":"GGS",
-    "UnderS":"Ro",
+    "Slogan":"Garta Student Grading System",
+    "UnderS":"(Anonymous)Student Grading System",
     "Forgot": "Ai uitat parola?",
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
