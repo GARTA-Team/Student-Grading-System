@@ -64,7 +64,7 @@ app.get("/dashboard", async (req, res) => {
       },
     });
 
-    const teams = await user.getTeams({
+    const userStudentTeams = await user.getTeams({
       where: {
         type: "STUDENT",
       },
@@ -77,8 +77,8 @@ app.get("/dashboard", async (req, res) => {
     //   status: "IN PROGRESS",
     // });
 
-    for (let i = 0; i < teams.length; i++) {
-      let projects = await teams[i].getProjects({
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projects = await userStudentTeams[i].getProjects({
         where: {
           status: "FINISHED",
         },
@@ -86,8 +86,8 @@ app.get("/dashboard", async (req, res) => {
       dashboard.completedCount += projects.length;
     }
 
-    for (let i = 0; i < teams.length; i++) {
-      let projects = await teams[i].getProjects({
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projects = await userStudentTeams[i].getProjects({
         where: {
           status: "IN PROGRESS",
         },
@@ -95,8 +95,8 @@ app.get("/dashboard", async (req, res) => {
       dashboard.inProgressCount += projects.length;
     }
 
-    for (let i = 0; i < teams.length; i++) {
-      let projectsTemp = await teams[i].getProjects();
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projectsTemp = await userStudentTeams[i].getProjects();
       if (projectsTemp != null) {
         for (let j = 0; j < projectsTemp.length; j++) {
           let phases = await projectsTemp[j].getProjectPhases();
