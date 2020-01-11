@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 
 app.get("/dashboard", async (req, res) => {
   const dashboard = {
-    inProgress: 0,
+    inProgressCount: 0,
     completedCount: 0,
     toBeGradedCount: 0,
     projects: [],
@@ -92,7 +92,7 @@ app.get("/dashboard", async (req, res) => {
           status: "IN PROGRESS",
         },
       });
-      dashboard.inProgress += projects.length;
+      dashboard.inProgressCount += projects.length;
     }
 
     for (let i = 0; i < teams.length; i++) {
