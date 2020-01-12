@@ -11,14 +11,12 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     [theme.breakpoints.up("sm")]: {
-      height: "85vh",
+      height: "100vh",
       minHeight: 500,
       maxHeight: 1300,
     },
   },
   container: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(14),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -41,7 +39,7 @@ const styles = theme => ({
     bottom: 0,
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
-    backgroundPosition: 'center bottom',
+    backgroundPosition: 'center',
   },
   arrowDown: {
     position: "absolute",
