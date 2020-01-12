@@ -83,7 +83,6 @@ function DelivarableFormDialog(props) {
               </Grid>
             </Grid>
 
-
             <DialogActions>
               <Button onClick={handleClose} color="primary">
                 {t("Projects.Add.Cancel")}
@@ -92,7 +91,6 @@ function DelivarableFormDialog(props) {
                 {t("Projects.Add.Submit")}
               </Button>
             </DialogActions>
-
 
           </Form>
         </Formik>
