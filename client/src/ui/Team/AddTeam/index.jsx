@@ -23,6 +23,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddFormDialog from "./AddForm";
 import FormikTextField from "../../../components/FormFields/TextField";
 import FormikSelect from "../../../components/FormFields/Select";
+import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
 
 const styles = theme => ({
@@ -144,23 +145,26 @@ class AddTeamPage extends Component {
                   />
                 </Grid> */}
 
-                <Grid item xs={12} className={classes.item}>
+                {/* <Grid item xs={12} className={classes.item}>
                   <FormikSelect
                     label={t("Team.Add.Team name")}
                     name="team"
                     options={[{ label: "GARTA", value: 1 }]}
                   />
-                </Grid>
+                </Grid> */}
 
-                <Grid item xs={12} className={classes.item}>
+                <ExpansionPanel />
+                <ExpansionPanel />
+
+                {/* <Grid item xs={12} className={classes.item}> */}
                   {/* TODO make summary a big text field */}
-                  <FormikTextField
+                  {/* <FormikTextField
                     label={t("Team.Add.Team number")}
-                    name="summary"
+                    name="number"
                     type="text"
                     rows="10"
-                  />
-                </Grid>
+                  /> */}
+                {/* </Grid> */}
 
               {/* </Grid> */}
 
