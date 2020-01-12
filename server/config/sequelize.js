@@ -36,8 +36,8 @@ Project.belongsTo(Team, { as: "ProjectTeam", foreignKey: "teamId" });
 Team.hasMany(Project, { foreignKey: "judgeTeamId" });
 Project.belongsTo(Team, { as: "JudgeTeam", foreignKey: "judgeTeamId" });
 
-Team.hasMany(Project, { foreignKey: "professorTeamId" });
-Project.belongsTo(Team, { as: "ProfessorTeam", foreignKey: "professorTeamId" });
+User.hasMany(Project, { foreignKey: "professorId" });
+Project.belongsTo(User, { as: "Professor", foreignKey: "professorId" });
 
 Project.hasMany(ProjectPhase);
 ProjectPhase.belongsTo(Project);
@@ -48,7 +48,7 @@ Grade.belongsTo(ProjectPhase);
 User.hasMany(Grade);
 Grade.belongsTo(User);
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   console.log("Database sync completed!");
 });
 
