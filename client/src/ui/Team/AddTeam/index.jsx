@@ -162,50 +162,9 @@ class AddTeamPage extends Component {
             {/* Project data */}
             <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
             <Paper>
-
-              {/* <Grid container>
-                <Grid item xs={12} className={classes.item}>
-                  <FormikTextField
-                    label={t("Team.Add.Teams")}
-                    name="name"
-                    type="text"
-                  />
-                </Grid> */}
-
-              <Grid item xs={12} className={classes.item}>
-                <FormikSelect
-                  label={t("Team.Add.Team name")}
-                  name="team"
-                  options={[{ label: "GARTA", value: 1 }]}
-                />
-              </Grid>
-
-              <Grid item xs={12} className={classes.item}>
-                {/* TODO make summary a big text field */}
-                <FormikTextField
-                  label={t("Team.Add.Team number")}
-                  name="summary"
-                  type="text"
-                  rows="10"
-                />
-              </Grid>
-
-              {/* </Grid> */}
-
+               <ExpansionPanel />
+               <ExpansionPanel />
             </Paper>
-
-            {/* <div className={classes.teamToBeAddedHeaders}>
-              <div className={errors.teamToBeAdded ? classes.deliverableError : ""}>
-                <Typography variant="h5">
-                  {t("Team.Add.TeamToBeAdded")}
-                </Typography>
-
-                {errors.teamToBeAdded ? (
-                  <Typography variy
-                  ant="body2" className={classes.deliverableErrorText}>{JSON.stringify(errors.teamToBeAdded)}</Typography>
-                ) : null}
-              </div> */}
-
             <IconButton
               aria-label={t("Team.Add.AddDeliverable")}
               onClick={this.handleDeliverableFormOpen}
