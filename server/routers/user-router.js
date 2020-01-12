@@ -1,4 +1,5 @@
 const express = require("express");
+const Sequelize = require("sequelize");
 const { User } = require("../config/sequelize");
 
 const router = express.Router();
@@ -6,6 +7,23 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ message: "server error" });
+  }
+});
+
+router.get("/students", async (req, res) => {
+  try {
+    const users = await User.findAll({
+      where: {
+        type: "STUDENT",
+        id: {
+          [Sequelize.Op.not]: req.user.id,
+        },
+      },
+    });
     res.status(200).json(users);
   } catch (error) {
     console.warn(error);
