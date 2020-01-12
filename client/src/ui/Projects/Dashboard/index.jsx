@@ -4,19 +4,27 @@ import { t } from "react-i18nify";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import TablePagination from "@material-ui/core/TablePagination";
 import ProjectSummary from "./ProjectSummary";
 import Loader from "../../../components/Loader";
+import Snackbar from "../../../components/Snackbar";
 
 
-const styles = {
+const styles = theme => ({
   header: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "1em",
   },
-};
-
-const PROJECTS_PER_PAGE = 10;
+  buttonsContainer: {
+    display: "flex",
+    justifyContent: "end",
+    marginTop: theme.spacing(5),
+  },
+  button: {
+    marginRight: theme.spacing(1),
+  },
+});
 
 /**
  * Renders a list of all the users projects
@@ -26,7 +34,11 @@ class ProjectsDashboard extends Component {
     allProjects: [],
     displayedProjects: [],
     currentPage: 0,
+    projectsPerPage: 10,
     isLoading: true,
+    oldEndIndex: 0,
+    message: "",
+    variant: "",
   }
 
   async componentDidMount() {
@@ -35,13 +47,18 @@ class ProjectsDashboard extends Component {
       const response = await axios.get("/projects");
       const projects = response.data;
 
+      const { projectsPerPage = 10 } = this.state;
+
       this.setState({
         allProjects: projects,
-        displayedProjects: projects.slice(0, PROJECTS_PER_PAGE),
+        displayedProjects: projects.slice(0, projectsPerPage),
         isLoading: false,
       });
     } catch (error) {
-      // TODO
+      this.setState({
+        message: t("Errors.FetchDataError"),
+        variant: "error",
+      });
     }
   }
 
@@ -61,15 +78,34 @@ class ProjectsDashboard extends Component {
     history.push(`${pathname}/add`);
   }
 
-  handleNext = () => this.setState(prevState => ({
-    currentPage: prevState.currentPage + 1,
-    displayedProjects: prevState.allProjects.slice((prevState.currentPage + 1) * PROJECTS_PER_PAGE, (prevState.currentPage + 2) * PROJECTS_PER_PAGE),
-  }))
+  handleChangePage = (event, nextPage) => {
+    // recalculate the start and end index for the displayedProjects
+    const { allProjects = [], projectsPerPage, oldEndIndex } = this.state;
 
-  handleBack = () => this.setState(prevState => ({
-    currentPage: prevState.currentPage - 1,
-    displayedProjects: prevState.allProjects.slice((prevState.currentPage - 1) * PROJECTS_PER_PAGE, (prevState.currentPage) * PROJECTS_PER_PAGE),
-  }))
+    let startIndex = nextPage * projectsPerPage;
+    let endIndex = (nextPage + 1) * projectsPerPage;
+
+    if (startIndex > allProjects.length - 1) {
+      startIndex = oldEndIndex;
+      endIndex = allProjects.length - 1;
+    }
+
+    this.setState({
+      currentPage: nextPage,
+      displayedProjects: allProjects.slice(startIndex, endIndex),
+      oldEndIndex: endIndex,
+    });
+  }
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState(
+      {
+        projectsPerPage: event.target.value,
+        currentPage: 0,
+      },
+      () => this.handleChangePage(null, 0), // show / hide the new projects
+    );
+  }
 
   render() {
     const { classes } = this.props;
@@ -78,6 +114,10 @@ class ProjectsDashboard extends Component {
       displayedProjects = [],
       currentPage,
       isLoading = true,
+      projectsPerPage,
+      allProjects = [],
+      message,
+      variant,
     } = this.state;
 
     return (
@@ -94,11 +134,23 @@ class ProjectsDashboard extends Component {
             displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
           }
 
-          <Button onClick={this.handleBack}>{t("Projects.Dashboard.Back")}</Button>
-          {currentPage}
-          <Button onClick={this.handleNext}>{t("Projects.Dashboard.Next")}</Button>
-
+          <div className={classes.buttonsContainer}>
+            <TablePagination
+              component="nav"
+              page={currentPage}
+              rowsPerPage={projectsPerPage}
+              count={allProjects.length}
+              onChangePage={this.handleChangePage}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
+          </div>
         </div>
+
+        <Snackbar
+          message={message}
+          onClose={() => this.setState({ message: "", variant: "" })}
+          variant={variant}
+        />
       </Loader>
     );
   }

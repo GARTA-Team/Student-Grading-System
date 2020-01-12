@@ -60,6 +60,7 @@
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
     "MaxDate": "Maximum date is %{date}",
-    "SumTo1": "The sum of all the weights must be 1!"
+    "SumTo1": "The sum of all the weights must be 1!",
+    "FetchDataError": "Couldn't load the data! Try again later."
   }
 }

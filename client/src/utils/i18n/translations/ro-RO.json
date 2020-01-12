@@ -101,6 +101,7 @@
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
     "MaxDate": "Data maxima este %{date}",
-    "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!"
+    "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!",
+    "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu."
   }
 }
