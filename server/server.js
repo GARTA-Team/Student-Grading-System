@@ -141,4 +141,13 @@ app.get("/create", async (req, res) => {
   }
 });
 
+// for (let index = 0; index < 100; index++) {
+//   Project.create({
+//     name: "nume",
+//     summary: "sumar",
+//     deadline: "10-10-2020",
+//     status: "IN PROGRESS",
+//   });
+// }
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
