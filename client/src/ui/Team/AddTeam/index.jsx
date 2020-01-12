@@ -27,7 +27,6 @@ import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
 import axios from "axios";
 
-
 const styles = theme => ({
   header: {
     padding: "0.3em",
@@ -45,25 +44,23 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "space-between",
   },
-  deliverableContent: {
+  teamContent: {
     padding: 0,
   },
   button: {
     marginRight: theme.spacing(1),
   },
-  deliverableError: {
+  teamsError: {
     color: "red"
   },
-  deliverableErrorText: {
+  teamsErrorText: {
     marginLeft: theme.spacing(1),
   }
 });
-
 class AddTeamPage extends Component {
   state = {
     initialValues: {
       name: "",
-      summary: "",
       teamId: "",
       teamToBeAdded: [],
     },
@@ -79,13 +76,10 @@ class AddTeamPage extends Component {
     const { match = {} } = this.props;
     const { projectId } = match.params;
     try {
-      // fetch data
       const response = await axios.get("/user-api/students");
       const students = response.data;
 
       console.log(students);
-
-
       this.setState({
         students,
       });
@@ -94,19 +88,9 @@ class AddTeamPage extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   console.log(this.props);
-  //   const { match = {} } = this.props;
-  //   const { projectId } = match.params;
-  //   const response = axios.get("/user-api/students");
+  handleFormOpen = () => this.setState({ isFormOpen: true });
 
-
-  // }
-
-
-  handleDeliverableFormOpen = () => this.setState({ isFormOpen: true });
-
-  handleDeliverableFormClose = () => this.setState({ isFormOpen: false });
+  handleFormClose = () => this.setState({ isFormOpen: false });
 
   handleSubmit = () => {
     console.log(this.state);
@@ -127,14 +111,11 @@ class AddTeamPage extends Component {
       open,
     } = this.state;
 
-
-
     return (
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object({
           name: Yup.string().required(t("Errors.Required")),
-          summary: Yup.string().required(t("Errors.Required")),
           team: Yup.object({
             label: Yup.string().required(t("Errors.Required")),
             value: Yup.number(t("Errors.Number")).positive(t("Errors.Positive")).required(t("Errors.Required")),
@@ -159,7 +140,6 @@ class AddTeamPage extends Component {
       >
         {({ errors, values }) => (
           <Form>
-            {/* Project data */}
             <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
             <Paper>
                <ExpansionPanel />
@@ -167,12 +147,11 @@ class AddTeamPage extends Component {
             </Paper>
             <IconButton
               aria-label={t("Team.Add.AddDeliverable")}
-              onClick={this.handleDeliverableFormOpen}
+              onClick={this.handleFormOpen}
             >
               <AddIcon />
             </IconButton>
 
-            {/* </div> */}
 
             <Grid container spacing={4}>
               {values.teamToBeAdded.map((deliverable) => {
@@ -204,30 +183,18 @@ class AddTeamPage extends Component {
                                 </Typography>
                               </TableCell>
                             </TableRow>
-                            <TableRow selected>
-                              <TableCell>
-                                <Translate value="Team.Add.Deliverable.Name" />
-                              </TableCell>
-                              <TableCell>{deliverable.deadline.toString()}</TableCell>
-                            </TableRow>
-                            <TableRow >
-                              <TableCell>
-                                <Translate value="Team.Add.Deliverable.Members" />
-                              </TableCell>
-                              <TableCell>{deliverable.weight}</TableCell>
-                            </TableRow>
                           </TableBody>
                         </Table>
 
                       </CardContent>
-                      <CardActions disableSpacing>
+                      {/* <CardActions disableSpacing>
                         <IconButton aria-label={t("Team.Add.Deliverable.Edit")}>
                           <EditIcon />
                         </IconButton>
                         <IconButton aria-label={t("Team.Add.Deliverable.Delete")}>
                           <DeleteIcon />
                         </IconButton>
-                      </CardActions>
+                      </CardActions> */}
                     </Card>
                   </Grid>
                 );
@@ -239,17 +206,8 @@ class AddTeamPage extends Component {
               options={students}
               name="teamToBeAdded"
               open={isFormOpen}
-              handleClose={this.handleDeliverableFormClose}
+              handleClose={this.handleFormClose}
             />
-
-            {/* <div className={classes.buttonsContainer}>
-              <Button variant="contained" onClick={history.goBack} color="secondary" className={classes.button}>
-                {t("Team.Add.Cancel")}
-              </Button>
-              <Button variant="contained" color="primary" type="submit" className={classes.button}>
-                {t("Team.Add.Submit")}
-              </Button>
-            </div> */}
 
             <Snackbar
               variant={variant}
