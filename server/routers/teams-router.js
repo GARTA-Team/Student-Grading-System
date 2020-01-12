@@ -1,11 +1,11 @@
 const express = require("express");
-const { Teams, UserTeams } = require("../config/sequelize");
+const { User, Team } = require("../config/sequelize");
 
 const router = express.Router();
 
 router.get("/teams", async (req, res) => {
   try {
-    const teams = await Teams.findAll();
+    const teams = await Team.findAll();
     res.status(200).json(teams);
   } catch (error) {
     console.warn(error);
@@ -15,7 +15,7 @@ router.get("/teams", async (req, res) => {
 
 router.get("/teams/:id", async (req, res) => {
   try {
-    const team = await Teams.findAll({
+    const team = await Team.findAll({
       where: {
         id: req.params.id
       }
@@ -42,15 +42,13 @@ router.get("/user_teams", async (req, res) => {
   }
 });
 
-router.post("/new_team", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    if (req.query.bulk && req.query.bulk === "on") {
-      await Teams.bulkCreate(req.body);
-      res.status(201).json({ message: "created" });
-    } else {
-      await Teams.create(req.body);
-      res.status(201).json({ message: "created" });
-    }
+    const creatingUser = await User.findByPk(req.user.id);
+    const { teamToBeAdded } = req.body;
+    req.body.teamToBeAdded.members.push(creatingUser);
+    await Team.create(teamToBeAdded);
+    res.status(201).json({ message: "created"});
   } catch (e) {
     console.warn(e);
     res.status(500).json({ message: "server error" });

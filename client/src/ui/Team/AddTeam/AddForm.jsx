@@ -2,6 +2,7 @@ import React from "react";
 import { t } from "react-i18nify";
 import { Formik, Form, useFormikContext, useField } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import { withStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
@@ -30,26 +31,33 @@ function DelivarableFormDialog(props) {
   const [field] = useField(props);
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth="true">
       <DialogTitle id="form-dialog-title">{t("Projects.Add.TeamToBeAdded.Add your team")}</DialogTitle>
       <DialogContent>
 
         <Formik
           initialValues={{
             name: "",
-            // members: "",
+            members: [],
           }}
           validationSchema={Yup.object({
-            name: Yup.string().required(t("Errors.Required")),
-            // members: Yup.string().required(t("Errors.Required")),
+            name: Yup.string().min(5, t("Teams.Add.NameLength")).max(20).required(t("Errors.Required")),
+            members: Yup.array().of(
+              Yup.object().shape({
+                id: Yup.number().required(t("Errors.Required")),
+                username: Yup.string().required(t("Errors.Required")),
+              }),
+            )
+              .required(t("Errors.Required"))
+              .min(1, t("Errors.Min", { value: 1, name: t("Teams.Add.Member") }))
+              .max(5, t("Errors.Max", { value: 5, name: t("Teams.Add.Member") })),
           })}
-          onSubmit={(teamToBeAdded, { setSubmitting }) => {
+          onSubmit={async (teamToBeAdded, { setSubmitting }) => {
             const { value = [] } = field;
-
+            teamToBeAdded.type = "STUDENT";
             value.push(teamToBeAdded);
-
-            setFieldValue(field.name, value);
-
+            const response = await axios.post("/teams", { teamToBeAdded });
+            console.log(response.data);
             setSubmitting(false);
             handleClose();
           }}
@@ -63,15 +71,6 @@ function DelivarableFormDialog(props) {
                   name="name"
                   type="text"
                 />
-              </Grid>
-
-              <Grid item xs={12} className={classes.item}>
-                {/* <FormikTextField
-                  label={t("Projects.Add.TeamToBeAdded.Members")}
-                  name="members"
-                  type="text"
-                  rows="5"
-                /> */}
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <FormikMultiselect

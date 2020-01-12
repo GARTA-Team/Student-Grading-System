@@ -42,7 +42,7 @@ const teamsRouter = require("./routers/teams-router.js");
 app.use("/", loginRouter);
 app.use(isAuthenticated);
 app.use("/user-api", userRouter);
-app.use("/team-api", teamsRouter);
+app.use("/teams", teamsRouter);
 app.use("/projects", projectRouter);
 
 app.get("/", (req, res) => {

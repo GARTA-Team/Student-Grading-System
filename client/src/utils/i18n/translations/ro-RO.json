@@ -32,10 +32,10 @@
     "Remember": "Tine-ma minte",
     "Forgot": "Ai uitat parola?"
   },
-  "Home":{
-    "Title":"Sistem Notare Anonima Garta",
-    "Slogan":"Garta Student Grading System",
-    "UnderS":"Sistem de Notare a Studentilor",
+  "Home": {
+    "Title": "Sistem Notare Anonima Garta",
+    "Slogan": "Garta Student Grading System",
+    "UnderS": "Sistem de Notare a Studentilor",
     "Forgot": "Ai uitat parola?",
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
@@ -84,5 +84,11 @@
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
     "MaxDate": "Data maxima este %{date}"
+  },
+  "Teams": {
+    "Add": {
+      "NameLength": "Numele echipei ar trebui sa fie intre 5 si 20 de caractere",
+      "Member": "Membru"
+    }
   }
 }

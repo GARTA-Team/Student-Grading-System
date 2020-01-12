@@ -3,7 +3,7 @@ import { t, Translate } from "react-i18nify";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Paper from "@material-ui/core/Paper";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Fab } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -55,6 +55,9 @@ const styles = theme => ({
   },
   teamsErrorText: {
     marginLeft: theme.spacing(1),
+  },
+  gridSpacing: {
+    marginBottom: 10,
   }
 });
 class AddTeamPage extends Component {
@@ -74,7 +77,6 @@ class AddTeamPage extends Component {
   async componentDidMount() {
     console.log(this.props);
     const { match = {} } = this.props;
-    const { projectId } = match.params;
     try {
       const response = await axios.get("/user-api/students");
       const students = response.data;
@@ -97,10 +99,7 @@ class AddTeamPage extends Component {
   };
 
   render() {
-    const {
-      classes,
-      history = {}
-    } = this.props;
+    const { classes } = this.props;
 
     const {
       students,
@@ -140,17 +139,26 @@ class AddTeamPage extends Component {
       >
         {({ errors, values }) => (
           <Form>
-            <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
+            <Grid container className={classes.gridSpacing}>
+              <Grid item md={8}>
+                <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
+              </Grid>
+              <Grid container item md={4} justify="flex-end">
+                <Fab
+                  size="medium"
+                  color="primary"
+                  aria-label={t("Team.Add.AddDeliverable")}
+                  onClick={this.handleFormOpen}
+                >
+                  <AddIcon />
+                </Fab>
+              </Grid>
+            </Grid>
             <Paper>
-               <ExpansionPanel />
-               <ExpansionPanel />
+              <ExpansionPanel />
+              <ExpansionPanel />
             </Paper>
-            <IconButton
-              aria-label={t("Team.Add.AddDeliverable")}
-              onClick={this.handleFormOpen}
-            >
-              <AddIcon />
-            </IconButton>
+
 
 
             <Grid container spacing={4}>

@@ -17,10 +17,10 @@
     "Remember": "Remember me",
     "Forgot": "Forgot password?"
   },
-  "Home":{
-    "Title":"Garta Student Anonymous Grading System",
-    "Slogan":"G.G.S.",
-    "UnderS":"Student Grading System",
+  "Home": {
+    "Title": "Garta Student Anonymous Grading System",
+    "Slogan": "G.G.S.",
+    "UnderS": "Student Grading System",
     "Forgot": "Forgot password?",
     "UsernameLength": "Username needs to be at least 5 characters long",
     "InvalidEmail": "Invalid email",
@@ -53,5 +53,11 @@
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
     "MaxDate": "Maximum date is %{date}"
+  },
+  "Teams": {
+    "Add": {
+      "NameLength": "Team name should be between 5 and 20 characters long",
+      "Member": "Member"
+    }
   }
 }
