@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
+import { useField, useFormikContext } from "formik";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -14,36 +15,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FormikMultiselect() {
+export default function FormikMultiselect({ label, textFieldProps, ...rest }) {
   const classes = useStyles();
+  const [field, meta] = useField(rest);
+  const { setFieldValue } = useFormikContext();
+
 
   return (
     <div className={classes.root}>
       <Autocomplete
         multiple
+        getOptionLabel={option => option.username || ""}
+        fullWidth
         id="tags-outlined"
-        options={top100Films}
-        getOptionLabel={option => option.title}
-        // defaultValue={[top100Films[0]]}
-        filterSelectedOptions
         renderInput={params => (
           <TextField
             {...params}
+            {...textFieldProps}
+            label={label}
             variant="outlined"
-            label="Members"
-            placeholder="Favorites"
             fullWidth
+            error={!!(meta.touched && meta.error)} // must be boolean
+            helperText={JSON.stringify(meta.error)}
           />
         )}
+        {...field}
+        {...rest}
+        onChange={(event, object) => setFieldValue(field.name, object)}
       />
     </div>
   );
 }
-
-const top100Films = [
-  { title: "GOproiu", year: 1994 },
-  { title: "Neacsu", year: 1994 },
-  { title: "Robert", year: 1994 },
-  { title: "Partenie", year: 1994 },
-  { title: "Tudor", year: 1994 },
-];

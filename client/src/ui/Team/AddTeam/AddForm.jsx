@@ -25,7 +25,7 @@ const styles = {
 };
 
 function DelivarableFormDialog(props) {
-  const { open, handleClose, classes } = props;
+  const { options, open, handleClose, classes } = props;
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 
@@ -75,6 +75,7 @@ function DelivarableFormDialog(props) {
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <FormikMultiselect
+                  options={options}
                   label={t("Projects.Add.TeamToBeAdded.Members")}
                   name="members"
                   type="text"

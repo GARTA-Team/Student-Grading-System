@@ -25,6 +25,8 @@ import FormikTextField from "../../../components/FormFields/TextField";
 import FormikSelect from "../../../components/FormFields/Select";
 import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
+import axios from "axios";
+
 
 const styles = theme => ({
   header: {
@@ -69,23 +71,46 @@ class AddTeamPage extends Component {
     variant: "",
     message: "",
     open: false,
-  }
+    students: [],
+  };
 
-  componentDidMount() {
-    console.log(this.props)
+  async componentDidMount() {
+    console.log(this.props);
     const { match = {} } = this.props;
     const { projectId } = match.params;
+    try {
+      // fetch data
+      const response = await axios.get("/user-api/students");
+      const students = response.data;
 
+      console.log(students);
+
+
+      this.setState({
+        students,
+      });
+    } catch (error) {
+      // TODO
+    }
   }
 
+  // componentDidMount() {
+  //   console.log(this.props);
+  //   const { match = {} } = this.props;
+  //   const { projectId } = match.params;
+  //   const response = axios.get("/user-api/students");
 
-  handleDeliverableFormOpen = () => this.setState({ isFormOpen: true })
 
-  handleDeliverableFormClose = () => this.setState({ isFormOpen: false })
+  // }
+
+
+  handleDeliverableFormOpen = () => this.setState({ isFormOpen: true });
+
+  handleDeliverableFormClose = () => this.setState({ isFormOpen: false });
 
   handleSubmit = () => {
     console.log(this.state);
-  }
+  };
 
   render() {
     const {
@@ -94,12 +119,14 @@ class AddTeamPage extends Component {
     } = this.props;
 
     const {
+      students,
       initialValues,
       isFormOpen = false,
       variant,
       message,
       open,
     } = this.state;
+
 
 
     return (
@@ -113,7 +140,7 @@ class AddTeamPage extends Component {
             value: Yup.number(t("Errors.Number")).positive(t("Errors.Positive")).required(t("Errors.Required")),
           })
             .required(t("Errors.Required")),
-            teamToBeAdded: Yup.array()
+          teamToBeAdded: Yup.array()
             .of(
               Yup.object().shape({
                 name: Yup.string().required(t("Errors.Required")),
@@ -126,7 +153,7 @@ class AddTeamPage extends Component {
         })}
         onSubmit={(finalData, { setSubmitting }) => {
 
-          console.log(finalData)
+          console.log(finalData);
           setSubmitting(false);
         }}
       >
@@ -145,26 +172,23 @@ class AddTeamPage extends Component {
                   />
                 </Grid> */}
 
-                {/* <Grid item xs={12} className={classes.item}>
-                  <FormikSelect
-                    label={t("Team.Add.Team name")}
-                    name="team"
-                    options={[{ label: "GARTA", value: 1 }]}
-                  />
-                </Grid> */}
+              <Grid item xs={12} className={classes.item}>
+                <FormikSelect
+                  label={t("Team.Add.Team name")}
+                  name="team"
+                  options={[{ label: "GARTA", value: 1 }]}
+                />
+              </Grid>
 
-                <ExpansionPanel />
-                <ExpansionPanel />
-
-                {/* <Grid item xs={12} className={classes.item}> */}
-                  {/* TODO make summary a big text field */}
-                  {/* <FormikTextField
-                    label={t("Team.Add.Team number")}
-                    name="number"
-                    type="text"
-                    rows="10"
-                  /> */}
-                {/* </Grid> */}
+              <Grid item xs={12} className={classes.item}>
+                {/* TODO make summary a big text field */}
+                <FormikTextField
+                  label={t("Team.Add.Team number")}
+                  name="summary"
+                  type="text"
+                  rows="10"
+                />
+              </Grid>
 
               {/* </Grid> */}
 
@@ -182,12 +206,12 @@ class AddTeamPage extends Component {
                 ) : null}
               </div> */}
 
-              <IconButton
-                aria-label={t("Team.Add.AddDeliverable")}
-                onClick={this.handleDeliverableFormOpen}
-              >
-                <AddIcon />
-              </IconButton>
+            <IconButton
+              aria-label={t("Team.Add.AddDeliverable")}
+              onClick={this.handleDeliverableFormOpen}
+            >
+              <AddIcon />
+            </IconButton>
 
             {/* </div> */}
 
@@ -253,6 +277,7 @@ class AddTeamPage extends Component {
             </Grid>
 
             <AddFormDialog
+              options={students}
               name="teamToBeAdded"
               open={isFormOpen}
               handleClose={this.handleDeliverableFormClose}
