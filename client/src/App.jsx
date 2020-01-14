@@ -53,7 +53,7 @@ export default class App extends Component {
               break;
 
             case 403:
-              if (data.msg === "no acces") {
+              if (data.msg === "no access") {
                 this.setState({ isAuthenticated: false });
               }
 
