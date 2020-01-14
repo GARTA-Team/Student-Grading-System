@@ -4,18 +4,18 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhase", {
     primaryKey: true,
     autoIncrement: true,
   },
-  phaseNumber: {
-    type: type.INTEGER,
+  name: {
+    type: type.STRING,
     allowNull: false,
   },
-  phaseDeadline: {
+  deadline: {
     type: type.DATE,
     allowNull: true,
     validate: {
       isDate: true,
     },
   },
-  proportion: {
+  weight: {
     type: type.INTEGER,
     allowNull: false,
     validate: {

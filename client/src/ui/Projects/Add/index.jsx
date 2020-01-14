@@ -162,9 +162,6 @@ class AddProjectPage extends Component {
                 ),
             })}
             onSubmit={async (finalData) => {
-              // TODO submit
-              console.log(finalData);
-
               const {
                 name,
                 deliverables,
@@ -174,7 +171,7 @@ class AddProjectPage extends Component {
               } = finalData;
 
               const { value: teamId } = team;
-              const { value: professorId } = team;
+              const { value: professorId } = professor;
 
               const response = await axios.post(
                 "/projects",
@@ -185,8 +182,6 @@ class AddProjectPage extends Component {
                   teamId,
                   professorId,
                 });
-
-              console.log(response)
 
               if(response.status === 201) {
                 this.setState(
