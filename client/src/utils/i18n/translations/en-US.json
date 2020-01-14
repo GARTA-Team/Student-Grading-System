@@ -50,6 +50,11 @@
       "TeamMembers": "Team members",
       "FinishDeliverable": "Finish deliverable",
       "Sure": "Are you sure you want to continue?"
+      }
+    },
+    "Tabs": {
+      "Owned": "Owned",
+      "ToBeGraded": "To be graded"
     }
   },
   "Errors": {

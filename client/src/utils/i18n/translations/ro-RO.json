@@ -91,6 +91,11 @@
     },
     "Deliverables": {
       "Overdue": "Depasit"
+      }
+    },
+    "Tabs": {
+      "Owned": "Proiectele mele",
+      "ToBeGraded": "De notat"
     }
   },
   "Errors": {

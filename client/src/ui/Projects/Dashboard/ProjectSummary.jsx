@@ -38,10 +38,6 @@ function ProjectSummary({ project, handleClick }) {
     <Paper className={classes.root}>
       {/* we use card header because it has all the required styling that we need */}
       <CardHeader
-        avatar={
-          // TODO
-          <Avatar alt="Remy Sharp" src="/logo192.png" />
-        }
         title={name}
         subheader={`${t("Projects.Dashboard.By")} ${teamName}`}
       />
@@ -89,7 +85,7 @@ ProjectSummary.propTypes = {
     updatedAt: PropTypes.string.isRequired,
     deadline: PropTypes.string.isRequired,
   }).isRequired,
-}
+};
 
 export default ProjectSummary;
 

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-const backgroundImage = "images/stockBackground.jpg";
+const backgroundImage = "images/homepage.jpeg";
 
 const styles = theme => ({
   root: {
