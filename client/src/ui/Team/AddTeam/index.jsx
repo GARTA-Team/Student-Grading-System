@@ -19,6 +19,7 @@ import AddFormDialog from "./AddTeamForm";
 import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
 import axios from "axios";
+import Loader from "../../../components/Loader";
 
 const styles = theme => ({
   header: {
@@ -65,6 +66,8 @@ class AddTeamPage extends Component {
     message: "",
     open: false,
     students: [],
+    teams: [],
+    isLoading: true,
   };
 
   async componentDidMount() {
@@ -73,15 +76,14 @@ class AddTeamPage extends Component {
     try {
       const response = await axios.get("/user-api/students");
       const students = response.data;
-      console.log(students);
 
-      const res = await axios.get("/teams/own");
+      const res = await axios.get("/teams/owned");
       const teams = res.data; //teams by user logged in
-      console.log(teams);
 
       this.setState({
         students,
-        allTeams: teams,
+        teams,
+        isLoading: false,
       });
     } catch (error) {
       // TODO
@@ -92,8 +94,22 @@ class AddTeamPage extends Component {
 
   handleFormClose = () => this.setState({ isFormOpen: false });
 
-  handleSubmit = () => {
-    console.log(this.state);
+  handleSubmit = async () => {
+    try {
+      const response = await axios.get("/user-api/students");
+      const students = response.data;
+
+      const res = await axios.get("/teams/owned");
+      const teams = res.data; //teams by user logged in
+
+      this.setState({
+        students,
+        teams,
+      });
+    } catch (error) {
+      // TODO
+      console.log(error);
+    }
   };
 
   render() {
@@ -107,9 +123,11 @@ class AddTeamPage extends Component {
       variant,
       message,
       open,
+      isLoading = true,
     } = this.state;
 
     return (
+      <Loader isLoading={isLoading}>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object({
@@ -131,94 +149,56 @@ class AddTeamPage extends Component {
             .max(6, t("Errors.Max", { value: 6, name: t("Team.Add.teamToBeAdded") })),
         })}
         onSubmit={(finalData, { setSubmitting }) => {
-
+          this.handleSubmit();
           console.log(finalData);
           setSubmitting(false);
         }}
       >
-        {({ errors, values }) => (
-          <Form>
-            <Grid container className={classes.gridSpacing}>
-              <Grid item md={8}>
-                <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
-              </Grid>
-              <Grid container item md={4} justify="flex-end">
-                <Fab
-                  size="medium"
-                  color="primary"
-                  aria-label={t("Team.Add.AddTeamToBeDelivered")}
-                  onClick={this.handleFormOpen}
-                >
-                  <AddIcon />
-                </Fab>
-              </Grid>
+        <Form>
+          <Grid container className={classes.gridSpacing}>
+            <Grid item md={8}>
+              <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
             </Grid>
-            <Paper>
-              <ExpansionPanel />
-            </Paper>
-
-            {/* {
-              teams.map(team => <ExpansionPanel team={team}  />)
-            } */}
-
-            <Grid container spacing={4}>
-              {values.teamToBeAdded.map((teamToBeDelivered) => {
-
-                return (
-                  <Grid item xs={6} md={4} justify="space-between">
-                    <Card>
-                      <CardHeader
-                        title={
-                          <Typography variant="h5" >
-                            {teamToBeDelivered.name}
-                          </Typography>
-                        }
-                      />
-
-                      <Divider />
-
-                      <CardContent className={classes.teamToBeDeliveredContent}>
-
-                        <Table aria-label="simple table">
-                          <TableBody>
-                            <TableRow>
-                              <TableCell>
-                                <Translate value="Team.Add.AddTeamToBeDelivered.Members" />
-                              </TableCell>
-                              <TableCell>
-                                <Typography variant="body1">
-                                  {`${teamToBeDelivered.members.slice(0, 20)}...`}
-                                </Typography>
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                );
-              })}
-
+            <Grid container item md={4} justify="flex-end">
+              <Fab
+                size="medium"
+                color="primary"
+                aria-label={t("Team.Add.AddTeamToBeDelivered")}
+                onClick={this.handleFormOpen}
+              >
+                <AddIcon />
+              </Fab>
             </Grid>
+          </Grid>
+          <Paper>
 
-            <AddFormDialog
-              options={students}
-              name="teamToBeAdded"
-              open={isFormOpen}
-              handleClose={this.handleFormClose}
-            />
+            {teams.map((team) => {
+              return (
+                <ExpansionPanel team={team} />
+              )
+            })}
+          </Paper>
 
-            <Snackbar
-              variant={variant}
-              message={message}
-              open={open}
-              handleClose={() => this.setState({ open: false })}
-            />
-          </Form>
-        )
-        }
+
+          <AddFormDialog
+            options={students}
+            name="teamToBeAdded"
+            open={isFormOpen}
+            handleClose={this.handleFormClose}
+            handleSubmit={this.handleSubmit}
+          />
+
+          <Snackbar
+            variant={variant}
+            message={message}
+            open={open}
+            handleClose={() => this.setState({ open: false })}
+          />
+        </Form>
+
+
       </Formik>
+      </Loader>
     );
   }
 }

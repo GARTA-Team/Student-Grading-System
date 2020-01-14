@@ -23,6 +23,7 @@ router.get("/students", async (req, res) => {
           [Sequelize.Op.not]: req.user.id,
         },
       },
+      attributes: ['id', 'username']
     });
     res.status(200).json(users);
   } catch (error) {

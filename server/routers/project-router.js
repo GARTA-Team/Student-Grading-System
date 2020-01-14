@@ -32,7 +32,6 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
-    // const phases = project.get
 
     if (project) {
       res.status(200).json(project);

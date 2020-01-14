@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FormikMultiselect({ label, textFieldProps, ...rest }) {
+
+export default function FormikMultiselect({ label, textFieldProps, options, ...rest }) {
   const classes = useStyles();
   const [field, meta] = useField(rest);
   const { setFieldValue } = useFormikContext();
@@ -24,7 +25,9 @@ export default function FormikMultiselect({ label, textFieldProps, ...rest }) {
     <div className={classes.root}>
       <Autocomplete
         multiple
-        getOptionLabel={option => option.username || ""}
+        options={options}
+        getOptionLabel={option => option.username}
+        defaultValue={options[0]}
         fullWidth
         id="tags-outlined"
         renderInput={params => (
@@ -40,7 +43,7 @@ export default function FormikMultiselect({ label, textFieldProps, ...rest }) {
         )}
         {...field}
         {...rest}
-        onChange={(event, object) => setFieldValue(field.name, object)}
+        onChange={(event, object) => { setFieldValue(field.name, object) }}
       />
     </div>
   );

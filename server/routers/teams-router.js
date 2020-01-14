@@ -39,9 +39,14 @@ router.get("/owned", async (req, res) => {
         attributes: ['username']
       });
 
+      const projects = await team.getProjects({
+        attributes: ['name']
+      });
+
       teamsWithMembers.push({
         ...teamJson,
         members,
+        projects,
       });
     }
 
@@ -86,8 +91,15 @@ router.post("/", async (req, res) => {
   try {
     const creatingUser = await User.findByPk(req.user.id);
     const { teamToBeAdded } = req.body;
-    req.body.teamToBeAdded.members.push(creatingUser);
-    await Team.create(teamToBeAdded);
+    let createdTeam = await Team.create(teamToBeAdded);
+
+    creatingUser.addTeam(createdTeam)
+
+    for (let i = 0; i < teamToBeAdded.members.length; i++) {
+      let usertemp = await User.findByPk(teamToBeAdded.members[i].id);
+      await usertemp.addTeam(createdTeam)
+    }
+
     res.status(201).json({ message: "created" });
   } catch (e) {
     console.warn(e);
@@ -110,26 +122,6 @@ router.post("/new_user_team", async (req, res) => {
   }
 });
 
-
-
-
-// router.get("/own/:userId", async (req, res) => {
-//   try {
-//     const userTeams = await UserTeams.findAll({
-//       where: {
-//         userId: req.params.userId
-//       }
-//     });
-//     if (userTeams) {
-//       res.status(200).json(userTeams);
-//     } else {
-//       res.status(404).json({ message: "not found" });
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//     res.status(500).json({ message: "server error" });
-//   }
-// });
 
 router.put("/:id", async (req, res) => {
   try {

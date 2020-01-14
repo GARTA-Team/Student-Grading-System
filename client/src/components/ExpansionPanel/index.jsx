@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function DetailedExpansionPanel() {
+export default function ControlledExpansionPanels(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = panel => (event, isExpanded) => {
@@ -48,62 +48,28 @@ export default function DetailedExpansionPanel() {
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+      <ExpansionPanel expanded={expanded === props.team.id} onChange={handleChange(props.team.id)}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1c-content"
           id="panel1c-header"
         >
           <div className={classes.column}>
-            <Typography className={classes.heading}>{t("Team.TeamName")}</Typography>
+            <Typography className={classes.heading}>{props.team.name}</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <Chip label={} />
-          <Chip label="Tudor" />
-          <Chip label="Robert" />
-          <Chip label="Neacsu" />
-          <Chip label="Partenie" />
+          {props.team.members.map(member => {
+            return (
+              <Chip label={member.username} />
+            )
+          })}
           <div className={clsx(classes.column, classes.helper)}>
-            <div className={classes.column}>
-            </div>
-            <Chip label="Project1" />
-            <div className={classes.column}>
-              <Chip label="Project2" />
-            </div>
-            <Chip label="Project3" />
-            <div className={classes.column}></div>
-            <Chip label="Project4" />
-          </div>
-        </ExpansionPanelDetails>
-        <Divider />
-      </ExpansionPanel>
-      <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2c-content"
-          id="panel2c-header"
-        >
-          <div className={classes.column}>
-            <Typography className={classes.heading}>{t("Team.TeamName")}</Typography>
-          </div>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
-          <Chip label="GOproiu" />
-          <Chip label="Tudor" />
-          <Chip label="Robert" />
-          <Chip label="Neacsu" />
-          <Chip label="Partenie" />
-          <div className={clsx(classes.column, classes.helper)}>
-            <div className={classes.column}>
-            </div>
-            <Chip label="Project1" />
-            <div className={classes.column}>
-              <Chip label="Project2" />
-            </div>
-            <Chip label="Project3" />
-            <div className={classes.column}></div>
-            <Chip label="Project4" />
+            {props.team.projects.map((project) => {
+              return (
+                <Chip label={project.name} />
+              )
+            })}
           </div>
         </ExpansionPanelDetails>
         <Divider />
