@@ -6,7 +6,6 @@ const { Project, User, Team, ProjectPhase } = require("../config/sequelize");
 
 const { Op } = sequelize;
 
-
 const projectSchema = Yup.object({
   name: Yup.string().required(),
   summary: Yup.string().required(),
@@ -99,7 +98,9 @@ router.post("/", async (req, res) => {
 
     /* get the project deadline by finding the latest deadline */
     // sort by date
-    const deliverablesDeadlines = deliverables.map(d => moment(d.deadline)).sort((a, b) => a.diff(b));
+    const deliverablesDeadlines = deliverables
+      .map((d) => moment(d.deadline))
+      .sort((a, b) => a.diff(b));
     const deadline = moment.max(deliverablesDeadlines);
 
     // check if the proffesor id is valid
@@ -119,7 +120,9 @@ router.post("/", async (req, res) => {
     });
 
     // create all the phases
-    const phases = await Promise.all(deliverables.map((d) => ProjectPhase.create(d)));
+    const phases = await Promise.all(
+      deliverables.map((d) => ProjectPhase.create(d)),
+    );
 
     await project.setProjectPhases(phases);
 
@@ -129,7 +132,7 @@ router.post("/", async (req, res) => {
 
     const users = await team.getUsers();
 
-    const userIds = users.map(user => user.id);
+    const userIds = users.map((user) => user.id);
 
     // create the judge team for the project excluding the team members
     const judgeTeam = await Team.create({
@@ -148,7 +151,7 @@ router.post("/", async (req, res) => {
       limit: 5,
     });
 
-    const judgesIds = judges.map(judge => judge.id);
+    const judgesIds = judges.map((judge) => judge.id);
 
     // at least 1 judge
     if (judgesIds.length < 1) {
@@ -191,31 +194,23 @@ router.post("/", async (req, res) => {
 
 router.post("/:id/phases/:phaseId", async (req, res) => {
   try {
-    // if (!req.body.deliverables) throw new Error("ValidationError");
-
-    // await projectSchema.validate(req.body);
-
-    const newPhase = req.body;
+    const { data } = req.body;
 
     const project = await Project.findByPk(req.params.id);
 
-    const projectPhase = await project.getProjectPhases({
-      where: {
-        id: req.params.id,
-      },
-    });
+    const projectPhase = await ProjectPhase.findByPk(req.params.id);
 
     if (projectPhase.data == null) {
-      // await projectPhase.update(newPhase);
+      await projectPhase.update({ data });
 
-      let judgeTeam = await Team.findByPk(project.judgeTeamId);
-      let users = await judgeTeam.getUsers();
-      let nrOfJudges = users.length;
-      let projectPhases = await project.getProjectPhases();
+      const judgeTeam = await Team.findByPk(project.judgeTeamId);
+      const users = await judgeTeam.getUsers();
+      const nrOfJudges = users.length;
+      const projectPhases = await project.getProjectPhases();
       let finished = true;
 
       for (let i = 0; i < projectPhases.length; i++) {
-        let grades = await projectPhases[i].getGrades();
+        const grades = await projectPhases[i].getGrades();
         if (grades.length !== nrOfJudges) {
           finished = false;
           break;
@@ -226,20 +221,11 @@ router.post("/:id/phases/:phaseId", async (req, res) => {
           status: "FINISHED",
         });
       }
-
-      console.log(users);
     }
-
-    // let projectPhases = await project.getProjectPhases();
 
     res.status(200).json(project);
   } catch (e) {
-    if (e.name === "ValidationError") {
-      res.status(400).json({ message: "Submited project is not valid" });
-    } else {
-      console.warn(e);
-      res.status(500).json({ message: "server error" });
-    }
+    res.status(500).json({ message: "server error" });
   }
 });
 
