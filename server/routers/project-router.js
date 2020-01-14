@@ -39,7 +39,7 @@ const projectSchema = Yup.object({
 const router = express.Router();
 
 /**
- * Get the teams based on the team type
+ * Get the projects based on the team type
  * @param {String} teamType The team type
  */
 async function getProjects(req, res, teamType) {
@@ -86,7 +86,7 @@ async function getProjects(req, res, teamType) {
   }
 }
 
-router.get("/own", async (req, res) => getProjects(req, res, "STUDENT"));
+router.get("/student", async (req, res) => getProjects(req, res, "STUDENT"));
 
 router.get("/judge", async (req, res) => getProjects(req, res, "JUDGE"));
 
@@ -184,21 +184,69 @@ router.post("/", async (req, res) => {
   }
 });
 
-// TODO
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const project = await Project.findByPk(req.params.id);
+router.get("/:id", async (req, res) => {
+  try {
+    // find the project by id,
+    // and also include the type for the user: judge if the user is a judge, student if user is a student
+    const project = await Project.findOne({
+      attributes: [
+        "id",
+        "name",
+        "summary",
+        "deadline",
+        "status",
+        "createdAt",
+        "updatedAt",
+        "teamId",
+        "professorId",
+      ],
+      where: {
+        id: req.params.id,
+      },
+      include: [
+        {
+          model: Team,
+          as: "ProjectTeam",
+          attributes: ["id"],
+          include: {
+            model: User,
+            where: {
+              id: req.user.id,
+            },
+          },
+        },
+        {
+          model: Team,
+          as: "JudgeTeam",
+          attributes: ["id"],
+          include: {
+            model: User,
+            attributes: [],
+            where: {
+              id: req.user.id,
+            },
+          },
+        }
+      ],
+    });
 
-//     if (project) {
-//       res.status(200).json(project);
-//     } else {
-//       res.status(404).json({ message: "not found" });
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//     res.status(500).json({ message: "server error" });
-//   }
-// });
+    if (project) {
+      const json = project.toJSON();
+      if (json.ProjectTeam) json.type = "student";
+      else if (json.JudgeTeam) json.type = "judge";
+
+      delete json.ProjectTeam;
+      delete json.JudgeTeam;
+
+      res.status(200).json(json);
+    } else {
+      res.status(404).json({ message: "not found" });
+    }
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ message: "server error" });
+  }
+});
 
 // router.put("/:id", async (req, res) => {
 //   try {
