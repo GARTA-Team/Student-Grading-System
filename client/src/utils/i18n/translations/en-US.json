@@ -20,7 +20,7 @@
   "Home":{
     "Title":"Garta Student Anonymous Grading System",
     "Slogan":"G.G.S.",
-    "UnderS":"(Anonymous)Student Grading System",
+    "UnderS":"Student Grading System",
     "Forgot": "Forgot password?",
     "UsernameLength": "Username needs to be at least 5 characters long",
     "InvalidEmail": "Invalid email",
