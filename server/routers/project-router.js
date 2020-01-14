@@ -24,9 +24,9 @@ const projectSchema = Yup.object({
     .min(1)
     .max(6)
     .test(
-      "sums-to-1",
-      "sum-to-1",
-      (value) => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 1,
+      "sums-to-100",
+      "sum-to-100",
+      (value) => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 100,
     ),
 });
 

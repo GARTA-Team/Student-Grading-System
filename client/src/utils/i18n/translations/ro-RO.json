@@ -96,13 +96,13 @@
   "Errors": {
     "Required": "Camp necesar",
     "Pozitive": "Numarul introdus trebuie sa fie pozitiv",
-    "Subunit": "Numarul trebuie sa fie subunitar",
+    "Subunit": "Numarul trebuie sa fie cuprins intre 1 si 100",
     "Number": "Valoarea introdusa trebuie sa fie de tip numeric",
     "Min": "Sunt necesare %{value} %{name}",
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
     "MaxDate": "Data maxima este %{date}",
-    "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!",
+    "SumTo100": "Suma tuturor ponderilor trebuie sa fie 100!",
     "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu.",
     "PostProjectError": "Proiectul nu se poate adauga!"
   }

@@ -55,13 +55,13 @@
   "Errors": {
     "Required": "Field is required",
     "Pozitive": "The number must pe pozitve",
-    "Subunit": "The number must be smaller or equal to 1",
+    "Subunit": "The number must be smaller or equal to 100",
     "Number": "Input value must be a number",
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
     "MaxDate": "Maximum date is %{date}",
-    "SumTo1": "The sum of all the weights must be 1!",
+    "SumTo100": "The sum of all the weights must be 100!",
     "FetchDataError": "Couldn't load the data! Try again later.",
     "PostProjectError": "Couldn't add the project!"
   }
