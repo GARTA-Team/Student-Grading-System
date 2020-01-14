@@ -1,7 +1,7 @@
 const express = require("express");
 const Yup = require("yup");
 const sequelize = require("sequelize");
-const { Project, User, Team } = require("../config/sequelize");
+const { Project, ProjectPhase, User, Team } = require("../config/sequelize");
 
 // used to validate the project
 
@@ -14,26 +14,39 @@ const { Project, User, Team } = require("../config/sequelize");
 const projectSchema = Yup.object({
   name: Yup.string().required(),
   summary: Yup.string().required(),
-  teamId: Yup.number().positive().required(),
-  professorId: Yup.number().positive().required(),
-  deliverables: Yup.array().of(
-    Yup.object().shape({
-      name: Yup.string().required(),
-      description: Yup.string().required(),
-      weight: Yup.number().positive().max(1).required(),
-      deadline: Yup.date().min(new Date()).required(),
-    }),
-  )
+  teamId: Yup.number()
+    .positive()
+    .required(),
+  professorId: Yup.number()
+    .positive()
+    .required(),
+  deliverables: Yup.array()
+    .of(
+      Yup.object().shape({
+        name: Yup.string().required(),
+        description: Yup.string().required(),
+        weight: Yup.number()
+          .positive()
+          .max(1)
+          .required(),
+        deadline: Yup.date()
+          .min(new Date())
+          .required(),
+      }),
+    )
     .required()
     .min(1)
     .max(6)
     .test(
       "sums-to-1",
       "sum-to-1",
-      (value) => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 1,
+      (value) =>
+        value.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.weight,
+          0,
+        ) === 1,
     ),
 });
-
 
 const router = express.Router();
 
@@ -43,27 +56,31 @@ router.get("/", async (req, res) => {
     const { id } = req.user;
 
     const teams = await Team.findAll({
-      include: [{
-        model: User,
-        where: { id, type: "STUDENT" },
-      }],
+      include: [
+        {
+          model: User,
+          where: { id, type: "STUDENT" },
+        },
+      ],
     });
 
     const promises = [];
 
-    teams.forEach(team => promises.push(team.getProjects()));
+    teams.forEach((team) => promises.push(team.getProjects()));
 
     let projects = await Promise.all(promises); // returns array of arrays
 
     // add the team name to each project
-    projects = projects.map((projectArray, index) => projectArray.map((e) => {
-      // we can't add a field to the object returned from sequelize, so we convert to JSOn first
-      const newObject = e.toJSON();
+    projects = projects.map((projectArray, index) =>
+      projectArray.map((e) => {
+        // we can't add a field to the object returned from sequelize, so we convert to JSOn first
+        const newObject = e.toJSON();
 
-      newObject.teamName = teams[index].name;
+        newObject.teamName = teams[index].name;
 
-      return newObject;
-    }));
+        return newObject;
+      }),
+    );
 
     projects = projects.flat(); // now array of projects
 
@@ -94,14 +111,12 @@ router.post("/", async (req, res) => {
     // User.findAll({
     //   include: [{
     //     model: Project,
-        
-    //   }]
-      // attributes: ["id", [sequelize.fn("COUNT")]]
-      // where: {
-      //   type: "STUDENT",
-      // },
 
-    })
+    //   }]
+    // attributes: ["id", [sequelize.fn("COUNT")]]
+    // where: {
+    //   type: "STUDENT",
+    // },
 
     res.status(201).json(project);
   } catch (e) {
@@ -130,20 +145,61 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const project = await Project.findByPk(req.params.id);
-//     if (project) {
-//       await project.update(req.body);
-//       res.status(202).json({ message: "accepted" });
-//     } else {
-//       res.status(404).json({ message: "not found" });
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//     res.status(500).json({ message: "server error" });
-//   }
-// });
+router.post("/:id/phases/:phaseId", async (req, res) => {
+  try {
+    // if (!req.body.deliverables) throw new Error("ValidationError");
+
+    // await projectSchema.validate(req.body);
+
+    const { phase } = req.body;
+
+    const project = await Project.findByPk(req.params.id);
+
+    let projectPhase = await project.getProjectPhases({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    // projectPhase.update(req.body);
+
+    let team = Team.findByPk(project.judgeTeamId);
+
+    let users = team.getUsers();
+
+    console.log(users);
+
+    // let projectPhases = await project.getProjectPhases();
+
+    // for (let i = 0; i < projectPhases.length; i++) {
+    //   let grades = projectPhases[i].getGrades();
+    // }
+
+    res.status(200).json(project);
+  } catch (e) {
+    if (e.name === "ValidationError") {
+      res.status(400).json({ message: "Submited project is not valid" });
+    } else {
+      console.warn(e);
+      res.status(500).json({ message: "server error" });
+    }
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const project = await Project.findByPk(req.params.id);
+    if (project) {
+      await project.update(req.body);
+      res.status(202).json({ message: "accepted" });
+    } else {
+      res.status(404).json({ message: "not found" });
+    }
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ message: "server error" });
+  }
+});
 
 router.delete("/:id", async (req, res) => {
   try {
