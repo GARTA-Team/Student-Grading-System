@@ -15,7 +15,7 @@ module.exports = (sequelize, type) => sequelize.define("Team", {
     type: type.STRING,
     allowNull: false,
     validate: {
-      isIn: [["STUDENT", "JUDGE", "PROFESSOR"]],
+      isIn: [["STUDENT", "JUDGE"]],
       notEmpty: true,
     },
   },

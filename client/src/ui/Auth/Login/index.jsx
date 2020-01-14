@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { t } from "react-i18nify";
+import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import { NavLink } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
@@ -14,9 +14,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import { t } from "react-i18nify";
-import axios from "axios";
 import FormikTextField from "../../../components/FormFields/TextField";
+import FormControlLabel from "../../../components/FormFields/FormControlLabel";
 import Snackbar from "../../../components/Snackbar";
 
 const styles = theme => ({
@@ -46,11 +45,11 @@ class Login extends Component {
     message: "",
   };
   handleSubmit = async (user) => {
-    const { email, password } = user;
+    const { email, password, remember } = user;
     try {
       const response = await axios.post(
         "/login",
-        { email, password },
+        { email, password, remember },
       );
       console.warn(response);
       if (response.status === 202) {
@@ -87,10 +86,12 @@ class Login extends Component {
           initialValues={{
             email: "",
             password: "",
+            remember: false,
           }}
           validationSchema={Yup.object({
             email: Yup.string().required("Required").email(t("Auth.InvalidEmail")),
             password: Yup.string(),
+            remember: Yup.bool(),
           })}
           onSubmit={async (user, { setSubmitting }) => {
             await this.handleSubmit(user);
@@ -122,9 +123,11 @@ class Login extends Component {
                   type="password"
                   autoComplete="current-password"
                 />
+
                 <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
+                  color="primary"
                   label={t("Auth.Remember")}
+                  name="remember"
                 />
                 <Button
                   type="submit"

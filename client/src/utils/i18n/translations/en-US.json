@@ -38,20 +38,31 @@
       "ProjectName": "Name",
       "ProjectSummary": "Summary",
       "ProjectTeam": "Team",
+      "ProjectProfessor": "Professor",
       "AddDeliverable": "Add deliverable",
       "Deliverable": {
         "Title": "Deliverable"
-      }
+      },
+      "Succes": "The project was added succesfuly!"
+    },
+    "Details": {
+      "NextDeadline": "Next deadline",
+      "TeamMembers": "Team members",
+      "FinishDeliverable": "Finish deliverable",
+      "Sure": "Are you sure you want to continue?"
     }
   },
   "Errors": {
     "Required": "Field is required",
     "Pozitive": "The number must pe pozitve",
-    "Subunit": "The number must be smaller or equal to 1",
+    "Subunit": "The number must be smaller or equal to 100",
     "Number": "Input value must be a number",
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
-    "MaxDate": "Maximum date is %{date}"
+    "MaxDate": "Maximum date is %{date}",
+    "SumTo100": "The sum of all the weights must be 100!",
+    "FetchDataError": "Couldn't load the data! Try again later.",
+    "PostProjectError": "Couldn't add the project!"
   }
 }

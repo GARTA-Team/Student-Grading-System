@@ -11,7 +11,7 @@ export default function ProjectsPage(props) {
     <Switch>
       <Route exact path={path} render={routerProps => (<ProjectsDashboard {...routerProps} history={history} />)} />
       <Route path={`${path}/add`} render={routerProps => (<AddProjectPage {...routerProps} />)} />
-      <Route path={`${path}/:projectId`} render={routerProps => (<ProjectDetails {...routerProps} />)} />
+      <Route path={`${path}/:projectId`} render={routerProps => (<ProjectDetails {...routerProps} history={history} />)} />
     </Switch>
   )
 }
