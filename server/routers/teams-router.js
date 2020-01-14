@@ -13,6 +13,46 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/owned", async (req, res) => {
+  try {
+    const teamsOfUser = await Team.findAll({ //get teams of the user that will have to implement projects
+      where: {
+        type: 'STUDENT'
+      },
+      include: [
+        {
+          model: User,
+          where: {
+            id: req.user.id
+          },
+          attributes: []
+        },
+      ]
+    });
+
+    const teamsWithMembers = [];
+
+    for (const team of teamsOfUser) {
+      const teamJson = team.toJSON();
+
+      const members = await team.getUsers({
+        attributes: ['username']
+      });
+
+      teamsWithMembers.push({
+        ...teamJson,
+        members,
+      });
+    }
+
+
+    res.status(200).json(teamsWithMembers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+})
+
 router.get("/:id", async (req, res) => {
   try {
     const team = await Team.findAll({
@@ -48,7 +88,7 @@ router.post("/", async (req, res) => {
     const { teamToBeAdded } = req.body;
     req.body.teamToBeAdded.members.push(creatingUser);
     await Team.create(teamToBeAdded);
-    res.status(201).json({ message: "created"});
+    res.status(201).json({ message: "created" });
   } catch (e) {
     console.warn(e);
     res.status(500).json({ message: "server error" });
@@ -70,19 +110,7 @@ router.post("/new_user_team", async (req, res) => {
   }
 });
 
-router.get("/own", async(req, res) => {
-  try {
-    const user = await User.findByPk(req.user.id); //get the user id that is logged in
-    const teamsOfUser = await user.getTeams({ //get teams of the user that will have to implement projects
-      where: {
-        type: "STUDENT"
-      }
-    });
-    res.status(200).json(teamsOfUser);
-  } catch (error) {
-    res.status(500).json({ message: "server error" });
-  }
-})
+
 
 
 // router.get("/own/:userId", async (req, res) => {

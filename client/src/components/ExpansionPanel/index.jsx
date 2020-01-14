@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
   column: {
     flexBasis: '20%',
-    flexDirection : 'column',
+    flexDirection: 'column',
   },
 
   helper: {
@@ -59,21 +59,21 @@ export default function DetailedExpansionPanel() {
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-            <Chip label="GOproiu"  />
-            <Chip label="Tudor"  />
-            <Chip label="Robert"  />
-            <Chip label="Neacsu"  />
-            <Chip label="Partenie" />
+          <Chip label={} />
+          <Chip label="Tudor" />
+          <Chip label="Robert" />
+          <Chip label="Neacsu" />
+          <Chip label="Partenie" />
           <div className={clsx(classes.column, classes.helper)}>
-          <div className={classes.column}>
-          </div>
-            <Chip label="Project1"  />
             <div className={classes.column}>
-            <Chip label="Project2"  />
             </div>
-            <Chip label="Project3"  />
+            <Chip label="Project1" />
+            <div className={classes.column}>
+              <Chip label="Project2" />
+            </div>
+            <Chip label="Project3" />
             <div className={classes.column}></div>
-            <Chip label="Project4"  />
+            <Chip label="Project4" />
           </div>
         </ExpansionPanelDetails>
         <Divider />
@@ -89,21 +89,21 @@ export default function DetailedExpansionPanel() {
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-            <Chip label="GOproiu"  />
-            <Chip label="Tudor"  />
-            <Chip label="Robert"  />
-            <Chip label="Neacsu"  />
-            <Chip label="Partenie" />
+          <Chip label="GOproiu" />
+          <Chip label="Tudor" />
+          <Chip label="Robert" />
+          <Chip label="Neacsu" />
+          <Chip label="Partenie" />
           <div className={clsx(classes.column, classes.helper)}>
-          <div className={classes.column}>
-          </div>
-            <Chip label="Project1"  />
             <div className={classes.column}>
-            <Chip label="Project2"  />
             </div>
-            <Chip label="Project3"  />
+            <Chip label="Project1" />
+            <div className={classes.column}>
+              <Chip label="Project2" />
+            </div>
+            <Chip label="Project3" />
             <div className={classes.column}></div>
-            <Chip label="Project4"  />
+            <Chip label="Project4" />
           </div>
         </ExpansionPanelDetails>
         <Divider />

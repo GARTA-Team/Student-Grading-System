@@ -82,10 +82,10 @@ function DelivarableFormDialog(props) {
               </Grid>
             </Grid>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button variant="contained" onClick={handleClose} color="secondary">
                 {t("Teams.Add.Cancel")}
               </Button>
-              <Button color="primary" type="submit">
+              <Button variant="contained" color="primary" type="submit">
                 {t("Teams.Add.Submit")}
               </Button>
             </DialogActions>
