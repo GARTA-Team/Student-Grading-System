@@ -2,66 +2,66 @@ const express = require("express");
 const Yup = require("yup");
 const sequelize = require("sequelize");
 const moment = require("moment");
-const { Project, User, Team, ProjectPhase } = require("../config/sequelize");
+const {
+  Project,
+  User,
+  Team,
+  ProjectPhase,
+} = require("../config/sequelize");
 
 const { Op } = sequelize;
 
 const projectSchema = Yup.object({
   name: Yup.string().required(),
   summary: Yup.string().required(),
-  teamId: Yup.number()
-    .positive()
-    .required(),
-  professorId: Yup.number()
-    .positive()
-    .required(),
-  deliverables: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required(),
-        description: Yup.string().required(),
-        weight: Yup.number()
-          .positive()
-          .max(1)
-          .required(),
-        deadline: Yup.date()
-          .min(new Date())
-          .required(),
-      }),
-    )
+  teamId: Yup.number().positive().required(),
+  professorId: Yup.number().positive().required(),
+  deliverables: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required(),
+      description: Yup.string().required(),
+      weight: Yup.number().positive().min(1).max(100).required(),
+      deadline: Yup.date().min(new Date()).required(),
+    }),
+  )
     .required()
     .min(1)
     .max(6)
     .test(
-      "sums-to-1",
-      "sum-to-1",
-      (value) =>
-        value.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.weight,
-          0,
-        ) === 1,
+      "sums-to-100",
+      "sum-to-100",
+      (value) => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 100,
     ),
 });
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+/**
+ * Get the teams based on the team type
+ * @param {String} teamType The team type
+ */
+async function getProjects(req, res, teamType) {
   try {
     // return all the users projects
     const { id } = req.user;
 
     const teams = await Team.findAll({
-      include: [
-        {
-          model: User,
-          where: { id, type: "STUDENT" },
-        },
-      ],
+      include: [{
+        model: User,
+        where: { id, type: "STUDENT" },
+      }],
+      where: {
+        type: teamType,
+      },
     });
 
     const promises = [];
 
-    teams.forEach((team) => promises.push(team.getProjects()));
+    if (teamType === "STUDENT") {
+      teams.forEach((team) => promises.push(team.getProjects()));
+    } else {
+      teams.forEach((team) => promises.push(team.getJudgeProjects()));
+    }
 
     let projects = await Promise.all(promises); // returns array of arrays
 
@@ -84,7 +84,11 @@ router.get("/", async (req, res) => {
     console.warn(error);
     res.status(500).json({ message: "server error" });
   }
-});
+}
+
+router.get("/own", async (req, res) => getProjects(req, res, "STUDENT"));
+
+router.get("/judge", async (req, res) => getProjects(req, res, "JUDGE"));
 
 /** Creates the project, projectPhases and the judge team */
 router.post("/", async (req, res) => {
@@ -126,9 +130,17 @@ router.post("/", async (req, res) => {
 
     await project.setProjectPhases(phases);
 
+    const team = await Team.findByPk(teamId);
+
+    if (team.type !== "STUDENT") {
+      const err = new Error("invalid team id.");
+      err.name = "ValidationError";
+
+      throw err;
+    }
+
     await project.setProjectTeam(teamId);
 
-    const team = await project.getProjectTeam();
 
     const users = await team.getUsers();
 
