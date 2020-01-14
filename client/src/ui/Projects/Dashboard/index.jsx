@@ -1,27 +1,24 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Tabs, Tab, Fab } from "@material-ui/core";
-import { t } from "react-i18nify";
 import AddIcon from "@material-ui/icons/Add";
+import { t } from "react-i18nify";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TablePagination from "@material-ui/core/TablePagination";
 import ProjectSummary from "./ProjectSummary";
 import Loader from "../../../components/Loader";
-<<<<<<< Updated upstream
 import Snackbar from "../../../components/Snackbar";
-=======
 import TabPanel from "../../../components/TabPanel";
->>>>>>> Stashed changes
 
 
 const styles = theme => ({
   header: {
     display: "flex",
     justifyContent: "space-between",
-    marginBottom: "1em",
-    marginTop: "1em",
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   buttonsContainer: {
     display: "flex",
@@ -39,44 +36,31 @@ const styles = theme => ({
 class ProjectsDashboard extends Component {
   state = {
     allOwnedProjects: [],
-    displayedOwnedProjects: [],
     allToBeGradedProjects: [],
-    displayedToBeGradedProjects: [],
+    displayedProjects: [],
     currentPage: 0,
     projectsPerPage: 10,
     isLoading: true,
-<<<<<<< Updated upstream
     oldEndIndex: 0,
     message: "",
     variant: "",
-=======
-    tab: 0,
->>>>>>> Stashed changes
   }
 
   async componentDidMount() {
     try {
       // fetch data
-      const response1 = await axios.get("/projects");
+      const response1 = await axios.get("/projects"); // TODO students
       const ownedProjects = response1.data;
 
-      const response2 = await axios.get("/projects");
+      const response2 = await axios.get("/projects"); // TODO judges
       const toBeGradedProjects = response2.data;
-
-      console.log(projects)
 
       const { projectsPerPage = 10 } = this.state;
 
       this.setState({
-<<<<<<< Updated upstream
-        allProjects: projects,
-        displayedProjects: projects.slice(0, projectsPerPage),
-=======
         allOwnedProjects: ownedProjects,
-        displayedOwnedProjects: ownedProjects.slice(0, PROJECTS_PER_PAGE),
+        displayedProjects: ownedProjects.slice(0, projectsPerPage),
         allToBeGradedProjects: toBeGradedProjects,
-        displayedToBeGradedProjects: toBeGradedProjects.slice(0, PROJECTS_PER_PAGE),
->>>>>>> Stashed changes
         isLoading: false,
       });
     } catch (error) {
@@ -86,11 +70,6 @@ class ProjectsDashboard extends Component {
       });
     }
   }
-
-  handleChange = (event, newTab) => this.setState({
-    tab: newTab,
-    currentPage: 0,
-  });
 
   handleProjectClick = (id) => {
     const { history = {} } = this.props;
@@ -108,24 +87,43 @@ class ProjectsDashboard extends Component {
     history.push(`${pathname}/add`);
   }
 
-<<<<<<< Updated upstream
   handleChangePage = (event, nextPage) => {
     // recalculate the start and end index for the displayedProjects
-    const { allProjects = [], projectsPerPage, oldEndIndex } = this.state;
+    const {
+      tab,
+      allOwnedProjects = [],
+      allToBeGradedProjects = [],
+      projectsPerPage,
+      oldEndIndex,
+    } = this.state;
 
     let startIndex = nextPage * projectsPerPage;
     let endIndex = (nextPage + 1) * projectsPerPage;
 
-    if (startIndex > allProjects.length - 1) {
-      startIndex = oldEndIndex;
-      endIndex = allProjects.length - 1;
+    if (tab === 0) {
+      if (startIndex > allOwnedProjects.length - 1) {
+        startIndex = oldEndIndex;
+        endIndex = allOwnedProjects.length - 1;
+      }
+
+      this.setState({
+        currentPage: nextPage,
+        displayedProjects: allOwnedProjects.slice(startIndex, endIndex),
+        oldEndIndex: endIndex,
+      });
+    } else if (tab === 1) {
+      if (startIndex > allToBeGradedProjects.length - 1) {
+        startIndex = oldEndIndex;
+        endIndex = allToBeGradedProjects.length - 1;
+      }
+
+      this.setState({
+        currentPage: nextPage,
+        displayedProjects: allToBeGradedProjects.slice(startIndex, endIndex),
+        oldEndIndex: endIndex,
+      });
     }
 
-    this.setState({
-      currentPage: nextPage,
-      displayedProjects: allProjects.slice(startIndex, endIndex),
-      oldEndIndex: endIndex,
-    });
   }
 
   handleChangeRowsPerPage = (event) => {
@@ -136,55 +134,26 @@ class ProjectsDashboard extends Component {
       },
       () => this.handleChangePage(null, 0), // show / hide the new projects
     );
-=======
-  handleNext = () => {
-    const { tab } = this.state;
-    if (tab === 0) {
-      this.setState(prevState => ({
-        currentPage: prevState.currentPage + 1,
-        displayedOwnedProjects: prevState.allOwnedProjects.slice((prevState.currentPage + 1) * PROJECTS_PER_PAGE, (prevState.currentPage + 2) * PROJECTS_PER_PAGE),
-      }));
-    } else if (tab === 1) {
-      this.setState(prevState => ({
-        currentPage: prevState.currentPage + 1,
-        displayedToBeGradedProjects: prevState.allToBeGradedProjects.slice((prevState.currentPage + 1) * PROJECTS_PER_PAGE, (prevState.currentPage + 2) * PROJECTS_PER_PAGE),
-      }));
-    }
   }
 
-  handleBack = () => {
-    const { tab } = this.state;
-
-    if(tab === 0) {
-      this.setState(prevState => ({
-        currentPage: prevState.currentPage - 1,
-        displayedOwnedProjects: prevState.allOwnedProjects.slice((prevState.currentPage - 1) * PROJECTS_PER_PAGE, (prevState.currentPage) * PROJECTS_PER_PAGE),
-      }));
-    } else if (tab === 1) {
-      this.setState(prevState => ({
-        currentPage: prevState.currentPage - 1,
-        displayedToBeGradedProjects: prevState.allToBeGradedProjects.slice((prevState.currentPage - 1) * PROJECTS_PER_PAGE, (prevState.currentPage) * PROJECTS_PER_PAGE),
-      }));
-    }
->>>>>>> Stashed changes
-  }
+  handleChange = (event, newTab) => this.setState({
+    tab: newTab,
+    currentPage: 0,
+  });
 
   render() {
     const { classes } = this.props;
 
     const {
-      displayedOwnedProjects = [],
-      displayedToBeGradedProjects = [],
+      tab = 0,
+      displayedProjects = [],
       currentPage,
       isLoading = true,
-<<<<<<< Updated upstream
       projectsPerPage,
-      allProjects = [],
+      allOwnedProjects = [],
+      allToBeGradedProjects = [],
       message,
       variant,
-=======
-      tab = 0,
->>>>>>> Stashed changes
     } = this.state;
 
     return (
@@ -216,21 +185,43 @@ class ProjectsDashboard extends Component {
               </div>
 
               {
-                displayedOwnedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
+                displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
               }
 
-              <Button onClick={this.handleBack}>{t("Projects.Dashboard.Back")}</Button>
-              {currentPage}
-              <Button onClick={this.handleNext}>{t("Projects.Dashboard.Next")}</Button>
+              <div className={classes.buttonsContainer}>
+                <TablePagination
+                  component="nav"
+                  page={currentPage}
+                  rowsPerPage={projectsPerPage}
+                  count={allOwnedProjects.length}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </div>
             </TabPanel>
             <TabPanel tab={tab} index={1}>
               {
-                displayedToBeGradedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
+                displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
               }
+              <div className={classes.buttonsContainer}>
+                <TablePagination
+                  component="nav"
+                  page={currentPage}
+                  rowsPerPage={projectsPerPage}
+                  count={allToBeGradedProjects.length}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </div>
             </TabPanel>
           </div>
 
-<<<<<<< Updated upstream
+          {/* <div className={classes.header}>
+            <Typography variant="h5">{t("Projects.Dashboard.Projects")}</Typography>
+
+            <Button onClick={this.handleAdd}>{t("Projects.Dashboard.Add")}</Button>
+          </div>
+
           {
             displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
           }
@@ -240,13 +231,11 @@ class ProjectsDashboard extends Component {
               component="nav"
               page={currentPage}
               rowsPerPage={projectsPerPage}
-              count={allProjects.length}
+              count={allToBeGradedProjects.length}
               onChangePage={this.handleChangePage}
               onChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
-          </div>
-=======
->>>>>>> Stashed changes
+          </div> */}
         </div>
 
         <Snackbar

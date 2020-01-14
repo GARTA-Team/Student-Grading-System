@@ -1,8 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState } from "react";
 import { t, Translate } from "react-i18nify";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import SpellcheckIcon from '@material-ui/icons/Spellcheck';
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -63,13 +65,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function DeliverablesTab(props) {
+function DeliverablesTab({ project }) {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
   const [finishData, setData] = useState("");
-
+  const [type, setType] = useState("JUDGE"); // TODO project.type
+  const [grade, setGrade] = useState(1);
 
   const {
     deliverables = [
@@ -95,10 +98,17 @@ function DeliverablesTab(props) {
         weight: 0.2,
       },
     ],
-  } = props;
+  } = project;
 
   const classes = useStyles();
 
+  const updateDeliverable= () => {
+    if(type === "STUDENT") {
+
+    } else if(type === "JUDGE") {
+
+    }
+  }
 
   return (
     <Grid container spacing={4} className={classes.root}>
@@ -110,7 +120,7 @@ function DeliverablesTab(props) {
                 <div className={classes.headerTitle}>
                   <Typography variant="h5" >
                     {deliverable.name}
-                  </Typography> 
+                  </Typography>
                   {
                     moment(deliverable.deadline).isSameOrBefore(new Date()) ? (
                       <Typography variant="caption" className={classes.status}>
@@ -165,26 +175,57 @@ function DeliverablesTab(props) {
             </CardContent>
 
             {
-              !deliverable.data ? (
+              type === "STUDENT" ? (
+                !deliverable.data ? (
+                  <CardActions disableSpacing>
+                    <IconButton aria-label={t("Projects.Details.FinishDeliverable")} onClick={() => setDialogOpen(true)}>
+                      <SendIcon />
+                    </IconButton>
+                  </CardActions>
+                ) : null
+              ) : (type === "JUDGE" ? (!deliverable.data ? (
                 <CardActions disableSpacing>
                   <IconButton aria-label={t("Projects.Details.FinishDeliverable")} onClick={() => setDialogOpen(true)}>
-                    <SendIcon />
+                    <SpellcheckIcon />
                   </IconButton>
                 </CardActions>
-              ) : null
+              ) : null)
+                : null)
             }
 
           </Card>
 
           {/* input dialog */}
-          <Dialog open={dialogOpen} onClose={() => setDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">{t("Projects.Details.FinishDeliverable")}</DialogTitle>
+          <Dialog open={dialogOpen} onClose={() => setDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title" fullWidth maxWidth={"sm"}>
+            <DialogTitle id="form-dialog-title">
+              {
+                type === "STUDENT" ? t("Projects.Details.FinishDeliverable") : t("Projects.Details.GradeDeliverable")
+              }
+            </DialogTitle>
 
-            <DialogContent>
-              <TextField id="outlined-basic" label="Outlined" variant="outlined" value={finishData} onChange={e => setData(e.target.value)} />
-            </DialogContent>
-
-            <DialogActions>
+            {
+              type === "STUDENT" ? (
+                <DialogContent>
+                  <TextField fullWidth id="link-dialog" label="Link" variant="outlined" value={finishData} onChange={e => setData(e.target.value)} />
+                </DialogContent>)
+                : (<DialogContent>
+                  <TextField
+                    fullWidth
+                    id="grade-dialog"
+                    label={t("Projects.Details.Grade")}
+                    variant="outlined"
+                    value={grade}
+                    onChange={e => setGrade(e.target.value)}
+                    inputProps={{
+                      type: "number",
+                      step: "0.01",
+                      min: "1",
+                      max: "10",
+                    }}
+                  />
+                </DialogContent>)
+            }
+            <DialogActions >
               <Button onClick={() => setDialogOpen(false)} color="primary">
                 {t("Projects.Add.Cancel")}
               </Button>
@@ -195,21 +236,22 @@ function DeliverablesTab(props) {
           </Dialog>
 
           {/* alert dialog */}
-          <Dialog open={alertDialogOpen} onClose={() => setAlertDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title">
+          < Dialog open={alertDialogOpen} onClose={() => setAlertDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">{t("Projects.Details.Sure")}</DialogTitle>
 
             <DialogActions>
               <Button onClick={() => setAlertDialogOpen(false) || setDialogOpen(false)} color="primary">
                 {t("Projects.Add.Cancel")}
               </Button>
-              <Button color="primary" onClick={() => null}>
+              <Button color="primary" onClick={() => updateDeliverable()}>
                 {t("Projects.Add.Submit")}
               </Button>
             </DialogActions>
           </Dialog>
-        </Grid>
-      ))}
-    </Grid>
+        </Grid >
+      ))
+      }
+    </Grid >
   );
 }
 

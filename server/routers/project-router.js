@@ -94,14 +94,14 @@ router.post("/", async (req, res) => {
     // User.findAll({
     //   include: [{
     //     model: Project,
-        
+
     //   }]
       // attributes: ["id", [sequelize.fn("COUNT")]]
       // where: {
       //   type: "STUDENT",
       // },
 
-    })
+    // })
 
     res.status(201).json(project);
   } catch (e) {
