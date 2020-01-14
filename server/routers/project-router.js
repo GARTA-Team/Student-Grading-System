@@ -11,7 +11,6 @@ const {
 
 const { Op } = sequelize;
 
-
 const projectSchema = Yup.object({
   name: Yup.string().required(),
   summary: Yup.string().required(),
@@ -34,7 +33,6 @@ const projectSchema = Yup.object({
       (value) => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 100,
     ),
 });
-
 
 const router = express.Router();
 
@@ -68,14 +66,16 @@ async function getProjects(req, res, teamType) {
     let projects = await Promise.all(promises); // returns array of arrays
 
     // add the team name to each project
-    projects = projects.map((projectArray, index) => projectArray.map((e) => {
-      // we can't add a field to the object returned from sequelize, so we convert to JSOn first
-      const newObject = e.toJSON();
+    projects = projects.map((projectArray, index) =>
+      projectArray.map((e) => {
+        // we can't add a field to the object returned from sequelize, so we convert to JSOn first
+        const newObject = e.toJSON();
 
-      newObject.teamName = teams[index].name;
+        newObject.teamName = teams[index].name;
 
-      return newObject;
-    }));
+        return newObject;
+      }),
+    );
 
     projects = projects.flat(); // now array of projects
 
@@ -102,7 +102,9 @@ router.post("/", async (req, res) => {
 
     /* get the project deadline by finding the latest deadline */
     // sort by date
-    const deliverablesDeadlines = deliverables.map(d => moment(d.deadline)).sort((a, b) => a.diff(b));
+    const deliverablesDeadlines = deliverables
+      .map((d) => moment(d.deadline))
+      .sort((a, b) => a.diff(b));
     const deadline = moment.max(deliverablesDeadlines);
 
     // check if the proffesor id is valid
@@ -122,7 +124,9 @@ router.post("/", async (req, res) => {
     });
 
     // create all the phases
-    const phases = await Promise.all(deliverables.map((d) => ProjectPhase.create(d)));
+    const phases = await Promise.all(
+      deliverables.map((d) => ProjectPhase.create(d)),
+    );
 
     await project.setProjectPhases(phases);
 
@@ -248,19 +252,56 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const project = await Project.findByPk(req.params.id);
-//     if (project) {
-//       await project.update(req.body);
-//       res.status(202).json({ message: "accepted" });
-//     } else {
-//       res.status(404).json({ message: "not found" });
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//     res.status(500).json({ message: "server error" });
-//   }
-// });
+router.post("/:id/phases/:phaseId", async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    const project = await Project.findByPk(req.params.id);
+
+    const projectPhase = await ProjectPhase.findByPk(req.params.id);
+
+    if (projectPhase.data == null) {
+      await projectPhase.update({ data });
+
+      const judgeTeam = await Team.findByPk(project.judgeTeamId);
+      const users = await judgeTeam.getUsers();
+      const nrOfJudges = users.length;
+      const projectPhases = await project.getProjectPhases();
+      let finished = true;
+
+      for (let i = 0; i < projectPhases.length; i++) {
+        const grades = await projectPhases[i].getGrades();
+        if (grades.length !== nrOfJudges) {
+          finished = false;
+          break;
+        }
+      }
+      if (finished) {
+        project.update({
+          status: "FINISHED",
+        });
+      }
+    }
+
+    res.status(200).json(project);
+  } catch (e) {
+    res.status(500).json({ message: "server error" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const project = await Project.findByPk(req.params.id);
+    if (project) {
+      await project.update(req.body);
+      res.status(202).json({ message: "accepted" });
+    } else {
+      res.status(404).json({ message: "not found" });
+    }
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ message: "server error" });
+  }
+});
 
 module.exports = router;
