@@ -3,7 +3,7 @@ const { User, Team } = require("../config/sequelize");
 
 const router = express.Router();
 
-router.get("/teams", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const teams = await Team.findAll();
     res.status(200).json(teams);
@@ -13,7 +13,7 @@ router.get("/teams", async (req, res) => {
   }
 });
 
-router.get("/teams/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const team = await Team.findAll({
       where: {
@@ -70,23 +70,38 @@ router.post("/new_user_team", async (req, res) => {
   }
 });
 
-router.get("/own/:userId", async (req, res) => {
+router.get("/own", async(req, res) => {
   try {
-    const userTeams = await UserTeams.findAll({
+    const user = await User.findByPk(req.user.id); //get the user id that is logged in
+    const teamsOfUser = await user.getTeams({ //get teams of the user that will have to implement projects
       where: {
-        userId: req.params.userId
+        type: "STUDENT"
       }
     });
-    if (userTeams) {
-      res.status(200).json(userTeams);
-    } else {
-      res.status(404).json({ message: "not found" });
-    }
+    res.status(200).json(teamsOfUser);
   } catch (error) {
-    console.warn(error);
     res.status(500).json({ message: "server error" });
   }
-});
+})
+
+
+// router.get("/own/:userId", async (req, res) => {
+//   try {
+//     const userTeams = await UserTeams.findAll({
+//       where: {
+//         userId: req.params.userId
+//       }
+//     });
+//     if (userTeams) {
+//       res.status(200).json(userTeams);
+//     } else {
+//       res.status(404).json({ message: "not found" });
+//     }
+//   } catch (error) {
+//     console.warn(error);
+//     res.status(500).json({ message: "server error" });
+//   }
+// });
 
 router.put("/:id", async (req, res) => {
   try {

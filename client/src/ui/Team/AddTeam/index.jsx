@@ -6,23 +6,16 @@ import Paper from "@material-ui/core/Paper";
 import { withStyles, Fab } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import AddFormDialog from "./AddTeamForm";
-import FormikTextField from "../../../components/FormFields/TextField";
-import FormikSelect from "../../../components/FormFields/Select";
 import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
 import axios from "axios";
@@ -80,10 +73,15 @@ class AddTeamPage extends Component {
     try {
       const response = await axios.get("/user-api/students");
       const students = response.data;
-
       console.log(students);
+
+      const res = await axios.get("/teams/own");
+      const teams = res.data; //teams by user logged in
+      console.log(teams);
+
       this.setState({
         students,
+        allTeams: teams,
       });
     } catch (error) {
       // TODO
@@ -103,6 +101,7 @@ class AddTeamPage extends Component {
 
     const {
       students,
+      teams,
       initialValues,
       isFormOpen = false,
       variant,
@@ -156,8 +155,11 @@ class AddTeamPage extends Component {
             </Grid>
             <Paper>
               <ExpansionPanel />
-              <ExpansionPanel />
             </Paper>
+
+            {/* {
+              teams.map(team => <ExpansionPanel team={team}  />)
+            } */}
 
             <Grid container spacing={4}>
               {values.teamToBeAdded.map((teamToBeDelivered) => {

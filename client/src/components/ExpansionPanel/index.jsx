@@ -4,13 +4,11 @@ import clsx from 'clsx';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import { t, Translate } from "react-i18nify";
+import { t } from "react-i18nify";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,10 +41,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function DetailedExpansionPanel() {
   const classes = useStyles();
+  const [expanded, setExpanded] = React.useState(false);
+  const handleChange = panel => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false)
+  }
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel defaultExpanded>
+      <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1c-content"
@@ -55,18 +57,13 @@ export default function DetailedExpansionPanel() {
           <div className={classes.column}>
             <Typography className={classes.heading}>{t("Team.TeamName")}</Typography>
           </div>
-          <div className={classes.description}>
-            <Typography className={classes.secondaryHeading}>{t("Team.TeamDescription")}</Typography>
-          </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}>
             <Chip label="GOproiu"  />
             <Chip label="Tudor"  />
             <Chip label="Robert"  />
             <Chip label="Neacsu"  />
             <Chip label="Partenie" />
-          </div>
           <div className={clsx(classes.column, classes.helper)}>
           <div className={classes.column}>
           </div>
@@ -75,9 +72,38 @@ export default function DetailedExpansionPanel() {
             <Chip label="Project2"  />
             </div>
             <Chip label="Project3"  />
-            <div className={classes.column}>
+            <div className={classes.column}></div>
             <Chip label="Project4"  />
+          </div>
+        </ExpansionPanelDetails>
+        <Divider />
+      </ExpansionPanel>
+      <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2c-content"
+          id="panel2c-header"
+        >
+          <div className={classes.column}>
+            <Typography className={classes.heading}>{t("Team.TeamName")}</Typography>
+          </div>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails className={classes.details}>
+            <Chip label="GOproiu"  />
+            <Chip label="Tudor"  />
+            <Chip label="Robert"  />
+            <Chip label="Neacsu"  />
+            <Chip label="Partenie" />
+          <div className={clsx(classes.column, classes.helper)}>
+          <div className={classes.column}>
+          </div>
+            <Chip label="Project1"  />
+            <div className={classes.column}>
+            <Chip label="Project2"  />
             </div>
+            <Chip label="Project3"  />
+            <div className={classes.column}></div>
+            <Chip label="Project4"  />
           </div>
         </ExpansionPanelDetails>
         <Divider />
