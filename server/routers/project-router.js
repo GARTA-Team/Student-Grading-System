@@ -1,7 +1,13 @@
 const express = require("express");
 const Yup = require("yup");
 const sequelize = require("sequelize");
-const { Project, ProjectPhase, User, Team } = require("../config/sequelize");
+const {
+  Sequelize,
+  Project,
+  ProjectPhase,
+  User,
+  Team,
+} = require("../config/sequelize");
 
 // used to validate the project
 
@@ -151,29 +157,42 @@ router.post("/:id/phases/:phaseId", async (req, res) => {
 
     // await projectSchema.validate(req.body);
 
-    const { phase } = req.body;
+    const newPhase = req.body;
 
     const project = await Project.findByPk(req.params.id);
 
-    let projectPhase = await project.getProjectPhases({
+    const projectPhase = await project.getProjectPhases({
       where: {
         id: req.params.id,
       },
     });
 
-    // projectPhase.update(req.body);
+    if (projectPhase.data == null) {
+      // await projectPhase.update(newPhase);
 
-    let team = Team.findByPk(project.judgeTeamId);
+      let judgeTeam = await Team.findByPk(project.judgeTeamId);
+      let users = await judgeTeam.getUsers();
+      let nrOfJudges = users.length;
+      let projectPhases = await project.getProjectPhases();
+      let finished = true;
 
-    let users = team.getUsers();
+      for (let i = 0; i < projectPhases.length; i++) {
+        let grades = await projectPhases[i].getGrades();
+        if (grades.length !== nrOfJudges) {
+          finished = false;
+          break;
+        }
+      }
+      if (finished) {
+        project.update({
+          status: "FINISHED",
+        });
+      }
 
-    console.log(users);
+      console.log(users);
+    }
 
     // let projectPhases = await project.getProjectPhases();
-
-    // for (let i = 0; i < projectPhases.length; i++) {
-    //   let grades = projectPhases[i].getGrades();
-    // }
 
     res.status(200).json(project);
   } catch (e) {
