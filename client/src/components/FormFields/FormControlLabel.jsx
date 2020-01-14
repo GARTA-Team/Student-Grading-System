@@ -3,18 +3,13 @@ import PropTypes from "prop-types";
 import { useField } from "formik";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import TextField from "@material-ui/core/TextField";
 
 /**
- * Wrapper around material-ui TextField.
+ * Wrapper around material-ui FormControlLabel.
  * Adds Formik functionality.
  */
 export default function FormikControlLabel(props) {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   const [field, meta] = useField(props);
-
-  console.log(field)
-  console.log(props)
 
   return (
     <FormControlLabel
@@ -27,7 +22,7 @@ export default function FormikControlLabel(props) {
   );
 }
 
-// FormControlLabel.propTypes = {
-//   name: PropTypes.string.isRequired,
-//   label: PropTypes.string.isRequired,
-// };
+FormControlLabel.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
