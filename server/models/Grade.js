@@ -5,7 +5,11 @@ module.exports = (sequelize, type) => sequelize.define("Grade", {
     autoIncrement: true,
   },
   grade: {
-    type: type.INTEGER,
+    type: type.DECIMAL(4, 2),
     allowNull: false,
+    validate: {
+      min: 1,
+      max: 10,
+    },
   },
 });

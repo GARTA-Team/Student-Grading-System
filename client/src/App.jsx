@@ -45,13 +45,19 @@ export default class App extends Component {
       response => response,
       (error) => {
         if (error.response) {
-          const { status } = error.response;
+          const { status, data } = error.response;
 
           switch (status) {
             case 401:
               this.setState({ isAuthenticated: false });
               break;
 
+            case 403:
+              if (data.msg === "no access") {
+                this.setState({ isAuthenticated: false });
+              }
+
+              break;
             default:
               break;
           }

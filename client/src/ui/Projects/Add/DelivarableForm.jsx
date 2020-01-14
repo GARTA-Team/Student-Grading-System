@@ -26,7 +26,7 @@ const styles = {
 };
 
 function DelivarableFormDialog(props) {
-  const { open, handleClose, classes } = props;
+  const { open, handleClose, classes, initialData } = props;
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 
@@ -36,22 +36,30 @@ function DelivarableFormDialog(props) {
       <DialogContent>
 
         <Formik
-          initialValues={{
-            name: "",
-            description: "",
-            weight: "",
-            deadline: new Date(),
-          }}
+          initialValues={
+            initialData || {
+              name: "",
+              description: "",
+              weight: "",
+              deadline: new Date(),
+            }}
           validationSchema={Yup.object({
             name: Yup.string().required(t("Errors.Required")),
             description: Yup.string().required(t("Errors.Required")),
-            weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).lessThan(1, t("Errors.Subunit")).required(t("Errors.Required")),
+            weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).min(1, t("Errors.Subunit")).max(100, t("Errors.Subunit")).required(t("Errors.Required")),
             deadline: Yup.date().min(new Date(), t("Errors.MinDate", { date: new Date() })).required(t("Errors.Required")),
           })}
           onSubmit={(deliverable, { setSubmitting }) => {
             const { value = [] } = field;
 
-            value.push(deliverable);
+            if (initialData) {
+              const index = value.findIndex(e => e === initialData);
+
+              value[index] = deliverable;
+            } else {
+              value.push(deliverable);
+            }
+
 
             setFieldValue(field.name, value);
 
