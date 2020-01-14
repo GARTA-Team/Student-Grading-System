@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { t } from "react-i18nify";
+import axios from "axios";
 import Typography from "@material-ui/core/Typography";
-import TabPanel from "../../../components/TabPanel";
-
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { withStyles, Grid, Button } from "@material-ui/core";
-
 import Overview from "./panels/Overview";
 import DeliverablesTab from "./panels/Deliverables";
+import TabPanel from "../../../components/TabPanel";
 
 const styles = theme => ({
   status: {
@@ -41,13 +40,26 @@ const styles = theme => ({
 
 class ProjectDetails extends Component {
   state = {
-    project: {
-      name: "TEST",
-      status: "Active",
-      summary: "Lasfafasfasfafasfafsaf"
-    },
+    project: {},
     tab: 0,
   }
+
+  async componentDidMount() {
+    try {
+      const { params } = this.props.match;
+      const { projectId } = params;
+
+      const response = await axios.get(`/projects/${projectId}`);
+      const project = response.data;
+
+      console.log(project)
+
+      this.setState({ project });
+    } catch (error) {
+      // TODO
+    }
+  }
+
 
   handleChange = (event, newTab) => this.setState({ tab: newTab });
 
@@ -102,8 +114,3 @@ class ProjectDetails extends Component {
 
 
 export default withStyles(styles)(ProjectDetails);
-
-
-// const project = await axios.get(`/projects/${id}`);
-
-//     console.log(project)

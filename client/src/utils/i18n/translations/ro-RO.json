@@ -73,7 +73,8 @@
         "Weight": "Pondere",
         "Deadline": "Termen",
         "Title": "Livrabil"
-      }
+      },
+      "Succes": "Proiectul a fost adaugat cu succes!"
     },
     "Details": {
       "Tabs": {
@@ -102,6 +103,7 @@
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
     "MaxDate": "Data maxima este %{date}",
     "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!",
-    "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu."
+    "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu.",
+    "PostProjectError": "Proiectul nu se poate adauga!"
   }
 }

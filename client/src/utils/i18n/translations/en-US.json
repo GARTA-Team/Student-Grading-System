@@ -42,7 +42,8 @@
       "AddDeliverable": "Add deliverable",
       "Deliverable": {
         "Title": "Deliverable"
-      }
+      },
+      "Succes": "The project was added succesfuly!"
     },
     "Details": {
       "NextDeadline": "Next deadline",
@@ -61,6 +62,7 @@
     "MinDate": "Minimum date %{date}",
     "MaxDate": "Maximum date is %{date}",
     "SumTo1": "The sum of all the weights must be 1!",
-    "FetchDataError": "Couldn't load the data! Try again later."
+    "FetchDataError": "Couldn't load the data! Try again later.",
+    "PostProjectError": "Couldn't add the project!"
   }
 }

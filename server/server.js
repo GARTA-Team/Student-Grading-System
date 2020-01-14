@@ -34,13 +34,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /** ROUTES */
+const teamRouter = require("./routers/team-router");
 const userRouter = require("./routers/user-router");
 const loginRouter = require("./routers/login-router");
 const projectRouter = require("./routers/project-router");
 
 app.use("/", loginRouter);
 app.use(isAuthenticated);
-app.use("/user-api", userRouter);
+app.use("/users", userRouter);
+app.use("/teams", teamRouter);
 app.use("/projects", projectRouter);
 
 app.get("/", (req, res) => {

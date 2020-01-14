@@ -47,6 +47,8 @@ class ProjectsDashboard extends Component {
       const response = await axios.get("/projects");
       const projects = response.data;
 
+      console.log(projects)
+
       const { projectsPerPage = 10 } = this.state;
 
       this.setState({

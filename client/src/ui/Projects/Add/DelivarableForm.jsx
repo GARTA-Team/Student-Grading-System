@@ -46,7 +46,7 @@ function DelivarableFormDialog(props) {
           validationSchema={Yup.object({
             name: Yup.string().required(t("Errors.Required")),
             description: Yup.string().required(t("Errors.Required")),
-            weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).lessThan(1, t("Errors.Subunit")).required(t("Errors.Required")),
+            weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).max(1, t("Errors.Subunit")).required(t("Errors.Required")),
             deadline: Yup.date().min(new Date(), t("Errors.MinDate", { date: new Date() })).required(t("Errors.Required")),
           })}
           onSubmit={(deliverable, { setSubmitting }) => {
