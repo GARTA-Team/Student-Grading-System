@@ -7,6 +7,7 @@ const {
   User,
   Team,
   ProjectPhase,
+  Grade,
 } = require("../config/sequelize");
 
 const { Op } = sequelize;
@@ -179,7 +180,7 @@ router.post("/", async (req, res) => {
     if (e.name === "ValidationError") {
       res.status(400).json({
         message: "Submited project is not valid",
-        erros: e.errors,
+        errors: e.errors,
       });
     } else {
       console.warn(e);
@@ -254,55 +255,213 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/:id/phases/:phaseId", async (req, res) => {
+/** set the project phase data */
+router.patch("/phases/:id", async (req, res) => {
   try {
-    const { data } = req.body;
-
-    const project = await Project.findByPk(req.params.id);
-
     const projectPhase = await ProjectPhase.findByPk(req.params.id);
 
-    if (projectPhase.data == null) {
-      await projectPhase.update({ data });
+    if (!projectPhase) {
+      res.status(404).json({ message: "not found" });
+    } else {
+      const project = await projectPhase.getProject();
 
-      const judgeTeam = await Team.findByPk(project.judgeTeamId);
-      const users = await judgeTeam.getUsers();
-      const nrOfJudges = users.length;
-      const projectPhases = await project.getProjectPhases();
-      let finished = true;
+      // check if user is member of the team
+      const team = await project.getProjectTeam();
+      const teamMembers = await team.getUsers();
 
-      for (let i = 0; i < projectPhases.length; i++) {
-        const grades = await projectPhases[i].getGrades();
-        if (grades.length !== nrOfJudges) {
-          finished = false;
-          break;
-        }
+      if (!teamMembers.some(({ id }) => id === req.user.id)) {
+        const err = new Error("Can't update deliverable of team you are not part of!");
+        err.name = "ValidationError";
+
+        throw err;
       }
-      if (finished) {
-        project.update({
-          status: "FINISHED",
+
+      if (projectPhase.data === null) {
+        const { data } = req.body;
+
+        await projectPhase.update({ data });
+
+        const phases = await ProjectPhase.findAll({
+          include: {
+            model: Project,
+            where: {
+              id: project.id,
+            },
+          },
+          order: [["id"]],
         });
-      }
-    }
 
-    res.status(200).json(project);
+        const lastPhase = phases.pop();
+
+        if (lastPhase.data !== null) {
+          await project.update({
+            status: "WAITING FOR GRADING",
+          });
+        }
+      } else {
+        const err = new Error("Can't overide phase data!");
+        err.name = "ValidationError";
+
+        throw err;
+      }
+
+      res.status(200).json(projectPhase);
+    }
   } catch (e) {
-    res.status(500).json({ message: "server error" });
+    if (e.name === "ValidationError") {
+      res.status(400).json({
+        message: "Submited project is not valid",
+        errors: e.errors,
+      });
+    } else {
+      console.warn(e);
+      res.status(500).json({ message: "server error" });
+    }
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.post("/phases/:id/grade", async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.id);
-    if (project) {
-      await project.update(req.body);
-      res.status(202).json({ message: "accepted" });
-    } else {
+    const projectPhase = await ProjectPhase.findByPk(req.params.id);
+
+    if (!projectPhase) {
       res.status(404).json({ message: "not found" });
+    } else {
+      const project = await projectPhase.getProject();
+
+      // check if user is member of the judges team
+      const team = await project.getJudgeTeam();
+      const judges = await team.getUsers();
+
+      if (!judges.some(({ id }) => id === req.user.id)) {
+        const err = new Error();
+        err.name = "ValidationError";
+        err.errors = "Can't grade project, you're not a judge!";
+
+        throw err;
+      }
+
+      if (projectPhase.data === null) {
+        const err = new Error();
+        err.name = "ValidationError";
+        err.errors = "Can't overide grade!";
+
+        throw err;
+      }
+
+      const grades = await projectPhase.getGrades();
+
+      if (grades.length && grades.some(({ UserId }) => UserId === req.user.id)) {
+        const err = new Error();
+        err.name = "ValidationError";
+        err.errors = "You have already set a grade!";
+
+        throw err;
+      }
+
+      const { grade } = req.body;
+
+      const gradeObj = await Grade.create({
+        grade,
+        UserId: req.user.id,
+      });
+
+      await projectPhase.addGrade(gradeObj);
+
+      if ((grades.length + 1) >= judges.length) {
+        let total = 0;
+        grades.forEach((g) => { total += g.grade; });
+
+        total += grade;
+
+        await projectPhase.update({
+          grade: total / (grades.length + 1),
+        });
+      }
+
+      // check if the last grade was added and the project is over
+      const phases = await ProjectPhase.findAll({
+        include: {
+          model: Project,
+          where: {
+            id: project.id,
+          },
+        },
+        order: [["id"]],
+      });
+
+      const lastPhase = phases.pop();
+      const lastPhaseGrades = await lastPhase.getGrades();
+
+      if (lastPhase.data !== null && lastPhaseGrades.length === judges.length) {
+        await project.update({
+          status: "FINISHED",
+        });
+      }
+
+      res.status(200).json({ grade });
     }
-  } catch (error) {
-    console.warn(error);
-    res.status(500).json({ message: "server error" });
+  } catch (e) {
+    if (e.name === "ValidationError") {
+      res.status(400).json({
+        message: "Submitted grade is not valid",
+        errors: e.errors,
+      });
+    } else {
+      console.warn(e);
+      res.status(500).json({ message: "server error" });
+    }
+  }
+});
+
+/** Route returns the grade of a specif phase. Used by judges only */
+router.get("/phases/:id/grade", async (req, res) => {
+  try {
+    const projectPhase = await ProjectPhase.findByPk(req.params.id);
+
+    if (!projectPhase) {
+      res.status(404).json({ message: "not found" });
+    } else {
+      const project = await projectPhase.getProject();
+
+      // check if user is member of the team
+      const team = await project.getJudgeTeam();
+      const judges = await team.getUsers();
+
+      if (!judges.some(({ id }) => id === req.user.id)) {
+        const err = new Error();
+        err.name = "ValidationError";
+        err.errors = "Can't see grade, you're not a judge!";
+
+        throw err;
+      }
+
+      const gradeObj = await Grade.findOne({
+        where: {
+          ProjectPhaseId: req.params.id,
+          UserId: req.user.id,
+        },
+        attributes: ["grade"],
+      });
+
+      if (gradeObj) {
+        const { grade } = gradeObj;
+
+        res.status(200).json({ grade });
+      } else {
+        res.status(200).json({ grade: "Not graded!" });
+      }
+    }
+  } catch (e) {
+    if (e.name === "ValidationError") {
+      res.status(400).json({
+        message: "Submited project is not valid",
+        errors: e.errors,
+      });
+    } else {
+      console.warn(e);
+      res.status(500).json({ message: "server error" });
+    }
   }
 });
 

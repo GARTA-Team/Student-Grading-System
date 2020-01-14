@@ -24,7 +24,7 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhase", {
     },
   },
   data: {
-    type: type.INTEGER,
+    type: type.STRING,
     allowNull: true,
     validate: {
       isUrl: true,
@@ -42,6 +42,14 @@ module.exports = (sequelize, type) => sequelize.define("ProjectPhase", {
     allowNull: true,
     validate: {
       notEmpty: true,
+    },
+  },
+  grade: {
+    type: type.DECIMAL(4, 2),
+    allowNull: false,
+    validate: {
+      min: 1,
+      max: 10,
     },
   },
 });

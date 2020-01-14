@@ -30,7 +30,7 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
     allowNull: false,
     validate: {
       notEmpty: true,
-      isIn: [["NOT STARTED", "IN PROGRESS", "FINISHED", "OVERDUE"]],
+      isIn: [["NOT STARTED", "IN PROGRESS", "WAITING FOR GRADING", "FINISHED"]],
     },
     defaultValue: "NOT STARTED",
   },
