@@ -32,7 +32,7 @@ function DelivarableFormDialog(props) {
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth="true">
-      <DialogTitle id="form-dialog-title">{t("Projects.Add.TeamToBeAdded.Add your team")}</DialogTitle>
+      <DialogTitle id="form-dialog-title">{t("Team.Add.TeamToBeAdded.AddYourTeam")}</DialogTitle>
       <DialogContent>
 
         <Formik
@@ -64,10 +64,9 @@ function DelivarableFormDialog(props) {
         >
           <Form>
             <Grid container>
-
               <Grid item xs={12} className={classes.item}>
                 <FormikTextField
-                  label={t("Projects.Add.TeamToBeAdded.Name")}
+                  label={t("Teams.Add.TeamToBeAdded.Name")}
                   name="name"
                   type="text"
                 />
@@ -75,7 +74,7 @@ function DelivarableFormDialog(props) {
               <Grid item xs={12} className={classes.item}>
                 <FormikMultiselect
                   options={options}
-                  label={t("Projects.Add.TeamToBeAdded.Members")}
+                  label={t("Teams.Add.TeamToBeAdded.Members")}
                   name="members"
                   type="text"
                   rows="5"
@@ -85,10 +84,10 @@ function DelivarableFormDialog(props) {
 
             <DialogActions>
               <Button onClick={handleClose} color="primary">
-                {t("Projects.Add.Cancel")}
+                {t("Teams.Add.Cancel")}
               </Button>
               <Button color="primary" type="submit">
-                {t("Projects.Add.Submit")}
+                {t("Teams.Add.Submit")}
               </Button>
             </DialogActions>
 

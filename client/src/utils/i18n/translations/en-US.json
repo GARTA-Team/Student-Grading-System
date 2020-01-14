@@ -57,7 +57,24 @@
   "Teams": {
     "Add": {
       "NameLength": "Team name should be between 5 and 20 characters long",
-      "Member": "Member"
+      "Member": "Member",
+      "Cancel": "Anuleaza",
+      "Submit": "Submit",
+      "TeamToBeAdded": {
+        "Members": "Members",
+        "Name": "Name",
+        "AddYourTeam": "Add your team"
+      }
+    }
+  },
+  "Team":{
+    "TeamName": "Team name",
+    "TeamDescription": "Team description",
+    "Add":{
+      "Teams": "Teams",
+      "TeamToBeAdded": {
+        "AddYourTeam": "Add your team"
+      }
     }
   }
 }

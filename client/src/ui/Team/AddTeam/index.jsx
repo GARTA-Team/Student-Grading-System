@@ -20,7 +20,7 @@ import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import AddFormDialog from "./AddForm";
+import AddFormDialog from "./AddTeamForm";
 import FormikTextField from "../../../components/FormFields/TextField";
 import FormikSelect from "../../../components/FormFields/Select";
 import ExpansionPanel from "../../../components/ExpansionPanel";
@@ -147,7 +147,7 @@ class AddTeamPage extends Component {
                 <Fab
                   size="medium"
                   color="primary"
-                  aria-label={t("Team.Add.AddDeliverable")}
+                  aria-label={t("Team.Add.AddTeamToBeDelivered")}
                   onClick={this.handleFormOpen}
                 >
                   <AddIcon />
@@ -159,10 +159,8 @@ class AddTeamPage extends Component {
               <ExpansionPanel />
             </Paper>
 
-
-
             <Grid container spacing={4}>
-              {values.teamToBeAdded.map((deliverable) => {
+              {values.teamToBeAdded.map((teamToBeDelivered) => {
 
                 return (
                   <Grid item xs={6} md={4} justify="space-between">
@@ -170,24 +168,24 @@ class AddTeamPage extends Component {
                       <CardHeader
                         title={
                           <Typography variant="h5" >
-                            {deliverable.name}
+                            {teamToBeDelivered.name}
                           </Typography>
                         }
                       />
 
                       <Divider />
 
-                      <CardContent className={classes.deliverableContent}>
+                      <CardContent className={classes.teamToBeDeliveredContent}>
 
                         <Table aria-label="simple table">
                           <TableBody>
                             <TableRow>
                               <TableCell>
-                                <Translate value="Team.Add.Deliverable.Members" />
+                                <Translate value="Team.Add.AddTeamToBeDelivered.Members" />
                               </TableCell>
                               <TableCell>
                                 <Typography variant="body1">
-                                  {`${deliverable.members.slice(0, 20)}...`}
+                                  {`${teamToBeDelivered.members.slice(0, 20)}...`}
                                 </Typography>
                               </TableCell>
                             </TableRow>
@@ -195,14 +193,6 @@ class AddTeamPage extends Component {
                         </Table>
 
                       </CardContent>
-                      {/* <CardActions disableSpacing>
-                        <IconButton aria-label={t("Team.Add.Deliverable.Edit")}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton aria-label={t("Team.Add.Deliverable.Delete")}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </CardActions> */}
                     </Card>
                   </Grid>
                 );

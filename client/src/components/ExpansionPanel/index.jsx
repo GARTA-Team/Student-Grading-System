@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import { t, Translate } from "react-i18nify";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,36 +24,21 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
     alignItems: 'right',
   },
-  // icon: {
-  //   verticalAlign: 'bottom',
-  //   height: 20,
-  //   width: 20,
-  // },
+
   details: {
     alignItems: 'center',
   },
-  // description: {
-  //   alignItems: 'right',
-  // },
+
   column: {
     flexBasis: '20%',
     flexDirection : 'column',
   },
-  // column2: {
-  //   alignItems: 'right',
-  //   flexDirection : 'row',
-  // },
+
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: theme.spacing(1, 2),
+    padding: theme.spacing(1, 5),
   },
-  // link: {
-  //   color: theme.palette.primary.main,
-  //   textDecoration: 'none',
-  //   '&:hover': {
-  //     textDecoration: 'underline',
-  //   },
-  // },
+
 }));
 
 export default function DetailedExpansionPanel() {
@@ -67,14 +53,13 @@ export default function DetailedExpansionPanel() {
           id="panel1c-header"
         >
           <div className={classes.column}>
-            <Typography className={classes.heading}>Team name</Typography>
+            <Typography className={classes.heading}>{t("Team.TeamName")}</Typography>
           </div>
           <div className={classes.description}>
-            <Typography className={classes.secondaryHeading}>Basic description of team ... idk</Typography>
+            <Typography className={classes.secondaryHeading}>{t("Team.TeamDescription")}</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column} />
           <div className={classes.column}>
             <Chip label="GOproiu"  />
             <Chip label="Tudor"  />
@@ -83,21 +68,19 @@ export default function DetailedExpansionPanel() {
             <Chip label="Partenie" />
           </div>
           <div className={clsx(classes.column, classes.helper)}>
-          <div className={classes.column2}>
-            <Chip label="Project1"  />
-            <Chip label="Project2"  />
-            <Chip label="Project3"  />
-            <Chip label="Project4"  />
+          <div className={classes.column}>
           </div>
+            <Chip label="Project1"  />
+            <div className={classes.column}>
+            <Chip label="Project2"  />
+            </div>
+            <Chip label="Project3"  />
+            <div className={classes.column}>
+            <Chip label="Project4"  />
+            </div>
           </div>
         </ExpansionPanelDetails>
         <Divider />
-        {/* <ExpansionPanelActions>
-          <Button size="small">Cancel</Button>
-          <Button size="small" color="primary">
-            Save
-          </Button>
-        </ExpansionPanelActions> */}
       </ExpansionPanel>
     </div>
   );

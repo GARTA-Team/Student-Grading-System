@@ -88,7 +88,24 @@
   "Teams": {
     "Add": {
       "NameLength": "Numele echipei ar trebui sa fie intre 5 si 20 de caractere",
-      "Member": "Membru"
+      "Member": "Membru",
+      "Cancel": "Anuleaza",
+      "Submit": "Trimite",
+      "TeamToBeAdded": {
+        "Members": "Membrii",
+        "Name": "Nume",
+        "AddYourTeam": "Adauga-ti echipa"
+      }
     }
-  }
+  },
+    "Team":{
+      "TeamName": "Nume echipa",
+      "TeamDescription": "Descriere echipa",
+      "Add":{
+        "Teams": "Echipe",
+        "TeamToBeAdded": {
+          "AddYourTeam": "Adauga echipa"
+        }
+      }
+    }
 }
