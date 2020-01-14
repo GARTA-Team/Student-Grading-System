@@ -29,7 +29,7 @@ export default function Dashboard(props) {
   const classes = useStyles();
 
   const { data } = props;
-  const { completedCount, toBeGradedCount, projects = [] } = data;
+  const { inProgressCount, completedCount, toBeGradedCount, projects = [] } = data;
 
   return (
     <div>
@@ -43,7 +43,7 @@ export default function Dashboard(props) {
               </Typography>
 
               <Typography variant="h4" color="textPrimary">
-                {projects.length}
+                {inProgressCount}
               </Typography>
 
             </div>

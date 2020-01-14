@@ -1,10 +1,12 @@
 const express = require("express");
+const Sequelize = require("sequelize");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const { sequelize } = require("./config/sequelize");
 const passport = require("./config/passport");
 const isAuthenticated = require("./config/auth");
+const { User, Project, Team } = require("./config/sequelize");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -19,16 +21,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
-  session(
-    {
-      secret: process.env.SESSION_SECRET,
-      resave: true,
-      saveUninitialized: true,
-      cookie: {
-        httpOnly: true,
-      },
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
     },
-  ),
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -49,8 +49,88 @@ app.get("/", (req, res) => {
   res.status(200).redirect("/dashboard");
 });
 
-app.get("/dashboard", (req, res) => {
-  res.status(200).send("this is the dashboard");
+app.get("/dashboard", async (req, res) => {
+  const dashboard = {
+    inProgressCount: 0,
+    completedCount: 0,
+    toBeGradedCount: 0,
+    projects: [],
+  };
+
+  try {
+    const user = await User.findByPk(req.user.id);
+
+    const userJudgeTeams = await user.getTeams({
+      where: {
+        type: "JUDGE",
+      },
+    });
+
+    const userStudentTeams = await user.getTeams({
+      where: {
+        type: "STUDENT",
+      },
+    });
+
+    // await Project.create({
+    //   name: "nume",
+    //   summary: "sumar",
+    //   deadline: "10-10-2020",
+    //   status: "IN PROGRESS",
+    // });
+
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projects = await userStudentTeams[i].getProjects({
+        where: {
+          status: "FINISHED",
+        },
+      });
+      dashboard.completedCount += projects.length;
+    }
+
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projects = await userStudentTeams[i].getProjects({
+        where: {
+          status: "IN PROGRESS",
+        },
+      });
+      dashboard.inProgressCount += projects.length;
+    }
+
+    for (let i = 0; i < userStudentTeams.length; i++) {
+      let projectsTemp = await userStudentTeams[i].getProjects();
+      if (projectsTemp != null) {
+        for (let j = 0; j < projectsTemp.length; j++) {
+          let phases = await projectsTemp[j].getProjectPhases();
+          if (phases) {
+            let phasesDone = 0;
+            for (let k = 0; k < phases.length; k++) {
+              if (phases.data) {
+                phasesDone++;
+              }
+            }
+            projectsTemp[j].percentage = (phasesDone / phases.length) * 100;
+          }
+          dashboard.projects.push(projectsTemp[j]);
+        }
+      }
+    }
+
+    for (let i = 0; i < userJudgeTeams.length; i++) {
+      let projects = await userJudgeTeams[i].getProjects({
+        where: {
+          status: {
+            [Sequelize.Op.not]: "FINISHED",
+          },
+        },
+      });
+      dashboard.toBeGradedCount += projects.length;
+    }
+
+    res.status(200).send(dashboard);
+  } catch (error) {
+    console.warn(error);
+  }
 });
 
 app.get("/create", async (req, res) => {
@@ -62,5 +142,14 @@ app.get("/create", async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 });
+
+// for (let index = 0; index < 100; index++) {
+//   Project.create({
+//     name: "nume",
+//     summary: "sumar",
+//     deadline: "10-10-2020",
+//     status: "IN PROGRESS",
+//   });
+// }
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
