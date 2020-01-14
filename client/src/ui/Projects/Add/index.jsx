@@ -148,7 +148,7 @@ class AddProjectPage extends Component {
                   Yup.object().shape({
                     name: Yup.string().required(t("Errors.Required")),
                     description: Yup.string().required(t("Errors.Required")),
-                    weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).max(1, t("Errors.Subunit")).required(t("Errors.Required")),
+                    weight: Yup.number(t("Errors.Number")).positive(t("Errors.Pozitive")).min(1, t("Errors.Subunit")).max(100, t("Errors.Subunit")).required(t("Errors.Required")),
                     deadline: Yup.date().min(new Date(), t("Errors.MinDate", { date: new Date() })).required(t("Errors.Required")),
                   }),
                 )
@@ -156,15 +156,12 @@ class AddProjectPage extends Component {
                 .min(1, t("Errors.Min", { value: 1, name: t("Projects.Add.Deliverables") }))
                 .max(6, t("Errors.Max", { value: 6, name: t("Projects.Add.Deliverables") }))
                 .test(
-                  "sums-to-1",
-                  t("Errors.SumTo1"),
-                  value => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 1,
+                  "sums-to-100",
+                  t("Errors.SumTo100"),
+                  value => value.reduce((accumulator, currentValue) => accumulator + currentValue.weight, 0) === 100,
                 ),
             })}
             onSubmit={async (finalData) => {
-              // TODO submit
-              console.log(finalData);
-
               const {
                 name,
                 deliverables,
@@ -174,7 +171,7 @@ class AddProjectPage extends Component {
               } = finalData;
 
               const { value: teamId } = team;
-              const { value: professorId } = team;
+              const { value: professorId } = professor;
 
               const response = await axios.post(
                 "/projects",
@@ -185,8 +182,6 @@ class AddProjectPage extends Component {
                   teamId,
                   professorId,
                 });
-
-              console.log(response)
 
               if(response.status === 201) {
                 this.setState(

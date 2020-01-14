@@ -32,10 +32,10 @@
     "Remember": "Tine-ma minte",
     "Forgot": "Ai uitat parola?"
   },
-  "Home": {
-    "Title": "Sistem Notare Anonima Garta",
-    "Slogan": "Garta Student Grading System",
-    "UnderS": "(Anonymous)Student Grading System",
+  "Home":{
+    "Title":"Sistem Notare Anonima Garta",
+    "Slogan":"Garta Student Grading System",
+    "UnderS":"Sistem de Notare a Studentilor",
     "Forgot": "Ai uitat parola?",
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
@@ -102,13 +102,13 @@
   "Errors": {
     "Required": "Camp necesar",
     "Pozitive": "Numarul introdus trebuie sa fie pozitiv",
-    "Subunit": "Numarul trebuie sa fie subunitar",
+    "Subunit": "Numarul trebuie sa fie cuprins intre 1 si 100",
     "Number": "Valoarea introdusa trebuie sa fie de tip numeric",
     "Min": "Sunt necesare %{value} %{name}",
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
     "MaxDate": "Data maxima este %{date}",
-    "SumTo1": "Suma tuturor ponderilor trebuie sa fie 1!",
+    "SumTo100": "Suma tuturor ponderilor trebuie sa fie 100!",
     "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu.",
     "PostProjectError": "Proiectul nu se poate adauga!"
   }

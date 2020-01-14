@@ -17,10 +17,10 @@
     "Remember": "Remember me",
     "Forgot": "Forgot password?"
   },
-  "Home": {
-    "Title": "Garta Student Anonymous Grading System",
-    "Slogan": "G.G.S.",
-    "UnderS": "(Anonymous)Student Grading System",
+  "Home":{
+    "Title":"Garta Student Anonymous Grading System",
+    "Slogan":"G.G.S.",
+    "UnderS":"Student Grading System",
     "Forgot": "Forgot password?",
     "UsernameLength": "Username needs to be at least 5 characters long",
     "InvalidEmail": "Invalid email",
@@ -61,13 +61,13 @@
   "Errors": {
     "Required": "Field is required",
     "Pozitive": "The number must pe pozitve",
-    "Subunit": "The number must be smaller or equal to 1",
+    "Subunit": "The number must be smaller or equal to 100",
     "Number": "Input value must be a number",
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
     "MaxDate": "Maximum date is %{date}",
-    "SumTo1": "The sum of all the weights must be 1!",
+    "SumTo100": "The sum of all the weights must be 100!",
     "FetchDataError": "Couldn't load the data! Try again later.",
     "PostProjectError": "Couldn't add the project!"
   }

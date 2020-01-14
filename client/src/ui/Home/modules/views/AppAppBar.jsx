@@ -2,10 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 import LanguagePicker from "../../../../components/LanguagePicker";
 
 
@@ -19,8 +16,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.typography.color,
   },
   tool: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    zIndex: 100,
+    display: "flex",
+    position: "absolute",
+    right: 0,
+    top: theme.spacing(1),
   },
 }));
 
@@ -28,18 +28,11 @@ function AppAppBar(props) {
   const classes = useStyles();
 
   return (
-    <div>
-      <Grid item xs={12}>
-        <AppBar elevation={0} position="sticky">
-          <Toolbar className={classes.tool}>
-            <LanguagePicker />
-            <Button className={classes.menuButton} component={NavLink} to="/login">
-              {"Login"}
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Grid>
-      <div className={classes.placeholder} />
+    <div className={classes.tool}>
+      <LanguagePicker />
+      <Button variant="contained" color="primary" className={classes.menuButton} component={NavLink} to="/login">
+        {"Login"}
+      </Button>
     </div>
   );
 }
