@@ -2,7 +2,12 @@ const express = require("express");
 const Yup = require("yup");
 const sequelize = require("sequelize");
 const moment = require("moment");
-const { Project, User, Team, ProjectPhase } = require("../config/sequelize");
+const {
+  Project,
+  User,
+  Team,
+  ProjectPhase,
+} = require("../config/sequelize");
 
 const { Op } = sequelize;
 
@@ -16,7 +21,7 @@ const projectSchema = Yup.object({
     Yup.object().shape({
       name: Yup.string().required(),
       description: Yup.string().required(),
-      weight: Yup.number().positive().max(1).required(),
+      weight: Yup.number().positive().min(1).max(100).required(),
       deadline: Yup.date().min(new Date()).required(),
     }),
   )
@@ -33,7 +38,11 @@ const projectSchema = Yup.object({
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+/**
+ * Get the teams based on the team type
+ * @param {String} teamType The team type
+ */
+async function getProjects(req, res, teamType) {
   try {
     // return all the users projects
     const { id } = req.user;
@@ -43,11 +52,18 @@ router.get("/", async (req, res) => {
         model: User,
         where: { id, type: "STUDENT" },
       }],
+      where: {
+        type: teamType,
+      },
     });
 
     const promises = [];
 
-    teams.forEach(team => promises.push(team.getProjects()));
+    if (teamType === "STUDENT") {
+      teams.forEach((team) => promises.push(team.getProjects()));
+    } else {
+      teams.forEach((team) => promises.push(team.getJudgeProjects()));
+    }
 
     let projects = await Promise.all(promises); // returns array of arrays
 
@@ -68,7 +84,11 @@ router.get("/", async (req, res) => {
     console.warn(error);
     res.status(500).json({ message: "server error" });
   }
-});
+}
+
+router.get("/own", async (req, res) => getProjects(req, res, "STUDENT"));
+
+router.get("/judge", async (req, res) => getProjects(req, res, "JUDGE"));
 
 /** Creates the project, projectPhases and the judge team */
 router.post("/", async (req, res) => {
@@ -106,13 +126,21 @@ router.post("/", async (req, res) => {
 
     await project.setProjectPhases(phases);
 
+    const team = await Team.findByPk(teamId);
+
+    if (team.type !== "STUDENT") {
+      const err = new Error("invalid team id.");
+      err.name = "ValidationError";
+
+      throw err;
+    }
+
     await project.setProjectTeam(teamId);
 
-    const team = await project.getProjectTeam();
 
     const users = await team.getUsers();
 
-    const userIds = users.map(user => user.id);
+    const userIds = users.map((user) => user.id);
 
     // create the judge team for the project excluding the team members
     const judgeTeam = await Team.create({
@@ -131,7 +159,7 @@ router.post("/", async (req, res) => {
       limit: 5,
     });
 
-    const judgesIds = judges.map(judge => judge.id);
+    const judgesIds = judges.map((judge) => judge.id);
 
     // at least 1 judge
     if (judgesIds.length < 1) {
