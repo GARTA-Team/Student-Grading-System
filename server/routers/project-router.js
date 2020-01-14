@@ -1,15 +1,11 @@
 const express = require("express");
 const Yup = require("yup");
 const sequelize = require("sequelize");
-const { Project, User, Team } = require("../config/sequelize");
+const moment = require("moment");
+const { Project, User, Team, ProjectPhase } = require("../config/sequelize");
 
-// used to validate the project
+const { Op } = sequelize;
 
-// name,
-// deliverables,
-// summary,
-// teamId,
-// professorId,
 
 const projectSchema = Yup.object({
   name: Yup.string().required(),
@@ -74,39 +70,85 @@ router.get("/", async (req, res) => {
   }
 });
 
-/** Creates the project and the judge team */
+/** Creates the project, projectPhases and the judge team */
 router.post("/", async (req, res) => {
   try {
-    // get the team, create the project and set the relationship
-
-    // yup crashes if the array is not present trowing different error, so we check it ourself
+    // yup crashes if the array is not present, trowing a different error, so we check it ourself
     if (!req.body.deliverables) throw new Error("ValidationError");
 
     await projectSchema.validate(req.body);
 
-    const { teamId, ...projectData } = req.body;
+    const { teamId, deliverables, ...projectData } = req.body;
 
-    const project = await Project.create(projectData);
+    /* get the project deadline by finding the latest deadline */
+    // sort by date
+    const deliverablesDeadlines = deliverables.map(d => moment(d.deadline)).sort((a, b) => a.diff(b));
+    const deadline = moment.max(deliverablesDeadlines);
+
+    // check if the proffesor id is valid
+    const { professorId } = projectData;
+    const professor = await User.findByPk(professorId);
+
+    if (!professor || professor.type !== "PROFESSOR") {
+      const err = new Error("invalid professor id.");
+      err.name = "ValidationError";
+
+      throw err;
+    }
+
+    const project = await Project.create({
+      ...projectData,
+      deadline: deadline.toDate(),
+    });
+
+    // create all the phases
+    const phases = await Promise.all(deliverables.map((d) => ProjectPhase.create(d)));
+
+    await project.setProjectPhases(phases);
 
     await project.setProjectTeam(teamId);
 
-    // create the judge team for the project
-    // User.findAll({
-    //   include: [{
-    //     model: Project,
-        
-    //   }]
-      // attributes: ["id", [sequelize.fn("COUNT")]]
-      // where: {
-      //   type: "STUDENT",
-      // },
+    const team = await project.getProjectTeam();
 
-    })
+    const users = await team.getUsers();
 
-    res.status(201).json(project);
+    const userIds = users.map(user => user.id);
+
+    // create the judge team for the project excluding the team members
+    const judgeTeam = await Team.create({
+      name: `${project.name}-judge`,
+      type: "JUDGE",
+    });
+
+    const judges = await User.findAll({
+      where: {
+        type: "STUDENT",
+        id: {
+          [Op.notIn]: userIds,
+        },
+      },
+      order: sequelize.literal("rand()"), // 5 random users
+      limit: 5,
+    });
+
+    const judgesIds = judges.map(judge => judge.id);
+
+    // at least 1 judge
+    if (judgesIds.length < 1) {
+      throw new Error("Internal server error!");
+    }
+
+    await judgeTeam.setUsers(judgesIds);
+
+    await project.setJudgeTeam(judgeTeam);
+
+    res.status(201).json({ id: project.id, name: project.name });
   } catch (e) {
     if (e.name === "ValidationError") {
-      res.status(400).json({ message: "Submited project is not valid" });
+      res.status(400).json({
+        message: "Submited project is not valid",
+        erros: e.errors,
+      });
     } else {
       console.warn(e);
       res.status(500).json({ message: "server error" });
@@ -114,21 +156,21 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  try {
-    const project = await Project.findByPk(req.params.id);
-    // const phases = project.get
+// TODO
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const project = await Project.findByPk(req.params.id);
 
-    if (project) {
-      res.status(200).json(project);
-    } else {
-      res.status(404).json({ message: "not found" });
-    }
-  } catch (error) {
-    console.warn(error);
-    res.status(500).json({ message: "server error" });
-  }
-});
+//     if (project) {
+//       res.status(200).json(project);
+//     } else {
+//       res.status(404).json({ message: "not found" });
+//     }
+//   } catch (error) {
+//     console.warn(error);
+//     res.status(500).json({ message: "server error" });
+//   }
+// });
 
 // router.put("/:id", async (req, res) => {
 //   try {
@@ -144,20 +186,5 @@ router.get("/:id", async (req, res) => {
 //     res.status(500).json({ message: "server error" });
 //   }
 // });
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const project = await Project.findByPk(req.params.id);
-    if (project) {
-      await project.destroy();
-      res.status(202).json({ message: "accepted" });
-    } else {
-      res.status(404).json({ message: "not found" });
-    }
-  } catch (error) {
-    console.warn(error);
-    res.status(500).json({ message: "server error" });
-  }
-});
 
 module.exports = router;
