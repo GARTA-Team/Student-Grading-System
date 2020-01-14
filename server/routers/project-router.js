@@ -208,6 +208,8 @@ router.get("/:id", async (req, res) => {
         id: req.params.id,
       },
       include: [
+        { model: ProjectPhase },
+        // get the team to find the type of the user
         {
           model: Team,
           as: "ProjectTeam",
