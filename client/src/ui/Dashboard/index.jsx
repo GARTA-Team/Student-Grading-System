@@ -29,7 +29,7 @@ export default function Dashboard(props) {
   const classes = useStyles();
 
   const { data } = props;
-  const { completedCount, toBeGradedCount, projects = [] } = data;
+  const { inProgressCount, completedCount, toBeGradedCount, projects = [] } = data;
 
   return (
     <div>
@@ -43,27 +43,11 @@ export default function Dashboard(props) {
               </Typography>
 
               <Typography variant="h4" color="textPrimary">
-                {projects.length}
+                {inProgressCount}
               </Typography>
 
             </div>
             <FolderIcon className={classes.icon} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} lg={4}>
-          <Paper className={classes.card}>
-            <div>
-              <Typography color="textSecondary">
-                {t("Dashboard.ProjectsToBeGraded")}
-              </Typography>
-
-              <Typography variant="h4" color="textPrimary">
-                {toBeGradedCount}
-              </Typography>
-
-            </div>
-            <FormatListBulletedIcon className={classes.icon} />
           </Paper>
         </Grid>
 
@@ -80,6 +64,22 @@ export default function Dashboard(props) {
 
             </div>
             <DoneIcon className={classes.icon} />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={6} lg={4}>
+          <Paper className={classes.card}>
+            <div>
+              <Typography color="textSecondary">
+                {t("Dashboard.DeliverablesToBeGraded")}
+              </Typography>
+
+              <Typography variant="h4" color="textPrimary">
+                {toBeGradedCount}
+              </Typography>
+
+            </div>
+            <FormatListBulletedIcon className={classes.icon} />
           </Paper>
         </Grid>
 

@@ -1,7 +1,7 @@
 {
   "Dashboard": {
     "OpenProjects": "Proiecte in desfasurare",
-    "ProjectsToBeGraded": "Proiecte de notat",
+    "DeliverablesToBeGraded": "Livrabile de notat",
     "CompletedProjects": "Proiecte incheiate",
     "Table": {
       "Title": "Proiecte",
