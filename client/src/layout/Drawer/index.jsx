@@ -154,7 +154,6 @@ export default function Layout({ children }) {
           <NavItem path="/projects" title={t("Navigation.Projects")} Icon={FolderIcon} />
           <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
           <Divider />
-          <NavItem path="/profile" title={t("Navigation.Profile")} Icon={AccountCircleIcon} />
           <NavItem path="/" exact title={t("Navigation.Logout")} Icon={ExitToAppIcon} onClick={handleLogOut} />
         </List>
       </Drawer>

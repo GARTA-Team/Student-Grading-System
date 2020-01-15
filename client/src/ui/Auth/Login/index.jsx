@@ -139,11 +139,6 @@ class Login extends Component {
                   {t("Auth.Login")}
                 </Button>
                 <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      {t("Auth.Forgot")}
-                    </Link>
-                  </Grid>
                   <Grid item>
                     <NavLink href="#" to="/register" variant="body2">
                       {t("Auth.LoginMessage")}
