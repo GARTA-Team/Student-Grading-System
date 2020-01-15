@@ -23,35 +23,35 @@ import Loader from "../../../components/Loader";
 
 const styles = theme => ({
   header: {
-    padding: "0.3em",
+    padding: "0.3em"
   },
   item: {
-    padding: "0.5em",
+    padding: "0.5em"
   },
   buttonsContainer: {
     display: "flex",
     justifyContent: "end",
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(5)
   },
   teamToBeAddedHeaders: {
     marginTop: theme.spacing(3),
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   teamContent: {
-    padding: 0,
+    padding: 0
   },
   button: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   teamsError: {
     color: "red"
   },
   teamsErrorText: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(1)
   },
   gridSpacing: {
-    marginBottom: 10,
+    marginBottom: 10
   }
 });
 class AddTeamPage extends Component {
@@ -59,7 +59,7 @@ class AddTeamPage extends Component {
     initialValues: {
       name: "",
       teamId: "",
-      teamToBeAdded: [],
+      teamToBeAdded: []
     },
     isFormOpen: false,
     variant: "",
@@ -67,14 +67,14 @@ class AddTeamPage extends Component {
     open: false,
     students: [],
     teams: [],
-    isLoading: true,
+    isLoading: true
   };
 
   async componentDidMount() {
     console.log(this.props);
     const { match = {} } = this.props;
     try {
-      const response = await axios.get("/user-api/students");
+      const response = await axios.get("/users/students");
       const students = response.data;
 
       const res = await axios.get("/teams/owned");
@@ -83,7 +83,7 @@ class AddTeamPage extends Component {
       this.setState({
         students,
         teams,
-        isLoading: false,
+        isLoading: false
       });
     } catch (error) {
       // TODO
@@ -96,7 +96,7 @@ class AddTeamPage extends Component {
 
   handleSubmit = async () => {
     try {
-      const response = await axios.get("/user-api/students");
+      const response = await axios.get("/users/students");
       const students = response.data;
 
       const res = await axios.get("/teams/owned");
@@ -104,7 +104,7 @@ class AddTeamPage extends Component {
 
       this.setState({
         students,
-        teams,
+        teams
       });
     } catch (error) {
       // TODO
@@ -128,76 +128,78 @@ class AddTeamPage extends Component {
 
     return (
       <Loader isLoading={isLoading}>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={Yup.object({
-          name: Yup.string().required(t("Errors.Required")),
-          team: Yup.object({
-            label: Yup.string().required(t("Errors.Required")),
-            value: Yup.number(t("Errors.Number")).positive(t("Errors.Positive")).required(t("Errors.Required")),
-          })
-            .required(t("Errors.Required")),
-          teamToBeAdded: Yup.array()
-            .of(
-              Yup.object().shape({
-                name: Yup.string().required(t("Errors.Required")),
-                members: Yup.string().required(t("Errors.Required")),
-              })
-            )
-            .required(t("Errors.Required"))
-            .min(1, t("Errors.Min", { value: 1, name: t("Team.Add.teamToBeAdded") }))
-            .max(6, t("Errors.Max", { value: 6, name: t("Team.Add.teamToBeAdded") })),
-        })}
-        onSubmit={(finalData, { setSubmitting }) => {
-          this.handleSubmit();
-          console.log(finalData);
-          setSubmitting(false);
-        }}
-      >
-        <Form>
-          <Grid container className={classes.gridSpacing}>
-            <Grid item md={8}>
-              <Typography variant="h5" className={classes.header}>{t("Team.Add.Teams")}</Typography>
-            </Grid>
-            <Grid container item md={4} justify="flex-end">
-              <Fab
-                size="medium"
-                color="primary"
-                aria-label={t("Team.Add.AddTeamToBeDelivered")}
-                onClick={this.handleFormOpen}
-              >
-                <AddIcon />
-              </Fab>
-            </Grid>
-          </Grid>
-          <Paper>
-
-            {teams.map((team) => {
-              return (
-                <ExpansionPanel team={team} />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={Yup.object({
+            name: Yup.string().required(t("Errors.Required")),
+            team: Yup.object({
+              label: Yup.string().required(t("Errors.Required")),
+              value: Yup.number(t("Errors.Number"))
+                .positive(t("Errors.Positive"))
+                .required(t("Errors.Required"))
+            }).required(t("Errors.Required")),
+            teamToBeAdded: Yup.array()
+              .of(
+                Yup.object().shape({
+                  name: Yup.string().required(t("Errors.Required")),
+                  members: Yup.string().required(t("Errors.Required"))
+                })
               )
-            })}
-          </Paper>
+              .required(t("Errors.Required"))
+              .min(
+                1,
+                t("Errors.Min", { value: 1, name: t("Team.Add.teamToBeAdded") })
+              )
+              .max(
+                6,
+                t("Errors.Max", { value: 6, name: t("Team.Add.teamToBeAdded") })
+              )
+          })}
+          onSubmit={(finalData, { setSubmitting }) => {
+            this.handleSubmit();
+            setSubmitting(false);
+          }}
+        >
+          <Form>
+            <Grid container className={classes.gridSpacing}>
+              <Grid item md={8}>
+                <Typography variant="h5" className={classes.header}>
+                  {t("Team.Add.Teams")}
+                </Typography>
+              </Grid>
+              <Grid container item md={4} justify="flex-end">
+                <Fab
+                  size="medium"
+                  color="primary"
+                  aria-label={t("Team.Add.AddTeamToBeDelivered")}
+                  onClick={this.handleFormOpen}
+                >
+                  <AddIcon />
+                </Fab>
+              </Grid>
+            </Grid>
+            <Paper>
+              {teams.map(team => {
+                return <ExpansionPanel team={team} />;
+              })}
+            </Paper>
 
+            <AddFormDialog
+              options={students}
+              name="teamToBeAdded"
+              open={isFormOpen}
+              handleClose={this.handleFormClose}
+              handleSubmit={this.handleSubmit}
+            />
 
-          <AddFormDialog
-            options={students}
-            name="teamToBeAdded"
-            open={isFormOpen}
-            handleClose={this.handleFormClose}
-            handleSubmit={this.handleSubmit}
-          />
-
-          <Snackbar
-            variant={variant}
-            message={message}
-            open={open}
-            handleClose={() => this.setState({ open: false })}
-          />
-        </Form>
-
-
-      </Formik>
+            <Snackbar
+              variant={variant}
+              message={message}
+              open={open}
+              handleClose={() => this.setState({ open: false })}
+            />
+          </Form>
+        </Formik>
       </Loader>
     );
   }

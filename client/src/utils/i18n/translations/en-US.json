@@ -1,7 +1,7 @@
 {
   "Dashboard": {
     "OpenProjects": "Open Projects",
-    "ProjectsToBeGraded": "Projects to be completed",
+    "DeliverablesToBeGraded": "Deliverables to be completed",
     "CompletedProjects": "Completed projects"
   },
   "Languages": {},
@@ -31,23 +31,38 @@
   "Projects": {
     "Dashboard": {
       "CreatedAt": "Created at",
-      "UpdatedAt": "Updated at"
+      "UpdatedAt": "Updated at",
+      "ProjectsToBeGraded": "Projects to be completed"
     },
     "Add": {
       "ProjectData": "Project data",
       "ProjectName": "Name",
       "ProjectSummary": "Summary",
       "ProjectTeam": "Team",
+      "ProjectProfessor": "Professor",
       "AddDeliverable": "Add deliverable",
       "Deliverable": {
         "Title": "Deliverable"
-      }
+      },
+      "Succes": "The project was added succesfuly!"
+    },
+    "Details": {
+      "NextDeadline": "Next deadline",
+      "TeamMembers": "Team members",
+      "FinishDeliverable": "Finish deliverable",
+      "GradeDeliverable": "Grade deliverable",
+      "Grade": "Grade",
+      "Sure": "Are you sure you want to continue?"
+    },
+    "Tabs": {
+      "Owned": "Owned",
+      "ToBeGraded": "To be graded"
     }
   },
   "Errors": {
     "Required": "Field is required",
     "Pozitive": "The number must pe pozitve",
-    "Subunit": "The number must be smaller or equal to 1",
+    "Subunit": "The number must be smaller or equal to 100",
     "Number": "Input value must be a number",
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
@@ -75,6 +90,10 @@
       "TeamToBeAdded": {
         "AddYourTeam": "Add your team"
       }
-    }
+    },
+    "MaxDate": "Maximum date is %{date}",
+    "SumTo100": "The sum of all the weights must be 100!",
+    "FetchDataError": "Couldn't load the data! Try again later.",
+    "PostProjectError": "Couldn't add the project!"
   }
 }

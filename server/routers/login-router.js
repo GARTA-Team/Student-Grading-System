@@ -6,13 +6,16 @@ const isAuthenticated = require("../config/auth");
 const router = express.Router();
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  // They won't get this or even be able to access this page if they aren't authed
+  if (req.body.remember) {
+    res.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+  } else {
+    res.cookie.expires = false;
+    req.session.cookie.expires = false;
+  }
   res.status(202).json({ msg: "ok" });
 });
 
-// Route for signing up a user. The user's password is automatically hashed and stored securely
-// thanks to how we configured our Sequelize User Model. If the user is created successfully,
-// proceed to log the user in, otherwise send back an error
 router.post("/signup", async (req, res) => {
   try {
     if (!req.body.username) {
@@ -24,11 +27,14 @@ router.post("/signup", async (req, res) => {
     } else if (!req.body.type) {
       res.status(406).json({ msg: "missing user type" });
     } else {
-      await User.create(req.body).then(() => {
-        res.status(201).json({ msg: "user created" });
-      }).catch((err) => {
-        res.status(409).json({ msg: err }); // just for debugging
-      });
+      await User.create(req.body)
+        .then(() => {
+          res.status(201).json({ msg: "user created" });
+        })
+        .catch((err) => {
+          res.status(409).json({ msg: err }); // just for debugging
+          console.error(err);
+        });
     }
   } catch (err) {
     console.warn(err);
@@ -37,6 +43,9 @@ router.post("/signup", async (req, res) => {
 });
 // Route for logging user out
 router.get("/logout", (req, res) => {
+  res.cookie.expires = false;
+  req.session.cookie.expires = false;
+
   req.logout();
   res.redirect("/");
 });
@@ -46,8 +55,6 @@ router.get("/user_data", isAuthenticated, (req, res) => {
     // The user is not logged in, send back an empty object
     res.json({});
   } else {
-    // Otherwise send back the user's email and id
-    // Sending back a password, even a hashed password, isn't a good idea
     res.json({
       username: req.user.username,
       email: req.user.email,

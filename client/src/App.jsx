@@ -10,6 +10,7 @@ import Projects from "./ui/Projects";
 import Team from "./ui/Team";
 import Drawer from "./layout/Drawer";
 import Loader from "./components/Loader";
+import The404 from "./components/The404";
 
 const theme = createMuiTheme({
   palette: {
@@ -45,13 +46,19 @@ export default class App extends Component {
       response => response,
       (error) => {
         if (error.response) {
-          const { status } = error.response;
+          const { status, data } = error.response;
 
           switch (status) {
             case 401:
               this.setState({ isAuthenticated: false });
               break;
 
+            case 403:
+              if (data.msg === "no access") {
+                this.setState({ isAuthenticated: false });
+              }
+
+              break;
             default:
               break;
           }
@@ -102,6 +109,7 @@ export default class App extends Component {
                     <Route path="/dashboard" render={routerProps => (<Dashboard {...routerProps} data={dashboardData} />)} />
                     <Route path="/projects" render={routerProps => (<Projects {...routerProps} path="/projects" />)} />
                     <Route path="/team" render={routerProps => (<Team {...routerProps} />)} />
+                    <Route path="*" exact component={The404} />
                   </Switch>
                 </Drawer>
               )

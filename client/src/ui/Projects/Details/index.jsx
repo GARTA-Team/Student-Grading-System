@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { t } from "react-i18nify";
+import axios from "axios";
 import Typography from "@material-ui/core/Typography";
-import TabPanel from "../../../components/TabPanel";
-
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { withStyles, Grid, Box } from "@material-ui/core";
-
+import { withStyles, Grid, Button } from "@material-ui/core";
 import Overview from "./panels/Overview";
+import DeliverablesTab from "./panels/Deliverables";
+import TabPanel from "../../../components/TabPanel";
+import Loader from "../../../components/Loader";
 
 const styles = theme => ({
   status: {
@@ -31,27 +32,47 @@ const styles = theme => ({
     flexGrow: 1,
     marginTop: theme.spacing(3),
   },
+  button: {
+    float: "right",
+    marginTop: theme.spacing(5),
+    marginRight: theme.spacing(6),
+  },
 });
 
 class ProjectDetails extends Component {
   state = {
-    project: {
-      name: "TEST",
-      status: "Active",
-    },
+    project: {},
     tab: 0,
+    isLoading: true,
   }
+
+  async componentDidMount() {
+    try {
+      const { params } = this.props.match;
+      const { projectId } = params;
+
+      const response = await axios.get(`/projects/${projectId}`);
+      const project = response.data;
+
+      console.log(project)
+
+      this.setState({ project, isLoading: false });
+    } catch (error) {
+      // TODO
+    }
+  }
+
 
   handleChange = (event, newTab) => this.setState({ tab: newTab });
 
   render() {
-    const { classes } = this.props;
+    const { classes, history } = this.props;
 
-    const { tab = 0, project = {} } = this.state;
+    const { tab = 0, project = {}, isLoading = true } = this.state;
     return (
-      <div>
-        <Grid container>
-          <Grid item xs={2} >
+      <Loader isLoading={isLoading}>
+        <Grid container justify="space-between">
+          <Grid item xs={6} >
             <Typography variant="caption">
               {t("Projects.Details.Project")}
             </Typography>
@@ -63,6 +84,15 @@ class ProjectDetails extends Component {
               {`status: ${t("Project.Status." + project.status)}`}
             </Typography>
           </Grid>
+
+          <Grid item xs={6} justify="flex-end">
+            <Typography variant="caption">
+              {t("Projects.Details.Grade")}
+            </Typography>
+            <Typography variant="h5">
+              {project.grade}
+            </Typography>
+          </Grid>
         </Grid>
 
         <div className={classes.tabsRoot}>
@@ -72,32 +102,26 @@ class ProjectDetails extends Component {
             variant="fullWidth"
             indicatorColor="primary"
             textColor="primary"
-            aria-label="icon tabs example"
+            aria-label="tabs"
           >
             <Tab label={t("Projects.Details.Tabs.Overview")} aria-label={t("Projects.Details.Tabs.Overview")} />
-            <Tab label={t("Projects.Details.Tabs.Data")} aria-label={t("Projects.Details.Tabs.Data")} />
-            <Tab label={t("Projects.Details.Tabs.History")} aria-label={t("Projects.Details.Tabs.History")} />
-            <Tab label={t("Projects.Details.Tabs.Chat")} aria-label={t("Projects.Details.Tabs.Chat")} />
+            <Tab label={t("Projects.Details.Tabs.Deliverables")} aria-label={t("Projects.Details.Tabs.Deliverables")} />
           </Tabs>
           <TabPanel tab={tab} index={0}>
-            <Overview />
+            <Overview project={project} />
           </TabPanel>
           <TabPanel tab={tab} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel tab={tab} index={2}>
-            Item Three
+            <DeliverablesTab project={project} />
           </TabPanel>
         </div>
-      </div>
+
+        <Button variant="contained" onClick={history.goBack} color="secondary" className={classes.button}>
+          {t("Projects.Details.Back")}
+        </Button>
+      </Loader>
     );
   }
 }
 
 
 export default withStyles(styles)(ProjectDetails);
-
-
-// const project = await axios.get(`/projects/${id}`);
-
-//     console.log(project)

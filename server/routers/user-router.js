@@ -47,6 +47,21 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/professors", async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: [["id", "value"], ["username", "label"]],
+      where: { type: "PROFESSOR" },
+    });
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.warn(error);
+    res.status(500).json({ message: "server error" });
+  }
+});
+
+
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);

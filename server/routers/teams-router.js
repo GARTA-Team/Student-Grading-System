@@ -17,13 +17,13 @@ router.get("/owned", async (req, res) => {
   try {
     const teamsOfUser = await Team.findAll({ //get teams of the user that will have to implement projects
       where: {
-        type: 'STUDENT'
+        type: "STUDENT",
       },
       include: [
         {
           model: User,
           where: {
-            id: req.user.id
+            id: req.user.id,
           },
           attributes: []
         },
