@@ -20,6 +20,10 @@ const styles = theme => ({
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(2),
   },
+  header2: {
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
   buttonsContainer: {
     display: "flex",
     justifyContent: "end",
@@ -49,10 +53,10 @@ class ProjectsDashboard extends Component {
   async componentDidMount() {
     try {
       // fetch data
-      const response1 = await axios.get("/projects"); // TODO students
+      const response1 = await axios.get("/projects/student"); // TODO students
       const ownedProjects = response1.data;
 
-      const response2 = await axios.get("/projects"); // TODO judges
+      const response2 = await axios.get("/projects/judge"); // TODO judges
       const toBeGradedProjects = response2.data;
 
       const { projectsPerPage = 10 } = this.state;
@@ -136,10 +140,13 @@ class ProjectsDashboard extends Component {
     );
   }
 
-  handleChange = (event, newTab) => this.setState({
-    tab: newTab,
-    currentPage: 0,
-  });
+  handleChange = (event, newTab) => this.setState(
+    {
+      tab: newTab,
+      currentPage: 0,
+    },
+    () => this.handleChangePage(null, 0), // refresh the projects
+  );
 
   render() {
     const { classes } = this.props;
@@ -200,6 +207,8 @@ class ProjectsDashboard extends Component {
               </div>
             </TabPanel>
             <TabPanel tab={tab} index={1}>
+              <Typography variant="h5" className={classes.header2} >{t("Projects.Dashboard.ProjectsToBeGraded")}</Typography>
+
               {
                 displayedProjects.map(project => <ProjectSummary project={project} handleClick={this.handleProjectClick} key={project.id} />)
               }
