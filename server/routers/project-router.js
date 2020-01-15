@@ -425,11 +425,11 @@ router.post("/phases/:id/grade", async (req, res) => {
 
       if (lastPhase.data !== null && lastPhaseGrades.length === judges.length) {
         let total = 0;
-        phases.forEach(p => { total += p.grade; });
+        phases.forEach(p => { total += parseFloat(p.grade) * (p.weight / 100); });
 
         await project.update({
           status: "FINISHED",
-          grade: total / phases.length,
+          grade: total,
         });
       }
 
