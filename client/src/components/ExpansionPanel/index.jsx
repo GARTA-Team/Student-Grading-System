@@ -7,6 +7,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import { t } from "react-i18nify";
 
@@ -28,14 +29,19 @@ const useStyles = makeStyles(theme => ({
   },
 
   column: {
-    flexBasis: '20%',
-    flexDirection: 'column',
+    // flexBasis: '20%',
+    // flexDirection: 'column',
   },
 
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
     padding: theme.spacing(1, 5),
   },
+  label: {
+    paddingLeft: theme.spacing(1),
+    fontSize: theme.typography.pxToRem(13),
+
+  }
 
 }));
 
@@ -43,9 +49,8 @@ export default function ControlledExpansionPanels(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = panel => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false)
-  }
-  console.log(props.team);
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
     <div className={classes.root}>
@@ -55,28 +60,27 @@ export default function ControlledExpansionPanels(props) {
           aria-controls="panel1c-content"
           id="panel1c-header"
         >
-          <div className={classes.column}>
-            <Typography className={classes.heading}>{props.team.name}</Typography>
-          </div>
+          <Grid container alignItems="center">
+            <Typography className={classes.heading}>{props.team.name}
+              {props.team.members.map(member => {
+                return (
+                  <Chip label={member.username} />
+                );
+              })}
+            </Typography>
+          </Grid>
         </ExpansionPanelSummary>
-        <p>Nume</p>
         <ExpansionPanelDetails className={classes.details}>
-          {props.team.members.map(member => {
+          <Typography className={classes.label}>{"Proiecte: "}</Typography>
+          {props.team.projects.map((project) => {
             return (
-              <Chip label={member.username} />
-            )
+              <Chip
+                label={project.name}
+                component="a"
+                href={`/projects/${project.id}`}
+                clickable />
+            );
           })}
-          <div className={clsx(classes.column, classes.helper)}>
-            {props.team.projects.map((project) => {
-              return (
-                <Chip
-                  label={project.name}
-                  component="a"
-                  href={`/projects/${project.id}`}
-                  clickable />
-              )
-            })}
-          </div>
         </ExpansionPanelDetails>
         <Divider />
       </ExpansionPanel>
