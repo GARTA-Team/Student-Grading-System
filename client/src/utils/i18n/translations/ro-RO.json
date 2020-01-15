@@ -127,6 +127,8 @@
     "Project":"Proiecte: ",
     "TeamName": "Nume echipa",
     "TeamDescription": "Descriere echipa",
+    "Members": "Membrii",
+    "Projects": "Proiecte",
     "Add": {
       "Teams": "Echipe",
       "TeamToBeAdded": {

@@ -38,8 +38,13 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 5)
   },
   label: {
-    paddingLeft: theme.spacing(1),
-    fontSize: theme.typography.pxToRem(13)
+    marginBottom: theme.spacing(1),
+  },
+  chip: {
+    marginLeft: theme.spacing(1),
+  },
+  chipContainer: {
+    display: "flex",
   }
 }));
 
@@ -51,7 +56,7 @@ export default function ControlledExpansionPanels(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, props.className)}>
       <ExpansionPanel
         expanded={expanded === props.team.id}
         onChange={handleChange(props.team.id)}
@@ -61,27 +66,41 @@ export default function ControlledExpansionPanels(props) {
           aria-controls="panel1c-content"
           id="panel1c-header"
         >
-          <Grid container alignItems="center">
-            <Typography className={classes.heading}>
-              {props.team.name}
-              {props.team.members.map(member => {
-                return <Chip label={member.username} />;
-              })}
-            </Typography>
-          </Grid>
+          <Typography className={classes.heading}>
+            {props.team.name}
+          </Typography>
+
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <Typography className={classes.label}>{t("Team.Project")}</Typography>
-          {props.team.projects.map(project => {
-            return (
-              <Chip
-                label={project.name}
-                component="a"
-                href={`/projects/${project.id}`}
-                clickable
-              />
-            );
-          })}
+          <Divider />
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography className={classes.label} variant="body1">{t("Team.Members")}</Typography>
+
+              <div className={classes.chipContainer}>
+                {props.team.members.map(member => (
+                  <Chip label={member.username} className={classes.chip} />
+                ))}
+              </div>
+
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography className={classes.label} variant="body1">{t("Team.Projects")}</Typography>
+              <div className={classes.chipContainer}>
+                {props.team.projects.map(project => (
+                  <Chip
+                    label={project.name}
+                    component="a"
+                    href={`/projects/${project.id}`}
+                    clickable
+                  />
+                ))}
+              </div>
+            </Grid>
+
+
+          </Grid>
         </ExpansionPanelDetails>
         <Divider />
       </ExpansionPanel>
