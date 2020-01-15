@@ -377,7 +377,9 @@ router.post("/phases/:id/grade", async (req, res) => {
   try {
     const { grade } = req.body;
 
-    if(grade < 1 || grade > 10) {
+    console.log(grade)
+
+    if (grade < 1 || grade > 10) {
       const err = new Error();
       err.name = "ValidationError";
       err.errors = "Grade must be between 1 and 10";
@@ -424,7 +426,7 @@ router.post("/phases/:id/grade", async (req, res) => {
 
 
       const gradeObj = await Grade.create({
-        grade,
+        grade: parseFloat(grade),
         UserId: req.user.id,
       });
 
@@ -436,12 +438,16 @@ router.post("/phases/:id/grade", async (req, res) => {
 
         grades.sort((a, b) => a - b);
 
-        // remove max and min grade conform project requirments
-        grades.shift();
-        grades.pop();
+        if (grades.length + 1 > 2) {
+          // remove max and min grade conform project requirments
+          grades.shift();
+          grades.pop();
+        }
 
         let total = 0;
         grades.forEach(g => { total += g; });
+
+        total += grade;
 
         await projectPhase.update({
           grade: total / (grades.length + 1),

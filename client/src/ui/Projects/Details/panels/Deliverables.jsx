@@ -194,7 +194,7 @@ function DeliverablesTab({ project }) {
                   </CardActions>
                 ) : null
               ) : (
-                  type === "judge" && deliverable.data && !deliverable.grade ? (
+                  type === "JUDGE" && (deliverable.data && !deliverable.grade) ? (
                     <CardActions disableSpacing>
                       <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
                         <SpellcheckIcon />

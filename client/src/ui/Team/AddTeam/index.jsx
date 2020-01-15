@@ -3,7 +3,6 @@ import { t } from "react-i18nify";
 import axios from "axios";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Paper from "@material-ui/core/Paper";
 import { withStyles, Fab } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -88,21 +87,8 @@ class AddTeamPage extends Component {
 
   handleFormClose = () => this.setState({ isFormOpen: false });
 
-  handleSubmit = async () => {
-    try {
-      const response = await axios.get("/users/students");
-      const students = response.data;
-
-      const res = await axios.get("/teams/owned");
-      const teams = res.data; //teams by user logged in
-
-      this.setState({
-        students,
-        teams,
-      });
-    } catch (error) {
-      // TODO
-    }
+  handleSubmit = () => {
+    document.location.reload();
   };
 
   render() {

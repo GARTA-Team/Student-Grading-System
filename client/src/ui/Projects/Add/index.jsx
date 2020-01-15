@@ -82,13 +82,11 @@ class AddProjectPage extends Component {
     try {
       // fetch data
       let req = await axios.get("/teams");
-      const teams = req.data;
+      const teams = req.data.map(team => ({ label: team.name, value: team.id }));
 
       req = await axios.get("/users/professors");
       const professors = req.data;
 
-      console.log(teams)
-      console.log(professors)
 
       this.setState({ teams, professors, isLoading: false });
     } catch (error) {
@@ -183,7 +181,7 @@ class AddProjectPage extends Component {
                   professorId,
                 });
 
-              if(response.status === 201) {
+              if (response.status === 201) {
                 this.setState(
                   {
                     message: t("Projects.Add.Succes"),
