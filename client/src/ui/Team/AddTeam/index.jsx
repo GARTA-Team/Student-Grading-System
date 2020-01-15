@@ -1,65 +1,57 @@
 import React, { Component } from "react";
-import { t, Translate } from "react-i18nify";
+import { t } from "react-i18nify";
+import axios from "axios";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import Paper from "@material-ui/core/Paper";
 import { withStyles, Fab } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
 import AddFormDialog from "./AddTeamForm";
 import ExpansionPanel from "../../../components/ExpansionPanel";
 import Snackbar from "../../../components/Snackbar";
-import axios from "axios";
 import Loader from "../../../components/Loader";
 
 const styles = theme => ({
   header: {
-    padding: "0.3em"
+    padding: "0.3em",
   },
   item: {
-    padding: "0.5em"
+    padding: "0.5em",
   },
   buttonsContainer: {
     display: "flex",
     justifyContent: "end",
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(5),
   },
   teamToBeAddedHeaders: {
     marginTop: theme.spacing(3),
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   teamContent: {
-    padding: 0
+    padding: 0,
   },
   button: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   teamsError: {
-    color: "red"
+    color: "red",
   },
   teamsErrorText: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   gridSpacing: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 class AddTeamPage extends Component {
   state = {
     initialValues: {
       name: "",
       teamId: "",
-      teamToBeAdded: []
+      teamToBeAdded: [],
     },
     isFormOpen: false,
     variant: "",
@@ -67,12 +59,11 @@ class AddTeamPage extends Component {
     open: false,
     students: [],
     teams: [],
-    isLoading: true
+    isLoading: true,
   };
 
   async componentDidMount() {
     console.log(this.props);
-    const { match = {} } = this.props;
     try {
       const response = await axios.get("/users/students");
       const students = response.data;
@@ -83,7 +74,7 @@ class AddTeamPage extends Component {
       this.setState({
         students,
         teams,
-        isLoading: false
+        isLoading: false,
       });
     } catch (error) {
       // TODO
@@ -104,11 +95,10 @@ class AddTeamPage extends Component {
 
       this.setState({
         students,
-        teams
+        teams,
       });
     } catch (error) {
       // TODO
-      console.log(error);
     }
   };
 
@@ -136,24 +126,24 @@ class AddTeamPage extends Component {
               label: Yup.string().required(t("Errors.Required")),
               value: Yup.number(t("Errors.Number"))
                 .positive(t("Errors.Positive"))
-                .required(t("Errors.Required"))
+                .required(t("Errors.Required")),
             }).required(t("Errors.Required")),
             teamToBeAdded: Yup.array()
               .of(
                 Yup.object().shape({
                   name: Yup.string().required(t("Errors.Required")),
-                  members: Yup.string().required(t("Errors.Required"))
-                })
+                  members: Yup.string().required(t("Errors.Required")),
+                }),
               )
               .required(t("Errors.Required"))
               .min(
                 1,
-                t("Errors.Min", { value: 1, name: t("Team.Add.teamToBeAdded") })
+                t("Errors.Min", { value: 1, name: t("Team.Add.teamToBeAdded") }),
               )
               .max(
                 6,
-                t("Errors.Max", { value: 6, name: t("Team.Add.teamToBeAdded") })
-              )
+                t("Errors.Max", { value: 6, name: t("Team.Add.teamToBeAdded") }),
+              ),
           })}
           onSubmit={(finalData, { setSubmitting }) => {
             this.handleSubmit();
@@ -179,9 +169,7 @@ class AddTeamPage extends Component {
               </Grid>
             </Grid>
             <Paper>
-              {teams.map(team => {
-                return <ExpansionPanel team={team} />;
-              })}
+              {teams.map(team => <ExpansionPanel team={team} />)}
             </Paper>
 
             <AddFormDialog

@@ -124,6 +124,7 @@
     }
   },
   "Team": {
+    "Project":"Proiecte: ",
     "TeamName": "Nume echipa",
     "TeamDescription": "Descriere echipa",
     "Add": {

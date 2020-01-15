@@ -83,6 +83,7 @@
     }
   },
   "Team":{
+    "Project":"Projects: ",
     "TeamName": "Team name",
     "TeamDescription": "Team description",
     "Add":{
