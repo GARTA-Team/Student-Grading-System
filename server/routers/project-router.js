@@ -204,6 +204,7 @@ router.get("/:id", async (req, res) => {
         "updatedAt",
         "teamId",
         "professorId",
+        "grade",
       ],
       where: {
         id: req.params.id,
@@ -220,7 +221,7 @@ router.get("/:id", async (req, res) => {
             where: {
               id: req.user.id,
             },
-          },
+          }
         },
         {
           model: Team,
@@ -239,11 +240,36 @@ router.get("/:id", async (req, res) => {
 
     if (project) {
       const json = project.toJSON();
+
+      // add the type
       if (json.ProjectTeam) json.type = "student";
       else if (json.JudgeTeam) json.type = "judge";
 
-      delete json.ProjectTeam;
       delete json.JudgeTeam;
+      delete json.ProjectTeam;
+
+      if (json.type === "student") {
+        const team = await project.getProjectTeam();
+
+        json.members = await team.getUsers({ attributes: ["username"] });
+      }
+
+      // add the professor name
+      const professor = await User.findByPk(project.professorId);
+      json.professorName = professor.username;
+
+
+      const phases = await project.getProjectPhases({
+        where: {
+          deadline: {
+            [Op.gte]: moment().toDate(),
+          },
+        },
+        order: [["deadline"]],
+      });
+
+      const firstPhase = phases.shift();
+      if (firstPhase) json.nextDeadline = firstPhase.deadline;
 
       res.status(200).json(json);
     } else {
@@ -296,6 +322,10 @@ router.patch("/phases/:id", async (req, res) => {
         if (lastPhase.data !== null) {
           await project.update({
             status: "WAITING FOR GRADING",
+          });
+        } else if (project.status === "NOT STARTED") {
+          await project.update({
+            status: "IN PROGRESS",
           });
         }
       } else {
@@ -390,12 +420,16 @@ router.post("/phases/:id/grade", async (req, res) => {
         order: [["id"]],
       });
 
-      const lastPhase = phases.pop();
+      const lastPhase = phases[phases.length - 1];
       const lastPhaseGrades = await lastPhase.getGrades();
 
       if (lastPhase.data !== null && lastPhaseGrades.length === judges.length) {
+        let total = 0;
+        phases.forEach(p => { total += p.grade; });
+
         await project.update({
           status: "FINISHED",
+          grade: total / phases.length,
         });
       }
 

@@ -12,6 +12,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/parteniealex/garta-student-grading-system#readme",
   "dependencies": {
-    "concurrently": "^5.0.0"
+    "@material-ui/icons": "^4.5.1",
+    "concurrently": "^5.0.0",
+    "react-swipeable-views": "^0.13.3"
   }
 }

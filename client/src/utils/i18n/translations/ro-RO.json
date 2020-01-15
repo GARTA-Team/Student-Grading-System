@@ -32,10 +32,10 @@
     "Remember": "Tine-ma minte",
     "Forgot": "Ai uitat parola?"
   },
-  "Home":{
-    "Title":"Sistem Notare Anonima Garta",
-    "Slogan":"Garta Student Grading System",
-    "UnderS":"Sistem de Notare a Studentilor",
+  "Home": {
+    "Title": "Sistem Notare Anonima Garta",
+    "Slogan": "Garta Student Grading System",
+    "UnderS": "Sistem de Notare a Studentilor",
     "Forgot": "Ai uitat parola?",
     "UsernameLength": "Numele de utilizator trebuie sa aiba cel putin 5 caractere",
     "InvalidEmail": "Email invalid",
@@ -53,7 +53,8 @@
       "UpdatedAt": "Actualizat la",
       "Deadline": "Termen",
       "By": "De",
-      "Details": "Detali"
+      "Details": "Detali",
+      "ProjectsToBeGraded": "Proiecte de notat"
     },
     "Add": {
       "ProjectData": "Date proiect",
@@ -85,12 +86,18 @@
       "NextDeadline": "Urmatorul termen",
       "TeamMembers": "Membri echipa",
       "Summary": "Summar",
-      "FinishDeliverable": "Finalizeaza",
+      "FinishDeliverable": "Finalizeaza livrabil",
+      "GradeDeliverable": "Noteaza livrabil",
+      "Grade": "Nota",
       "Sure": "Esti sigur ca vrei sa trimiti?",
-      "Back":"Inapoi"
+      "Back": "Inapoi"
     },
     "Deliverables": {
       "Overdue": "Depasit"
+    },
+    "Tabs": {
+      "Owned": "Proiectele mele",
+      "ToBeGraded": "De notat"
     }
   },
   "Errors": {
