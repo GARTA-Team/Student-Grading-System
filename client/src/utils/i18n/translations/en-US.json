@@ -1,7 +1,7 @@
 {
   "Dashboard": {
     "OpenProjects": "Open Projects",
-    "ProjectsToBeGraded": "Projects to be completed",
+    "DeliverablesToBeGraded": "Deliverables to be completed",
     "CompletedProjects": "Completed projects"
   },
   "Languages": {},

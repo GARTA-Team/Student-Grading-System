@@ -72,13 +72,6 @@ app.get("/dashboard", async (req, res) => {
       },
     });
 
-    // await Project.create({
-    //   name: "nume",
-    //   summary: "sumar",
-    //   deadline: "10-10-2020",
-    //   status: "IN PROGRESS",
-    // });
-
     for (let i = 0; i < userStudentTeams.length; i++) {
       let projects = await userStudentTeams[i].getProjects({
         where: {
@@ -116,15 +109,41 @@ app.get("/dashboard", async (req, res) => {
       }
     }
 
+    let projects = [];
     for (let i = 0; i < userJudgeTeams.length; i++) {
-      let projects = await userJudgeTeams[i].getProjects({
+      const project = await userJudgeTeams[i].getJudgeProjects({
         where: {
-          status: {
-            [Sequelize.Op.not]: "FINISHED",
-          },
+          grade: null,
         },
       });
-      dashboard.toBeGradedCount += projects.length;
+      if (project != null) {
+        projects.push(...project);
+      }
+    }
+
+    let phases = [];
+    for (let j = 0; j < projects.length; j++) {
+      const phase = await projects[j].getProjectPhases({
+        where: {
+          grade: null,
+        },
+      });
+      if(phase != null) {
+        phases.push(...phase);
+      }
+    }
+
+    for (let k = 0; k < phases.length; k++) {
+      let grade = await phases[k].getGrades({
+        where: {
+          UserId: req.user.id,
+        }
+      })
+
+      console.log(JSON.stringify(grade));
+      if (!grade || grade.length == 0) {
+        dashboard.toBeGradedCount++;
+      }
     }
 
     res.status(200).send(dashboard);

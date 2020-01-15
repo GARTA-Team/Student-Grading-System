@@ -55,22 +55,6 @@ export default function Dashboard(props) {
           <Paper className={classes.card}>
             <div>
               <Typography color="textSecondary">
-                {t("Dashboard.ProjectsToBeGraded")}
-              </Typography>
-
-              <Typography variant="h4" color="textPrimary">
-                {toBeGradedCount}
-              </Typography>
-
-            </div>
-            <FormatListBulletedIcon className={classes.icon} />
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} lg={4}>
-          <Paper className={classes.card}>
-            <div>
-              <Typography color="textSecondary">
                 {t("Dashboard.CompletedProjects")}
               </Typography>
 
@@ -80,6 +64,22 @@ export default function Dashboard(props) {
 
             </div>
             <DoneIcon className={classes.icon} />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={6} lg={4}>
+          <Paper className={classes.card}>
+            <div>
+              <Typography color="textSecondary">
+                {t("Dashboard.DeliverablesToBeGraded")}
+              </Typography>
+
+              <Typography variant="h4" color="textPrimary">
+                {toBeGradedCount}
+              </Typography>
+
+            </div>
+            <FormatListBulletedIcon className={classes.icon} />
           </Paper>
         </Grid>
 
