@@ -40,7 +40,7 @@ router.get("/owned", async (req, res) => {
       });
 
       const projects = await team.getProjects({
-        attributes: ['name']
+        attributes: ['name', 'id']
       });
 
       teamsWithMembers.push({

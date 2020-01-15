@@ -45,6 +45,7 @@ export default function ControlledExpansionPanels(props) {
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
+  console.log(props.team);
 
   return (
     <div className={classes.root}>
@@ -67,7 +68,11 @@ export default function ControlledExpansionPanels(props) {
           <div className={clsx(classes.column, classes.helper)}>
             {props.team.projects.map((project) => {
               return (
-                <Chip label={project.name} />
+                <Chip
+                  label={project.name}
+                  component="a"
+                  href={`/projects/${project.id}`}
+                  clickable />
               )
             })}
           </div>
