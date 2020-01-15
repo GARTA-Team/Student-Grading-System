@@ -45,6 +45,9 @@ const styles = theme => ({
   gridSpacing: {
     marginBottom: 10,
   },
+  team: {
+    marginTop: theme.spacing(2),
+  },
 });
 class AddTeamPage extends Component {
   state = {
@@ -168,9 +171,10 @@ class AddTeamPage extends Component {
                 </Fab>
               </Grid>
             </Grid>
-            <Paper>
-              {teams.map(team => <ExpansionPanel team={team} />)}
-            </Paper>
+
+            <div>
+              {teams.map(team => <ExpansionPanel team={team} className={classes.team} />)}
+            </div>
 
             <AddFormDialog
               options={students}
