@@ -85,16 +85,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function Layout({ children }) {
+export default function Layout({ type, children }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleLogOut = () => {
-    Axios.get("/logout").then((res)=>{
+    Axios.get("/logout").then((res) => {
       window.location.reload(false);
     });
-
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -152,7 +151,9 @@ export default function Layout({ children }) {
         <List>
           <NavItem path="/dashboard" exact title={t("Navigation.Dashboard")} Icon={DashboardIcon} />
           <NavItem path="/projects" title={t("Navigation.Projects")} Icon={FolderIcon} />
-          <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
+          {type === "STUDENT" && (
+            <NavItem path="/team" title={t("Navigation.Team")} Icon={GroupIcon} />
+          )}
           <Divider />
           <NavItem path="/" exact title={t("Navigation.Logout")} Icon={ExitToAppIcon} onClick={handleLogOut} />
         </List>

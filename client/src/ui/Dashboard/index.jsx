@@ -29,7 +29,7 @@ export default function Dashboard(props) {
   const classes = useStyles();
 
   const { data, history = {} } = props;
-  const { inProgressCount, completedCount, toBeGradedCount, projects = [] } = data;
+  const { inProgressCount, completedCount, toBeGradedCount, projects = [], type } = data;
 
   return (
     <div>
@@ -67,21 +67,25 @@ export default function Dashboard(props) {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} lg={4}>
-          <Paper className={classes.card}>
-            <div>
-              <Typography color="textSecondary">
-                {t("Dashboard.DeliverablesToBeGraded")}
-              </Typography>
+        {
+          type === "STUDENT" ? (
+            <Grid item xs={12} sm={6} lg={4}>
+              <Paper className={classes.card}>
+                <div>
+                  <Typography color="textSecondary">
+                    {t("Dashboard.DeliverablesToBeGraded")}
+                  </Typography>
 
-              <Typography variant="h4" color="textPrimary">
-                {toBeGradedCount}
-              </Typography>
+                  <Typography variant="h4" color="textPrimary">
+                    {toBeGradedCount}
+                  </Typography>
 
-            </div>
-            <FormatListBulletedIcon className={classes.icon} />
-          </Paper>
-        </Grid>
+                </div>
+                <FormatListBulletedIcon className={classes.icon} />
+              </Paper>
+            </Grid>
+          ) : null
+        }
 
         <Grid item xs={12}>
           <DataTable

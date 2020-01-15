@@ -55,102 +55,131 @@ app.get("/dashboard", async (req, res) => {
     completedCount: 0,
     toBeGradedCount: 0,
     projects: [],
+    type: "STUDENT",
   };
 
   try {
     const user = await User.findByPk(req.user.id);
 
-    const userJudgeTeams = await user.getTeams({
-      where: {
-        type: "JUDGE",
-      },
-    });
+    if (user.type === "STUDENT") {
+      const userJudgeTeams = await user.getTeams({
+        where: {
+          type: "JUDGE",
+        },
+      });
 
-    const userStudentTeams = await user.getTeams({
-      where: {
-        type: "STUDENT",
-      },
-    });
+      const userStudentTeams = await user.getTeams({
+        where: {
+          type: "STUDENT",
+        },
+      });
 
-    for (let i = 0; i < userStudentTeams.length; i++) {
-      let projects = await userStudentTeams[i].getProjects({
+      for (let i = 0; i < userStudentTeams.length; i++) {
+        let projects = await userStudentTeams[i].getProjects({
+          where: {
+            status: "FINISHED",
+          },
+        });
+        dashboard.completedCount += projects.length;
+      }
+
+      for (let i = 0; i < userStudentTeams.length; i++) {
+        let projects = await userStudentTeams[i].getProjects({
+          where: {
+            status: {
+              [Sequelize.Op.or]: ["IN PROGRESS", "WAITING FOR GRADING"],
+            }
+          },
+        });
+        dashboard.inProgressCount += projects.length;
+      }
+
+      for (let i = 0; i < userStudentTeams.length; i++) {
+        let projectsTemp = await userStudentTeams[i].getProjects();
+        if (projectsTemp != null) {
+          for (let j = 0; j < projectsTemp.length; j++) {
+            let phases = await projectsTemp[j].getProjectPhases();
+            if (phases) {
+              let phasesDone = 0;
+              for (let k = 0; k < phases.length; k++) {
+                if (phases.data) {
+                  phasesDone++;
+                }
+              }
+              projectsTemp[j].percentage = (phasesDone / phases.length) * 100;
+            }
+            dashboard.projects.push(projectsTemp[j]);
+          }
+        }
+      }
+
+      let projects = [];
+      for (let i = 0; i < userJudgeTeams.length; i++) {
+        const project = await userJudgeTeams[i].getJudgeProjects({
+          where: {
+            grade: null,
+          },
+        });
+        if (project != null) {
+          projects.push(...project);
+        }
+      }
+
+      let phases = [];
+      for (let j = 0; j < projects.length; j++) {
+        const phase = await projects[j].getProjectPhases({
+          where: {
+            grade: null,
+            data: {
+              [Sequelize.Op.ne]: null,
+            }
+          },
+        });
+        if (phase != null) {
+          phases.push(...phase);
+        }
+      }
+
+      for (let k = 0; k < phases.length; k++) {
+        let grade = await phases[k].getGrades({
+          where: {
+            UserId: req.user.id,
+          },
+        });
+
+        if (!grade || grade.length === 0) {
+          dashboard.toBeGradedCount++;
+        }
+      }
+    } else {
+      // get data for projects the user is a professor of
+
+      const projects = await Project.findAll({
         where: {
           status: "FINISHED",
         },
+        professorId: req.user.id,
       });
-      dashboard.completedCount += projects.length;
-    }
 
-    for (let i = 0; i < userStudentTeams.length; i++) {
-      let projects = await userStudentTeams[i].getProjects({
+      dashboard.completedCount += projects.length;
+
+      projects.push(...await Project.findAll({
         where: {
           status: {
             [Sequelize.Op.or]: ["IN PROGRESS", "WAITING FOR GRADING"],
-          }
+          },
         },
-      });
+      }));
       dashboard.inProgressCount += projects.length;
-    }
 
-    for (let i = 0; i < userStudentTeams.length; i++) {
-      let projectsTemp = await userStudentTeams[i].getProjects();
-      if (projectsTemp != null) {
-        for (let j = 0; j < projectsTemp.length; j++) {
-          let phases = await projectsTemp[j].getProjectPhases();
-          if (phases) {
-            let phasesDone = 0;
-            for (let k = 0; k < phases.length; k++) {
-              if (phases.data) {
-                phasesDone++;
-              }
-            }
-            projectsTemp[j].percentage = (phasesDone / phases.length) * 100;
-          }
-          dashboard.projects.push(projectsTemp[j]);
-        }
-      }
-    }
-
-    let projects = [];
-    for (let i = 0; i < userJudgeTeams.length; i++) {
-      const project = await userJudgeTeams[i].getJudgeProjects({
-        where: {
-          grade: null,
-        },
-      });
-      if (project != null) {
-        projects.push(...project);
-      }
-    }
-
-    let phases = [];
-    for (let j = 0; j < projects.length; j++) {
-      const phase = await projects[j].getProjectPhases({
-        where: {
-          grade: null,
-        },
-      });
-      if(phase != null) {
-        phases.push(...phase);
-      }
-    }
-
-    for (let k = 0; k < phases.length; k++) {
-      let grade = await phases[k].getGrades({
-        where: {
-          UserId: req.user.id,
-        }
-      })
-
-      console.log(JSON.stringify(grade));
-      if (!grade || grade.length == 0) {
-        dashboard.toBeGradedCount++;
-      }
+      dashboard.projects = projects;
+      dashboard.type = "PROFESSOR";
     }
 
     res.status(200).send(dashboard);
   } catch (error) {
     console.warn(error);
+    res.status(500).json({ message: "server error" });
   }
 });
 
@@ -163,14 +192,5 @@ app.get("/create", async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 });
-
-// for (let index = 0; index < 100; index++) {
-//   Project.create({
-//     name: "nume",
-//     summary: "sumar",
-//     deadline: "10-10-2020",
-//     status: "IN PROGRESS",
-//   });
-// }
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

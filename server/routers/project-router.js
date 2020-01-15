@@ -42,54 +42,71 @@ const router = express.Router();
  * @param {String} teamType The team type
  */
 async function getProjects(req, res, teamType) {
+  // return all the users projects
+  const { id } = req.user;
+
+  const teams = await Team.findAll({
+    include: [{
+      model: User,
+      where: { id, type: "STUDENT" },
+    }],
+    where: {
+      type: teamType,
+    },
+  });
+
+  const promises = [];
+
+  if (teamType === "STUDENT") {
+    teams.forEach((team) => promises.push(team.getProjects()));
+  } else {
+    teams.forEach((team) => promises.push(team.getJudgeProjects()));
+  }
+
+  let projects = await Promise.all(promises); // returns array of arrays
+
+  // add the team name to each project
+  projects = projects.map((projectArray, index) =>
+    projectArray.map((e) => {
+      // we can't add a field to the object returned from sequelize, so we convert to JSOn first
+      const newObject = e.toJSON();
+
+      newObject.teamName = teams[index].name;
+
+      return newObject;
+    }),
+  );
+
+  projects = projects.flat(); // now array of projects
+
+  return projects;
+
+}
+
+router.get("/", async (req, res) => {
   try {
-    // return all the users projects
-    const { id } = req.user;
+    const user = await User.findByPk(req.user.id);
 
-    const teams = await Team.findAll({
-      include: [{
-        model: User,
-        where: { id, type: "STUDENT" },
-      }],
-      where: {
-        type: teamType,
-      },
-    });
+    if (user.type === "PROFESSOR") {
+      const projects = await Project.findAll({ professorId: req.user.id, type: "STUDENT" });
 
-    const promises = [];
+      res.status(200).json({ professor: projects });
+    } else if (user.type === "STUDENT") {
+      const data = {
+        student: await getProjects(req, res, "STUDENT"),
+        judge: await getProjects(req, res, "JUDGE"),
+      };
 
-    if (teamType === "STUDENT") {
-      teams.forEach((team) => promises.push(team.getProjects()));
-    } else {
-      teams.forEach((team) => promises.push(team.getJudgeProjects()));
+      res.status(200).json(data);
     }
-
-    let projects = await Promise.all(promises); // returns array of arrays
-
-    // add the team name to each project
-    projects = projects.map((projectArray, index) =>
-      projectArray.map((e) => {
-        // we can't add a field to the object returned from sequelize, so we convert to JSOn first
-        const newObject = e.toJSON();
-
-        newObject.teamName = teams[index].name;
-
-        return newObject;
-      }),
-    );
-
-    projects = projects.flat(); // now array of projects
-
-    res.status(200).json(projects);
+    else {
+      throw new Error();
+    }
   } catch (error) {
     console.warn(error);
     res.status(500).json({ message: "server error" });
   }
-}
-
-router.get("/student", async (req, res) => getProjects(req, res, "STUDENT"));
-
-router.get("/judge", async (req, res) => getProjects(req, res, "JUDGE"));
+});
 
 /** Creates the project, projectPhases and the judge team */
 router.post("/", async (req, res) => {
@@ -242,13 +259,19 @@ router.get("/:id", async (req, res) => {
       const json = project.toJSON();
 
       // add the type
-      if (json.ProjectTeam) json.type = "student";
-      else if (json.JudgeTeam) json.type = "judge";
+      if (json.ProjectTeam) json.type = "STUDENT";
+      else if (json.JudgeTeam) json.type = "JUDGE";
 
       delete json.JudgeTeam;
       delete json.ProjectTeam;
 
-      if (json.type === "student") {
+      if (!json.type) {
+        const user = await User.findByPk(req.user.id);
+
+        if (user.type === "PROFESSOR") json.type = "PROFESSOR";
+      }
+
+      if (json.type === "STUDENT" || json.type === "PROFESSOR") {
         const team = await project.getProjectTeam();
 
         json.members = await team.getUsers({ attributes: ["username"] });
@@ -352,6 +375,16 @@ router.patch("/phases/:id", async (req, res) => {
 
 router.post("/phases/:id/grade", async (req, res) => {
   try {
+    const { grade } = req.body;
+
+    if(grade < 1 || grade > 10) {
+      const err = new Error();
+      err.name = "ValidationError";
+      err.errors = "Grade must be between 1 and 10";
+
+      throw err;
+    }
+
     const projectPhase = await ProjectPhase.findByPk(req.params.id);
 
     if (!projectPhase) {
@@ -389,7 +422,6 @@ router.post("/phases/:id/grade", async (req, res) => {
         throw err;
       }
 
-      const { grade } = req.body;
 
       const gradeObj = await Grade.create({
         grade,

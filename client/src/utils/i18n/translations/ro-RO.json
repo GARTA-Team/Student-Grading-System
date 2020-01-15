@@ -5,7 +5,7 @@
     "CompletedProjects": "Proiecte incheiate",
     "NotGraded": "Nenotat",
     "Table": {
-      "Title": "Proiecte",
+      "Title": "Proiectele mele",
       "Project": "Proiect",
       "Percentage": "Procentaj",
       "Grade": "Nota",
@@ -99,7 +99,8 @@
     },
     "Tabs": {
       "Owned": "Proiectele mele",
-      "ToBeGraded": "De notat"
+      "ToBeGraded": "De notat",
+      "Projects": "Proiecte"
     }
   },
   "Errors": {

@@ -3,7 +3,10 @@
     "OpenProjects": "Open Projects",
     "DeliverablesToBeGraded": "Deliverables to be completed",
     "CompletedProjects": "Completed projects",
-    "NotGraded": "Not graded"
+    "NotGraded": "Not graded",
+    "Table": {
+      "Title": "Owned projects"
+    }
   },
   "Languages": {},
   "Navigation": {},
@@ -83,11 +86,11 @@
       }
     }
   },
-  "Team":{
-    "Project":"Projects: ",
+  "Team": {
+    "Project": "Projects: ",
     "TeamName": "Team name",
     "TeamDescription": "Team description",
-    "Add":{
+    "Add": {
       "Teams": "Teams",
       "TeamToBeAdded": {
         "AddYourTeam": "Add your team"

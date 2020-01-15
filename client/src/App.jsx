@@ -94,6 +94,7 @@ export default class App extends Component {
 
   render() {
     const { isAuthenticated = false, isLoading = true, dashboardData = {} } = this.state;
+    const { type } = dashboardData;
 
     return (
 
@@ -103,7 +104,7 @@ export default class App extends Component {
           <Router>
             {
               isAuthenticated ? (
-                <Drawer>
+                <Drawer type={type}>
                   <Switch>
                     <Route exact path="/" render={routerProps => (<Redirect {...routerProps} to="/dashboard" />)} />
                     <Route path="/dashboard" render={routerProps => (<Dashboard {...routerProps} data={dashboardData} />)} />

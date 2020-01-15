@@ -81,7 +81,7 @@ function Overview({ project }) {
         </Grid>
 
         {
-          type === "student" ? (
+          type === "STUDENT" || project.type === "PROFESSOR" ? (
             <Grid item xs={12} >
               <Paper>
                 <Card className={classes.card}>

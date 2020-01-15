@@ -53,11 +53,24 @@ class ProjectsDashboard extends Component {
   async componentDidMount() {
     try {
       // fetch data
-      const response1 = await axios.get("/projects/student"); // TODO students
-      const ownedProjects = response1.data;
+      const response = await axios.get("/projects/");
+      const { data = {} } = response;
 
-      const response2 = await axios.get("/projects/judge"); // TODO judges
-      const toBeGradedProjects = response2.data;
+      let type;
+      let ownedProjects;
+      let toBeGradedProjects;
+
+      if (data.professor) {
+        type = "PROFESSOR";
+
+        ownedProjects = data.professor;
+        toBeGradedProjects = [];
+      } else {
+        type = "STUDENT";
+
+        ownedProjects = data.student;
+        toBeGradedProjects = data.judge;
+      }
 
       const { projectsPerPage = 10 } = this.state;
 
@@ -66,6 +79,7 @@ class ProjectsDashboard extends Component {
         displayedProjects: ownedProjects.slice(0, projectsPerPage),
         allToBeGradedProjects: toBeGradedProjects,
         isLoading: false,
+        type,
       });
     } catch (error) {
       this.setState({
@@ -161,6 +175,7 @@ class ProjectsDashboard extends Component {
       allToBeGradedProjects = [],
       message,
       variant,
+      type,
     } = this.state;
 
     return (
@@ -175,8 +190,13 @@ class ProjectsDashboard extends Component {
               textColor="primary"
               aria-label="icon tabs example"
             >
-              <Tab label={t("Projects.Tabs.Owned")} aria-label={t("Projects.Tabs.Owned")} />
-              <Tab label={t("Projects.Tabs.ToBeGraded")} aria-label={t("Projects.Tabs.ToBeGraded")} />
+              <Tab
+                label={type === "STUDENT" ? t("Projects.Tabs.Owned") : t("Projects.Tabs.Projects")}
+                aria-label={type === "STUDENT" ? t("Projects.Tabs.Owned") : t("Projects.Tabs.Projects")}
+              />
+              {type === "STUDENT" && (
+                <Tab label={t("Projects.Tabs.ToBeGraded")} aria-label={t("Projects.Tabs.ToBeGraded")} />
+              )}
             </Tabs>
             <TabPanel tab={tab} index={0}>
               <div className={classes.header}>

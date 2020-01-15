@@ -86,7 +86,7 @@ class ProjectDetails extends Component {
           </Grid>
 
           {
-            project.type === "student" ? (
+            project.type === "STUDENT" || project.type === "PROFESSOR" ? (
               <Grid item xs={6} justify="flex-end">
                 <Typography variant="caption">
                   {t("Projects.Details.Grade")}

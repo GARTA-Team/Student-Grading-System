@@ -85,14 +85,14 @@ function DeliverablesTab({ project }) {
 
   const updateDeliverable = async () => {
     try {
-      if (type === "student") {
+      if (type === "STUDENT") {
         await axios.patch(
           `/projects/phases/${selectedId}`,
           { data: finishData },
         );
 
         document.location.reload();
-      } else if (type === "judge") {
+      } else if (type === "JUDGE") {
         await axios.post(
           `/projects/phases/${selectedId}/grade`,
           { grade },
@@ -132,7 +132,9 @@ function DeliverablesTab({ project }) {
             <CardContent
               className={clsx(
                 classes.deliverableContent,
-                deliverable.data || (type === "judge" && !deliverable.grade) ? classes.deliverableContentFinished : false,
+                deliverable.data || type === "PROFESSOR" || (type === "JUDGE" && !deliverable.grade)
+                  ? classes.deliverableContentFinished
+                  : false,
               )}
             >
 
@@ -180,7 +182,7 @@ function DeliverablesTab({ project }) {
             </CardContent>
 
             {
-              type === "student" ? (
+              type === "STUDENT" ? (
                 !deliverable.data ? (
                   <CardActions disableSpacing>
                     <IconButton aria-label={t("Projects.Details.FinishDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
@@ -189,7 +191,7 @@ function DeliverablesTab({ project }) {
                   </CardActions>
                 ) : null
               ) : (
-                  type === "judge" && deliverable.data ? (
+                  type === "JUDGE" && deliverable.data ? (
                     <CardActions disableSpacing>
                       <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
                         <SpellcheckIcon />
@@ -209,12 +211,12 @@ function DeliverablesTab({ project }) {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title" fullWidth maxWidth={"sm"}>
         <DialogTitle id="form-dialog-title">
           {
-            type === "student" ? t("Projects.Details.FinishDeliverable") : t("Projects.Details.GradeDeliverable")
+            type === "STUDENT" ? t("Projects.Details.FinishDeliverable") : t("Projects.Details.GradeDeliverable")
           }
         </DialogTitle>
 
         {
-          type === "student" ? (
+          type === "STUDENT" ? (
             <DialogContent>
               <TextField fullWidth id="link-dialog" label="Link" variant="outlined" value={finishData} onChange={e => setData(e.target.value)} />
             </DialogContent>
