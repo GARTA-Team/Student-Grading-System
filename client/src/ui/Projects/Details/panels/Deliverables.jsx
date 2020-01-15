@@ -100,6 +100,9 @@ function DeliverablesTab({ project }) {
 
         document.location.reload();
       }
+
+      setAlertDialogOpen(false);
+      setDialogOpen(false);
     } catch (error) {
       console.error(JSON.stringify(error));
     }
@@ -189,7 +192,7 @@ function DeliverablesTab({ project }) {
                   </CardActions>
                 ) : null
               ) : (
-                  type === "judge" && deliverable.data ? (
+                  type === "judge" && deliverable.data && !deliverable.grade ? (
                     <CardActions disableSpacing>
                       <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
                         <SpellcheckIcon />
@@ -226,7 +229,7 @@ function DeliverablesTab({ project }) {
                   label={t("Projects.Details.Grade")}
                   variant="outlined"
                   value={grade}
-                  onChange={e => setGrade(e.target.value)}
+                  onChange={e => console.log(e.target.value) || setGrade(e.target.value)}
                   inputProps={{
                     type: "number",
                     step: "0.01",
