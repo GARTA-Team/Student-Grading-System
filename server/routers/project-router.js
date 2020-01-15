@@ -399,10 +399,17 @@ router.post("/phases/:id/grade", async (req, res) => {
       await projectPhase.addGrade(gradeObj);
 
       if ((grades.length + 1) >= judges.length) {
-        let total = 0;
-        grades.forEach((g) => { total += g.grade; });
 
-        total += grade;
+        grades.forEach((g) => grades.push(g.grade));
+
+        grades.sort((a, b) => a - b);
+
+        // remove max and min grade conform project requirments
+        grades.shift();
+        grades.pop();
+
+        let total = 0;
+        grades.forEach(g => { total += g; });
 
         await projectPhase.update({
           grade: total / (grades.length + 1),
