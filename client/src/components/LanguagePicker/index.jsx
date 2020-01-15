@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 
 const LanguageItem = ({ label, avatar, classes }) => (
   <>
-    <Avatar name={label} src={avatar} className={classes.avatar} />
+    <Avatar name={label} src={`${window.location.origin.toString()}/${avatar}`} className={classes.avatar} />
     <Typography color="secondary" className={classes.typography}>{t(label)}</Typography>
   </>
 );
