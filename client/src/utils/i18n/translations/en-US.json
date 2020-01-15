@@ -2,7 +2,8 @@
   "Dashboard": {
     "OpenProjects": "Open Projects",
     "DeliverablesToBeGraded": "Deliverables to be completed",
-    "CompletedProjects": "Completed projects"
+    "CompletedProjects": "Completed projects",
+    "NotGraded": "Not graded"
   },
   "Languages": {},
   "Navigation": {},

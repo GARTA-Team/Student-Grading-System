@@ -84,20 +84,24 @@ function DeliverablesTab({ project }) {
   const classes = useStyles();
 
   const updateDeliverable = async () => {
-    if (type === "student") {
-      await axios.patch(
-        `/projects/phases/${selectedId}`,
-        { data: finishData },
-      );
+    try {
+      if (type === "student") {
+        await axios.patch(
+          `/projects/phases/${selectedId}`,
+          { data: finishData },
+        );
 
-      document.location.reload();
-    } else if (type === "judge") {
-      await axios.post(
-        `/projects/phases/${selectedId}/grade`,
-        { grade: grade },
-      );
+        document.location.reload();
+      } else if (type === "judge") {
+        await axios.post(
+          `/projects/phases/${selectedId}/grade`,
+          { grade },
+        );
 
-      document.location.reload();
+        document.location.reload();
+      }
+    } catch (error) {
+      console.error(JSON.stringify(error));
     }
   };
 
@@ -128,7 +132,7 @@ function DeliverablesTab({ project }) {
             <CardContent
               className={clsx(
                 classes.deliverableContent,
-                deliverable.data ? classes.deliverableContentFinished : false,
+                deliverable.data || (type === "judge" && !deliverable.grade) ? classes.deliverableContentFinished : false,
               )}
             >
 
@@ -185,7 +189,7 @@ function DeliverablesTab({ project }) {
                   </CardActions>
                 ) : null
               ) : (
-                  type === "judge" && !deliverable.grade ? (
+                  type === "judge" && deliverable.data ? (
                     <CardActions disableSpacing>
                       <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
                         <SpellcheckIcon />

@@ -85,14 +85,18 @@ class ProjectDetails extends Component {
             </Typography>
           </Grid>
 
-          <Grid item xs={6} justify="flex-end">
-            <Typography variant="caption">
-              {t("Projects.Details.Grade")}
-            </Typography>
-            <Typography variant="h5">
-              {project.grade}
-            </Typography>
-          </Grid>
+          {
+            project.type === "student" ? (
+              <Grid item xs={6} justify="flex-end">
+                <Typography variant="caption">
+                  {t("Projects.Details.Grade")}
+                </Typography>
+                <Typography variant="h5">
+                  {project.grade ? project.grade : t("Dashboard.NotGraded")}
+                </Typography>
+              </Grid>
+            ) : null
+          }
         </Grid>
 
         <div className={classes.tabsRoot}>
