@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 export default function Dashboard(props) {
   const classes = useStyles();
 
-  const { data } = props;
+  const { data, history = {} } = props;
   const { inProgressCount, completedCount, toBeGradedCount, projects = [] } = data;
 
   return (
@@ -89,6 +89,7 @@ export default function Dashboard(props) {
             title={t("Dashboard.Table.Title")}
             columns={columns}
             options={options}
+            onRowClick={(event, rowData) => console.log(rowData) || history.push(`/projects/${rowData.id}`)}
           />
         </Grid>
 

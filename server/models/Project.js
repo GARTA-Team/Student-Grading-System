@@ -30,9 +30,9 @@ module.exports = (sequelize, type) => sequelize.define("Project", {
     allowNull: false,
     validate: {
       notEmpty: true,
-      isIn: [["NOT STARTED", "IN PROGRESS", "WAITING FOR GRADING", "FINISHED"]],
+      isIn: [["IN PROGRESS", "WAITING FOR GRADING", "FINISHED"]],
     },
-    defaultValue: "NOT STARTED",
+    defaultValue: "IN PROGRESS",
   },
   grade: {
     type: type.DECIMAL(4, 2),

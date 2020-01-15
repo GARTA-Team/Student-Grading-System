@@ -3,10 +3,12 @@
     "OpenProjects": "Proiecte in desfasurare",
     "DeliverablesToBeGraded": "Livrabile de notat",
     "CompletedProjects": "Proiecte incheiate",
+    "NotGraded": "Nenotat",
     "Table": {
       "Title": "Proiecte",
       "Project": "Proiect",
       "Percentage": "Procentaj",
+      "Grade": "Nota",
       "Deadline": "Termen"
     }
   },
@@ -53,7 +55,7 @@
       "UpdatedAt": "Actualizat la",
       "Deadline": "Termen",
       "By": "De",
-      "Details": "Detali",
+      "Details": "Detalii",
       "ProjectsToBeGraded": "Proiecte de notat"
     },
     "Add": {
