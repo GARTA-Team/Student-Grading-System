@@ -59,6 +59,7 @@ export default function ControlledExpansionPanels(props) {
             <Typography className={classes.heading}>{props.team.name}</Typography>
           </div>
         </ExpansionPanelSummary>
+        <p>Nume</p>
         <ExpansionPanelDetails className={classes.details}>
           {props.team.members.map(member => {
             return (
