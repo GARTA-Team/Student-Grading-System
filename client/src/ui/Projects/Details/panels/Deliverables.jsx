@@ -24,6 +24,7 @@ import { TextField, Button } from "@material-ui/core";
 import clsx from "clsx";
 import moment from "moment";
 import axios from "axios";
+import Loader from "../../../../components/Loader";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,6 +77,8 @@ function DeliverablesTab({ project }) {
 
   const [selectedId, setSelectedId] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     ProjectPhases: deliverables = [],
     type,
@@ -85,6 +88,8 @@ function DeliverablesTab({ project }) {
 
   const updateDeliverable = async () => {
     try {
+      setIsLoading(true);
+
       if (type === "STUDENT") {
         await axios.patch(
           `/projects/phases/${selectedId}`,
@@ -109,163 +114,166 @@ function DeliverablesTab({ project }) {
   };
 
   return (
-    <Grid container spacing={4} className={classes.root}>
-      {deliverables.map(deliverable => (
-        <Grid item xs={6} md={5} justify="space-between">
-          <Card>
-            <CardHeader
-              title={
-                <div className={classes.headerTitle}>
-                  <Typography variant="h5" >
-                    {deliverable.name}
-                  </Typography>
-                  {
-                    moment(deliverable.deadline).isSameOrBefore(new Date()) ? (
-                      <Typography variant="caption" className={classes.status}>
-                        {t("Projects.Deliverable.Overdue")}
-                      </Typography>
-                    ) : null
-                  }
-                </div>
-              }
-            />
+    <Loader isLoading={isLoading}>
 
-            <Divider />
+      <Grid container spacing={4} className={classes.root}>
+        {deliverables.map(deliverable => (
+          <Grid item xs={6} md={5} justify="space-between">
+            <Card>
+              <CardHeader
+                title={
+                  <div className={classes.headerTitle}>
+                    <Typography variant="h5" >
+                      {deliverable.name}
+                    </Typography>
+                    {
+                      moment(deliverable.deadline).isSameOrBefore(new Date()) ? (
+                        <Typography variant="caption" className={classes.status}>
+                          {t("Projects.Deliverable.Overdue")}
+                        </Typography>
+                      ) : null
+                    }
+                  </div>
+                }
+              />
 
-            <CardContent
-              className={clsx(
-                classes.deliverableContent,
-                deliverable.data || type === "PROFESSOR" || (type === "JUDGE" && !deliverable.grade)
-                  ? classes.deliverableContentFinished
-                  : false,
-              )}
-            >
+              <Divider />
 
-              <Table className={classes.table}>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <Translate value="Projects.Add.Deliverable.Description" />
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Typography>{deliverable.description}</Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow selected>
-                    <TableCell>
-                      <Translate value="Projects.Add.Deliverable.Deadline" />
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>{moment(deliverable.deadline).format("DD.MM.YYYY")}</TableCell>
-                  </TableRow>
-                  <TableRow >
-                    <TableCell>
-                      <Translate value="Projects.Add.Deliverable.Weight" />
-                    </TableCell>
-                    <TableCell>{deliverable.weight}</TableCell>
-                  </TableRow>
-                  <TableRow selected >
-                    <TableCell>
-                      <Translate value="Projects.Details.Data " />
-                    </TableCell>
-                    <TableCell><a href={deliverable.data || ""}>{deliverable.data || ""}</a></TableCell>
-                  </TableRow>
-                  {
-                    deliverable.grade ? (
-                      <TableRow >
-                        <TableCell>
-                          <Translate value="Projects.Details.Grade" />
-                        </TableCell>
-                        <TableCell>{deliverable.grade}</TableCell>
-                      </TableRow>
-                    ) : null
-                  }
-                </TableBody>
-              </Table>
+              <CardContent
+                className={clsx(
+                  classes.deliverableContent,
+                  deliverable.data || type === "PROFESSOR" || (type === "JUDGE" && !deliverable.grade)
+                    ? classes.deliverableContentFinished
+                    : false,
+                )}
+              >
 
-            </CardContent>
+                <Table className={classes.table}>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        <Translate value="Projects.Add.Deliverable.Description" />
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <Typography>{deliverable.description}</Typography>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow selected>
+                      <TableCell>
+                        <Translate value="Projects.Add.Deliverable.Deadline" />
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>{moment(deliverable.deadline).format("DD.MM.YYYY")}</TableCell>
+                    </TableRow>
+                    <TableRow >
+                      <TableCell>
+                        <Translate value="Projects.Add.Deliverable.Weight" />
+                      </TableCell>
+                      <TableCell>{deliverable.weight}</TableCell>
+                    </TableRow>
+                    <TableRow selected >
+                      <TableCell>
+                        <Translate value="Projects.Details.Data " />
+                      </TableCell>
+                      <TableCell><a href={deliverable.data || ""}>{deliverable.data || ""}</a></TableCell>
+                    </TableRow>
+                    {
+                      deliverable.grade ? (
+                        <TableRow >
+                          <TableCell>
+                            <Translate value="Projects.Details.Grade" />
+                          </TableCell>
+                          <TableCell>{deliverable.grade}</TableCell>
+                        </TableRow>
+                      ) : null
+                    }
+                  </TableBody>
+                </Table>
 
-            {
-              type === "STUDENT" ? (
-                !deliverable.data ? (
-                  <CardActions disableSpacing>
-                    <IconButton aria-label={t("Projects.Details.FinishDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
-                      <SendIcon />
-                    </IconButton>
-                  </CardActions>
-                ) : null
-              ) : (
-                  type === "JUDGE" && (deliverable.data && !deliverable.grade) ? (
+              </CardContent>
+
+              {
+                type === "STUDENT" ? (
+                  !deliverable.data ? (
                     <CardActions disableSpacing>
-                      <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
-                        <SpellcheckIcon />
+                      <IconButton aria-label={t("Projects.Details.FinishDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
+                        <SendIcon />
                       </IconButton>
                     </CardActions>
                   ) : null
-                )
-            }
+                ) : (
+                    type === "JUDGE" && (deliverable.data && !deliverable.grade) ? (
+                      <CardActions disableSpacing>
+                        <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
+                          <SpellcheckIcon />
+                        </IconButton>
+                      </CardActions>
+                    ) : null
+                  )
+              }
 
-          </Card>
+            </Card>
 
-        </Grid >
-      ))
-      }
-
-      {/* input dialog */}
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title" fullWidth maxWidth={"sm"}>
-        <DialogTitle id="form-dialog-title">
-          {
-            type === "STUDENT" ? t("Projects.Details.FinishDeliverable") : t("Projects.Details.GradeDeliverable")
-          }
-        </DialogTitle>
-
-        {
-          type === "STUDENT" ? (
-            <DialogContent>
-              <TextField fullWidth id="link-dialog" label="Link" variant="outlined" value={finishData} onChange={e => setData(e.target.value)} />
-            </DialogContent>
-          ) : (
-              <DialogContent>
-                <TextField
-                  fullWidth
-                  id="grade-dialog"
-                  label={t("Projects.Details.Grade")}
-                  variant="outlined"
-                  value={grade}
-                  onChange={e => console.log(e.target.value) || setGrade(e.target.value)}
-                  inputProps={{
-                    type: "number",
-                    step: "0.01",
-                    min: "1",
-                    max: "10",
-                  }}
-                />
-              </DialogContent>
-            )
+          </Grid >
+        ))
         }
-        <DialogActions >
-          <Button onClick={() => setDialogOpen(false) || setSelectedId(null)} color="primary">
-            {t("Projects.Add.Cancel")}
-          </Button>
-          <Button color="primary" onClick={() => setAlertDialogOpen(true)}>
-            {t("Projects.Add.Submit")}
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      {/* alert dialog */}
-      <Dialog open={alertDialogOpen} onClose={() => setAlertDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{t("Projects.Details.Sure")}</DialogTitle>
+        {/* input dialog */}
+        <Dialog open={dialogOpen} onClose={() => setDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title" fullWidth maxWidth={"sm"}>
+          <DialogTitle id="form-dialog-title">
+            {
+              type === "STUDENT" ? t("Projects.Details.FinishDeliverable") : t("Projects.Details.GradeDeliverable")
+            }
+          </DialogTitle>
 
-        <DialogActions>
-          <Button onClick={() => setAlertDialogOpen(false) || setDialogOpen(false) || setSelectedId(null)} color="primary">
-            {t("Projects.Add.Cancel")}
-          </Button>
-          <Button color="primary" onClick={() => updateDeliverable()}>
-            {t("Projects.Add.Submit")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Grid >
+          {
+            type === "STUDENT" ? (
+              <DialogContent>
+                <TextField fullWidth id="link-dialog" label="Link" variant="outlined" value={finishData} onChange={e => setData(e.target.value)} />
+              </DialogContent>
+            ) : (
+                <DialogContent>
+                  <TextField
+                    fullWidth
+                    id="grade-dialog"
+                    label={t("Projects.Details.Grade")}
+                    variant="outlined"
+                    value={grade}
+                    onChange={e => console.log(e.target.value) || setGrade(e.target.value)}
+                    inputProps={{
+                      type: "number",
+                      step: "0.01",
+                      min: "1",
+                      max: "10",
+                    }}
+                  />
+                </DialogContent>
+              )
+          }
+          <DialogActions >
+            <Button onClick={() => setDialogOpen(false) || setSelectedId(null)} color="primary">
+              {t("Projects.Add.Cancel")}
+            </Button>
+            <Button color="primary" onClick={() => setAlertDialogOpen(true)}>
+              {t("Projects.Add.Submit")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* alert dialog */}
+        <Dialog open={alertDialogOpen} onClose={() => setAlertDialogOpen(!dialogOpen)} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">{t("Projects.Details.Sure")}</DialogTitle>
+
+          <DialogActions>
+            <Button onClick={() => setAlertDialogOpen(false) || setDialogOpen(false) || setSelectedId(null)} color="primary">
+              {t("Projects.Add.Cancel")}
+            </Button>
+            <Button color="primary" onClick={() => updateDeliverable()}>
+              {t("Projects.Add.Submit")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Grid >
+    </Loader>
   );
 }
 
