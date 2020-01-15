@@ -9,6 +9,7 @@ import { withStyles, Grid, Button } from "@material-ui/core";
 import Overview from "./panels/Overview";
 import DeliverablesTab from "./panels/Deliverables";
 import TabPanel from "../../../components/TabPanel";
+import Loader from "../../../components/Loader";
 
 const styles = theme => ({
   status: {
@@ -42,6 +43,7 @@ class ProjectDetails extends Component {
   state = {
     project: {},
     tab: 0,
+    isLoading: true,
   }
 
   async componentDidMount() {
@@ -54,7 +56,7 @@ class ProjectDetails extends Component {
 
       console.log(project)
 
-      this.setState({ project });
+      this.setState({ project, isLoading: false });
     } catch (error) {
       // TODO
     }
@@ -66,11 +68,11 @@ class ProjectDetails extends Component {
   render() {
     const { classes, history } = this.props;
 
-    const { tab = 0, project = {} } = this.state;
+    const { tab = 0, project = {}, isLoading = true } = this.state;
     return (
-      <div>
-        <Grid container>
-          <Grid item xs={2} >
+      <Loader isLoading={isLoading}>
+        <Grid container justify="space-between">
+          <Grid item xs={6} >
             <Typography variant="caption">
               {t("Projects.Details.Project")}
             </Typography>
@@ -80,6 +82,15 @@ class ProjectDetails extends Component {
             </Typography>
             <Typography variant="caption" className={classes.status}>
               {`status: ${t("Project.Status." + project.status)}`}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={6} justify="flex-end">
+            <Typography variant="caption">
+              {t("Projects.Details.Grade")}
+            </Typography>
+            <Typography variant="h5">
+              {project.grade}
             </Typography>
           </Grid>
         </Grid>
@@ -107,7 +118,7 @@ class ProjectDetails extends Component {
         <Button variant="contained" onClick={history.goBack} color="secondary" className={classes.button}>
           {t("Projects.Details.Back")}
         </Button>
-      </div>
+      </Loader>
     );
   }
 }

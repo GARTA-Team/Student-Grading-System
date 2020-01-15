@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { t, Translate } from "react-i18nify";
+import { t } from "react-i18nify";
+import moment from "moment";
 
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 function Overview({ project }) {
   const classes = useStyles();
 
-  const { summary = "", users = [1, 2, 3], professor = "test" } = project;
+  const { summary = "", members = {}, professorName = "test", nextDeadline, type } = project;
 
   return (
     <Grid container className={classes.root} spacing={5}>
@@ -63,41 +64,48 @@ function Overview({ project }) {
               <List>
                 <ListItem divider className={classes.listItem}>
                   <Typography variant="body1">{t("Projects.Details.Professor")}</Typography>
-                  <Typography variant="body1">{professor}</Typography>
+                  <Typography variant="body1">{professorName}</Typography>
                 </ListItem>
 
                 <ListItem divider className={classes.listItem}>
                   <Typography variant="body1">{t("Projects.Details.NextDeadline")}</Typography>
-                  <Typography variant="body1">{"10.02.12112"}</Typography> {/* TODO */}
+                  {
+                    nextDeadline ? (
+                      <Typography variant="body1">{moment(nextDeadline).format("DD.MM.YYYY")}</Typography>
+                    ) : null
+                  }
                 </ListItem>
               </List>
             </CardContent>
           </Card>
         </Grid>
 
-        <Grid item xs={12} >
-          <Paper>
-            <Card className={classes.card}>
-              <CardHeader
-                className={classes.cardHeader}
-                subheader={t("Project.Details.TeamMembers")}
-              />
-              <CardContent className={classes.cardContent}>
-                <List>
-                  {
-                    users.map(user => (
-                      <ListItem divider>
-                        <ListItemText primary={user} />
-                      </ListItem>
-                    ))
-                  }
-                </List>
-              </CardContent>
-            </Card>
+        {
+          type === "student" ? (
+            <Grid item xs={12} >
+              <Paper>
+                <Card className={classes.card}>
+                  <CardHeader
+                    className={classes.cardHeader}
+                    subheader={t("Project.Details.TeamMembers")}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <List>
+                      {
+                        members.map(({ username }, index) => (
+                          <ListItem divider key={`${index + 1}. ${username}`}>
+                            <ListItemText primary={`${index + 1}. ${username}`} />
+                          </ListItem>
+                        ))
+                      }
+                    </List>
+                  </CardContent>
+                </Card>
 
-
-          </Paper>
-        </Grid>
+              </Paper>
+            </Grid>
+          ) : null
+        }
 
 
       </Grid>
