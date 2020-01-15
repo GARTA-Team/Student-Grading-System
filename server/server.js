@@ -84,7 +84,9 @@ app.get("/dashboard", async (req, res) => {
     for (let i = 0; i < userStudentTeams.length; i++) {
       let projects = await userStudentTeams[i].getProjects({
         where: {
-          status: "IN PROGRESS",
+          status: {
+            [Sequelize.Op.or]: ["IN PROGRESS", "WAITING FOR GRADING"],
+          }
         },
       });
       dashboard.inProgressCount += projects.length;
