@@ -95,7 +95,7 @@ function DeliverablesTab({ project }) {
       } else if (type === "judge") {
         await axios.post(
           `/projects/phases/${selectedId}/grade`,
-          { grade: grade },
+          { grade },
         );
 
         document.location.reload();
@@ -189,7 +189,7 @@ function DeliverablesTab({ project }) {
                   </CardActions>
                 ) : null
               ) : (
-                  type === "judge" && deliverable.grade ? (
+                  type === "judge" && deliverable.data ? (
                     <CardActions disableSpacing>
                       <IconButton aria-label={t("Projects.Details.GradeDeliverable")} onClick={() => setDialogOpen(true) || setSelectedId(deliverable.id)}>
                         <SpellcheckIcon />
