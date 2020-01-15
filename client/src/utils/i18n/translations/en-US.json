@@ -68,6 +68,31 @@
     "Min": "Field requires at least %{value} %{name}",
     "Max": "You can only have %{value} %{name}",
     "MinDate": "Minimum date %{date}",
+    "MaxDate": "Maximum date is %{date}"
+  },
+  "Teams": {
+    "Add": {
+      "NameLength": "Team name should be between 5 and 20 characters long",
+      "Member": "Member",
+      "Cancel": "Anuleaza",
+      "Submit": "Submit",
+      "TeamToBeAdded": {
+        "Members": "Members",
+        "Name": "Name",
+        "AddYourTeam": "Add your team"
+      }
+    }
+  },
+  "Team":{
+    "Project":"Projects: ",
+    "TeamName": "Team name",
+    "TeamDescription": "Team description",
+    "Add":{
+      "Teams": "Teams",
+      "TeamToBeAdded": {
+        "AddYourTeam": "Add your team"
+      }
+    },
     "MaxDate": "Maximum date is %{date}",
     "SumTo100": "The sum of all the weights must be 100!",
     "FetchDataError": "Couldn't load the data! Try again later.",

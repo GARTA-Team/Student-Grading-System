@@ -110,9 +110,36 @@
     "Min": "Sunt necesare %{value} %{name}",
     "Max": "Maxim %{value} %{name}",
     "MinDate": "Nu poti selecta o data mai mica decat %{date}",
-    "MaxDate": "Data maxima este %{date}",
-    "SumTo100": "Suma tuturor ponderilor trebuie sa fie 100!",
-    "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu.",
-    "PostProjectError": "Proiectul nu se poate adauga!"
-  }
+    "MaxDate": "Data maxima este %{date}"
+  },
+  "Teams": {
+    "Add": {
+      "NameLength": "Numele echipei ar trebui sa fie intre 5 si 20 de caractere",
+      "Member": "Membru",
+      "Cancel": "Anuleaza",
+      "Submit": "Trimite",
+      "TeamToBeAdded": {
+        "Members": "Membrii",
+        "Name": "Nume",
+        "AddYourTeam": "Adauga-ti echipa"
+      }
+    }
+  },
+  "Team": {
+    "Project":"Proiecte: ",
+    "TeamName": "Nume echipa",
+    "TeamDescription": "Descriere echipa",
+    "Members": "Membrii",
+    "Projects": "Proiecte",
+    "Add": {
+      "Teams": "Echipe",
+      "TeamToBeAdded": {
+        "AddYourTeam": "Adauga echipa"
+      }
+    }
+  },
+  "MaxDate": "Data maxima este %{date}",
+  "SumTo100": "Suma tuturor ponderilor trebuie sa fie 100!",
+  "FetchDataError": "Nu s-au putut incarca datele! Incearca mai tarziu.",
+  "PostProjectError": "Proiectul nu se poate adauga!"
 }

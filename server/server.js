@@ -34,7 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /** ROUTES */
-const teamRouter = require("./routers/team-router");
+const teamRouter = require("./routers/teams-router");
 const userRouter = require("./routers/user-router");
 const loginRouter = require("./routers/login-router");
 const projectRouter = require("./routers/project-router");
