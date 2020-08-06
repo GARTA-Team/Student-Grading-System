@@ -6,7 +6,7 @@
 	* npm install on root directory
 	* "cd client" and "npm install"
 	* "cd ../server" and "npm install"
-* In server, rename .env.example to .env and add your own values (you can find the latest .env file in bitbucket's "Downloads" page)
+* In server, rename .env.example to .env and add your own values
 * Go back to root directory and run "npm start"
 
 ## How to fix errors
