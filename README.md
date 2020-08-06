@@ -1,6 +1,6 @@
 # GARTA Student Grading System
 
-## Requirements to run the app
+## Requirements to run the app 
 * Nodemon: npm install -g nodemon
 * Install dependencies
 	* npm install on root directory
